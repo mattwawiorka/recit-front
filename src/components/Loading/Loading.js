@@ -1,5 +1,14 @@
 import React from 'react';
 
-const Loading = () => <h2>Loading</h2>;
+import './Loading.css';
+
+const Loading = (props) => (
+  <div className="loader mx-auto d-block">
+    <div />
+    <div />
+    <div />
+    <div />
+  </div>
+);
 
 export default Loading;
