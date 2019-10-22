@@ -8,6 +8,7 @@ class GameTable extends Component {
       this.props.games.forEach((game) => {
         rows.push(
           <GameRow
+            id={game.id}
             title={game.title}
             sport={game.sport}
             venue={game.venue}

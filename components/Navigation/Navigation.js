@@ -1,27 +1,130 @@
-const Navigation = () => (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a className="navbar-brand" href="#">RECIT</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-        </button>
+import React, { Component } from 'react';
+import Link from 'next/link';
 
-        <div className="collapse navbar-collapse" id="navbarColor01">
-            <ul className="navbar-nav mr-auto">
-                <li className="nav-item active">
-                    <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">Features</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">Pricing</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">About</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-);
+class Navigation extends Component {
+
+    componentDidMount() {
+        this.menu();
+    }
+
+    menu = () => {
+        var dropdown = document.querySelector("nav .dropdown");
+        var button = document.querySelector("nav .menu");
+        if (dropdown.style.display === "none") {
+            dropdown.style.display = "grid";
+            button.innerHTML = "close";
+        } else {
+            dropdown.style.display = "none";
+            button.innerHTML = "menu";
+        }
+        addEventListener("resize", () => {
+            if (window.innerWidth > 700) {
+                dropdown.style.display = "none";
+                button.innerHTML = "menu";
+            }
+        });
+    }
+
+    render() {
+        return(
+            <div>
+                <nav>
+                    <div className="content">
+                        <Link href="/">
+                            <div className="nav-title">
+                                <h1>Recit</h1>
+                            </div>
+                        </Link>
+                        <div className="links">
+                            <Link href="/about">
+                                <a>About</a>
+                            </Link>
+                            <Link href="/login">
+                                <a>Login</a>
+                            </Link>
+                            <Link href="/signup">
+                                <a>signup</a>
+                            </Link>
+                        </div>
+                        <i className="material-icons menu" onClick={() => this.menu()}>menu</i>
+                    </div>
+                    <div className="dropdown">
+                        <Link href="/about">
+                            <a>About</a>
+                        </Link>
+                        <Link href="/login">
+                            <a>Login</a>
+                        </Link>
+                        <Link href="/signup">
+                            <a>signup</a>
+                        </Link>
+                    </div>
+                </nav>
+            
+
+                <style jsx>{`
+                    nav {
+                        display: grid;
+                        grid-template-rows: minmax(min-content, 100px) min-content;
+                    }
+
+                    nav .content {
+                        background-color: var(--greyapple);
+                        display: grid;
+                        place-items: center;
+                        grid-auto-flow: column;
+                        align-content: space-evenly;
+                    }
+
+                    nav .nav-title:hover {
+                        filter: opacity(50%);
+                        cursor: pointer;
+                        -webkit-user-select: none;
+                    }
+
+                    nav .content .menu {
+                        display: none;
+                    }
+
+                    nav .content .menu:hover {
+                        filter: opacity(50%);
+                        cursor: pointer;
+                        -webkit-user-select: none;
+                    }
+
+                    nav .content .links {
+                        display: grid;
+                        grid-gap: 15px;
+                        place-items: center;
+                        grid-auto-flow: column;
+                        grid-auto-columns: minmax(min-content, 80px);
+                    }
+
+                    nav .dropdown {
+                        display: grid;
+                        background-color: var(--darkmatter);
+                        text-align: center;
+                    }
+
+                    nav .dropdown a {
+                        color: white;
+                        padding: 20px;
+                        
+                    }
+
+                    nav .dropdown a:hover {
+                        color: var(--greenapple);
+                        background-color: var(--greyapple);
+                    }
+
+                    @media only screen and (max-width: 700px) {
+                        nav .content .menu { display: initial;}
+                        nav .content .links { display: none;}
+                    }
+                `}</style>
+            </div>
+        );
+    }
+};
 
 export default Navigation;
