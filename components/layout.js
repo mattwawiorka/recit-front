@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Navbar from './navbar';
-import Meta from './meta';
+import Meta from './Meta';
 
 const Layout = (props) => (
     <div>
