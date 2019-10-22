@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Loading from '../Loading/Loading';
+//import Loading from '../../src/components/Loading/Loading';
 
 class GameRow extends Component {
   render() {
