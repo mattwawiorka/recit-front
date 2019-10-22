@@ -20,7 +20,7 @@ class GameInfo extends Component {
 
               <style jsx>{`
                 .jumbotron {
-                    background-color: #5bd40a; /* Orange */
+                    background-color: #006408; /* Orange */
                     color: #ffffff;
                 }
               `}</style>
