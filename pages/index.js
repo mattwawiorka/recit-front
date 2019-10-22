@@ -1,13 +1,10 @@
-import Layout from '../components/layout';
 import GameList from '../components/GameList/GameList';
+import GamesLayout from '../components/GamesLayout/GamesLayout';
 
-const Index = () => (
-    <Layout>
-        <div>
-            <h1>Welcome to Recit!</h1>
-            <GameList />
-        </div>
-    </Layout>
+const Index = (props) => (
+    <GamesLayout>
+        <GameList></GameList>
+    </GamesLayout>
 );
 
 export default Index;

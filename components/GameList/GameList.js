@@ -1,83 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-//import Loading from '../../src/components/Loading/Loading';
-
-class GameRow extends Component {
-  render() {
-    const title = this.props.title;
-    const sport = this.props.sport;
-    const venue = this.props.venue;
-   
-    return (
-      <tr>
-        <td>
-          <h3>{title}</h3>
-        </td>
-        <td>
-          <p>{sport}</p>
-        </td>
-        <td>
-          <p>{venue}</p>
-        </td>
-        <td>
-          <form>
-            <input type="submit" value="Join Game" />
-          </form>
-        </td>
-      </tr>
-    );
-  }
-}
-
-class GameTable extends Component {
-  render() {
-    const rows = [];
-    
-    this.props.games.forEach((game) => {
-      rows.push(
-        <GameRow
-          title={game.title}
-          sport={game.sport}
-          venue={game.venue}
-          key={game.id} />
-      );
-    });
-
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Sport</th>
-            <th>Venue</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    );
-  }
-}
-
-class SearchBar extends Component {
-  render() {
-    return (
-      <form>
-        <input type="text" placeholder="Search..." />
-      </form>
-    );
-  }
-}
-
-class FilterableGameTable extends Component {
-  render() {
-    return (
-      <div>
-        <SearchBar />
-        <GameTable games={this.props.games} />
-      </div>
-    );
-  }
-}
+import GameTable from './GameTable';
+import SearchBar from './SearchBar';
+import Loading from '../Loading/Loading';
 
 class GameList extends Component {
     constructor(props) {
@@ -164,29 +89,20 @@ class GameList extends Component {
     }
   
     render() {
-      return <FilterableGameTable games={this.state.games} />
-      // return (
-      //   <div className="App">
-      //       <div className="jumbotron">
-      //           <h2>Recit</h2>
-      //           <p className="lead">Games List</p>
-      //       </div>
-      //     {!this.state.loading ? (
-      //       this.state.games.map( (game, i) => {
-      //         return (
-      //           <div>
-      //             <h3 key={i}>{game.title}</h3>
-      //             <p key={i}>{game.sport}</p>
-      //             <p key={i}>{game.venue}</p>
-      //             <form onSubmit={this.handleJoin}>
-      //               <input type="submit" value="Join Game" />
-      //             </form>
-      //           </div>
-      //         )
-      //       })
-      //     ) : (<Loading />)}
-      //   </div>
-      // )
+      if (this.state.loading) {
+        return (
+          <div className="container">
+            <Loading></Loading>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <SearchBar />
+            <GameTable games={this.state.games} />
+          </div>
+        );
+      }
     }
   }
 
