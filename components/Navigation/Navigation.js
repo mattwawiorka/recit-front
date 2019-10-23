@@ -36,26 +36,26 @@ class Navigation extends Component {
                             </div>
                         </Link>
                         <div className="links">
-                            <Link href="/about">
+                            <Link href="#">
                                 <a>About</a>
                             </Link>
-                            <Link href="/login">
+                            <Link href="#">
                                 <a>Login</a>
                             </Link>
-                            <Link href="/signup">
-                                <a>signup</a>
+                            <Link href="#">
+                                <a>Signup</a>
                             </Link>
                         </div>
                         <i className="material-icons menu" onClick={() => this.menu()}>menu</i>
                     </div>
                     <div className="dropdown">
-                        <Link href="/about">
+                        <Link href="#">
                             <a>About</a>
                         </Link>
-                        <Link href="/login">
+                        <Link href="#">
                             <a>Login</a>
                         </Link>
-                        <Link href="/signup">
+                        <Link href="#">
                             <a>signup</a>
                         </Link>
                     </div>

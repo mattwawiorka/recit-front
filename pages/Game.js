@@ -4,9 +4,10 @@ import GamePage from '../components/GamePage/GamePage';
 
 const Game = () => {
   const router = useRouter();
+  const gameId = router.query.id;
   return (
   <GamesLayout>
-      <GamePage gameId={router.query.id} />
+      <GamePage gameId={gameId} />
   </GamesLayout>
   );
 };

@@ -4,74 +4,79 @@ import GameInfo from '../GamePage/GameInfo';
 import axios from 'axios';
 
 class GamePage extends Component {
-    constructor(props) {
-        // props
-        super(props)
-        // state
-        this.state = {
-            game: {},
-            loading: false
-        };
-        // bind
-      }
+  constructor(props) {
+      // props
+      super(props)
+      // state
+      this.state = {
+          game: {},
+          date: "",
+          time: "",
+          loading: false
+      };
+      // bind
+    }
 
-    getGame() {
+  getGame() {
     this.setState({
-        loading: true
+      loading: true
     })
     const graphqlQuery = {
-        query: `
-            {
-                game(id: "${this.props.gameId}") {
-                    id
-                    title
-                    dateTime
-                    venue
-                    address
-                    sport
-                    description
-                }
-            }
-        `,
-        variables: {
-            gameId: this.props.gameId
-        }
+      query: `
+      {
+          game(id: "${this.props.gameId}") {
+              id
+              title
+              dateTime
+              venue
+              address
+              sport
+              description
+          }
+    }
+    `,
+      variables: {
+        gameId: this.props.gameId
+      }
     };
     axios({
-        url: 'http://localhost:8080/graphql',
-        method: 'post',
-        data: graphqlQuery
+      url: 'http://localhost:8080/graphql',
+      method: 'post',
+      data: graphqlQuery
     })
     .then( response => { 
-        this.setState({
+      const d = new Date(parseInt(response.data.data.game.dateTime));
+      this.setState({
         game: response.data.data.game,
-        loading: false
-        })
+        loading: false,
+        date: d.toLocaleDateString(),
+        time: d.toLocaleTimeString()
+      })
     })
     .catch( err => {
-        console.log(err);
+      console.log(err);
     })
-    }
+  }
 
-    componentDidMount() {
+  componentDidMount() {
     this.getGame();
-    }
+  }
 
-    render() {
-        if (this.state.loading) {
-          return (
-            <div className="container">
-              <Loading></Loading>
-            </div>
-          );
-        } else {
-          return (
-            <div>
-              <GameInfo game={this.state.game} />
-            </div>
-          );
-        }
+  render() {
+      if (this.state.loading) {
+        return (
+          <div className="container">
+            <Loading></Loading>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <GameInfo game={this.state.game} date={this.state.date} time={this.state.time} />
+          </div>
+        );
       }
+    }
 }
 
 export default GamePage;
