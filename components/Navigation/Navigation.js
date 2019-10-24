@@ -39,10 +39,10 @@ class Navigation extends Component {
                             <Link href="#">
                                 <a>About</a>
                             </Link>
-                            <Link href="#">
+                            <Link href="/Login">
                                 <a>Login</a>
                             </Link>
-                            <Link href="#">
+                            <Link href="/Signup">
                                 <a>Signup</a>
                             </Link>
                         </div>
@@ -52,11 +52,11 @@ class Navigation extends Component {
                         <Link href="#">
                             <a>About</a>
                         </Link>
-                        <Link href="#">
+                        <Link href="/Login">
                             <a>Login</a>
                         </Link>
-                        <Link href="#">
-                            <a>signup</a>
+                        <Link href="/Signup">
+                            <a>Signup</a>
                         </Link>
                     </div>
                 </nav>

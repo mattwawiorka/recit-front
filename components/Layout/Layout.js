@@ -1,14 +1,16 @@
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
+import Meta from '../Meta';
 
-const GamesLayout = (props) => (
+const Layout = (props) => (
     <div>
         <Header />
-        <Navigation />
         <div>
+            <Meta />
+            <Navigation />
             {props.children}
         </div>
     </div>
 );
 
-export default GamesLayout;
+export default Layout;

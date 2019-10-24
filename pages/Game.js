@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
-import GamesLayout from '../components/GamesLayout/GamesLayout';
+import Layout from '../components/Layout/Layout';
 import GamePage from '../components/GamePage/GamePage';
 
 const Game = () => {
   const router = useRouter();
   const gameId = router.query.id;
   return (
-  <GamesLayout>
+  <Layout>
       <GamePage gameId={gameId} />
-  </GamesLayout>
+  </Layout>
   );
 };
 

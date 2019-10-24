@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GameList from '../components/GameList/GameList';
-import GamesLayout from '../components/GamesLayout/GamesLayout';
+import Layout from '../components/Layout/Layout';
 import GameForm from '../components/CreateGame/GameForm';
 
 class Index extends Component {
@@ -12,6 +12,7 @@ class Index extends Component {
           createGame: false
         };
         // bind
+        this.handleCreateGame = this.handleCreateGame.bind(this);
       }
 
     componentDidMount() {
@@ -21,34 +22,43 @@ class Index extends Component {
     }
 
     handleCreateGame() {
-        // this.setState({
-        //     createGame: true
-        // })
+        this.setState({
+            createGame: !this.state.createGame
+        })
     }
 
     renderCreateGame = () => {
         return (
-            <GamesLayout>
+            <Layout>
                 <GameForm />
-            </GamesLayout>
+                <button className="btn" onClick={this.handleCreateGame}>Exit</button>
+            </Layout>
         );
     }
 
     renderGameList = () => {
         return (
-            <GamesLayout>
+            <Layout>
                 <GameList></GameList>
                 <button className="btn" onClick={this.handleCreateGame}>Create Game</button>
-            </GamesLayout>
+            </Layout>
         )
     }
 
     render() {
-        return (
-            <div>
-                {this.renderGameList()}
-            </div>
-        );
+        if (this.state.createGame) {
+            return (
+                <div>
+                    {this.renderCreateGame()}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    {this.renderGameList()}
+                </div>
+            );
+        } 
     }
 }
 

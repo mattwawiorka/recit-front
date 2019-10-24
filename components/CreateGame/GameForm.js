@@ -45,6 +45,10 @@ class GameForm extends Component {
         axios({
             url: 'http://localhost:8080/graphql',
             method: 'post',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token"),
+                'Content-Type': 'application/json'
+            },
             data: graphqlQuery
         })
         .then( response => { 

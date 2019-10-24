@@ -1,11 +1,11 @@
-import GamesLayout from '../components/GamesLayout/GamesLayout';
+import Layout from '../components/Layout/Layout';
 import GameForm from '../components/CreateGame/GameForm';
 
 const CreateGame = () => {
   return (
-  <GamesLayout>
+  <Layout>
       <GameForm />
-  </GamesLayout>
+  </Layout>
   );
 };
 

@@ -10,6 +10,17 @@ class GameInfo extends Component {
     const venue = this.props.game.venue;
     const address = this.props.game.address;
     const description = this.props.game.description;
+    const players = this.props.players;
+
+    const rows = [];
+      
+      players.forEach((player) => {
+        rows.push(
+          <tr>
+            <th>{player.name}</th>
+          </tr>
+        );
+    });
 
     return (
         <div className="jumbotron text-center">
@@ -20,6 +31,16 @@ class GameInfo extends Component {
             <p>{time}</p>
             <p>{venue}</p>
             <p>{address}</p>
+
+            <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>Players</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </table>
 
             <style jsx>{`
               .jumbotron {
