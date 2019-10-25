@@ -16,7 +16,7 @@ class GameInfo extends Component {
       
       players.forEach((player) => {
         rows.push(
-          <tr>
+          <tr key={player.id}>
             <th>{player.name}</th>
           </tr>
         );
@@ -44,7 +44,7 @@ class GameInfo extends Component {
 
             <style jsx>{`
               .jumbotron {
-                  background-color: #006408; /* Orange */
+                  background-color: var(--greenapple); /* Orange */
                   color: #ffffff;
               }
             `}</style>

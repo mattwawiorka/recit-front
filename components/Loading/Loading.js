@@ -22,10 +22,10 @@ const Loading = (props) => (
         width: 51px;
         height: 51px;
         margin: 6px;
-        border: 6px solid #006408;
+        border: 6px solid var(--greenapple);
         border-radius: 50%;
         animation: loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        border-color: #006408 transparent transparent transparent;
+        border-color: var(--greenapple) transparent transparent transparent;
       }
       .loader div:nth-child(1) {
         animation-delay: -0.45s;

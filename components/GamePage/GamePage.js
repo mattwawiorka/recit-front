@@ -17,6 +17,7 @@ class GamePage extends Component {
       };
       // bind
       this.handleJoin = this.handleJoin.bind(this);
+      this.handleLeave = this.handleLeave.bind(this);
     }
 
   getGame() {
@@ -123,10 +124,45 @@ class GamePage extends Component {
     })
   }
 
+  leaveGame() {
+    this.setState({
+      loading: true
+    })
+    const graphqlQuery = {
+      query: `
+        mutation {
+          leaveGame(gameId: ${this.state.game.id}) 
+        }
+    `
+    };
+    axios({
+      url: 'http://localhost:8080/graphql',
+      method: 'post',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem("token"),
+        'Content-Type': 'application/json'
+      },
+      data: graphqlQuery
+    })
+    .then( response => { 
+      this.getPlayers();
+      this.setState({
+        loading: false
+      })
+    })
+    .catch( err => {
+      console.log(err);
+    })
+  }
+
   handleJoin(e) {
     e.preventDefault();
     this.joinGame();
+  }
 
+  handleLeave(e) {
+    e.preventDefault();
+    this.leaveGame();
   }
 
   componentDidMount() {
@@ -149,6 +185,11 @@ class GamePage extends Component {
               className="btn btn-raised btn-primary"
               onClick={this.handleJoin}>
               Join Game
+            </button>
+            <button 
+              className="btn btn-raised btn-primary"
+              onClick={this.handleLeave}>
+              Leave Game
             </button>
           </div>
         );

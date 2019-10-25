@@ -9,7 +9,7 @@ class GameRow extends Component {
       const venue = this.props.venue;
      
       return (
-        <Link href={`/Game?id=${id}`}>
+        <Link href={`/Game?id=${id}`} as='/'>
           <tr>
             <td>
               <h3>{title}</h3>
