@@ -59,32 +59,40 @@ class Login extends Component {
                 <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
                 <div className="container">
                     <div></div>
-                    <div>
-                        <form onSubmit={this.clickLogin}>
-                            <div className="form-group">
-                                <input 
-                                    onChange={this.handleChange("name")} 
-                                    type="text" 
-                                    value={name}
-                                    className="text-fields"
-                                    placeholder="Email"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <input 
-                                    onChange={this.handleChange("password")} 
-                                    type="password" 
-                                    value={password} 
-                                    className="text-fields"
-                                    placeholder="Password"
-                                />
-                            </div>
-                            <input type="submit" value="Submit" />
-                        </form><br />
+                    <div className="center-content">
                         <div>
-                            <Link href="/Forgot_Password">
-                                <a style={{color: '#3399ff'}}>Forgot Password?</a>
-                            </Link>
+                            <form onSubmit={this.clickLogin}>
+                                <div className="form-group">
+                                    <input 
+                                        onChange={this.handleChange("name")} 
+                                        type="text" 
+                                        value={name}
+                                        className="text-fields"
+                                        placeholder="Username"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input 
+                                        onChange={this.handleChange("password")} 
+                                        type="password" 
+                                        value={password} 
+                                        className="text-fields"
+                                        placeholder="Password"
+                                    />
+                                </div>
+                                <input type="submit" value="Submit" />
+                            </form><br />
+                        </div>
+                        <div className="bottom">
+                            <div>
+                                <Link href="/Forgot_Password"><a style={{color: '#3399ff'}}>Forgot Password?</a></Link>
+                            </div>
+                            <div style={{textAlign: 'center'}}> | </div>
+                            <div>
+                                <p style={{float: 'right'}}>Don't have an account? <br />
+                                    <Link href="/Signup"><a style={{color: '#3399ff'}}><u>Signup for one!</u></a></Link>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,8 +101,19 @@ class Login extends Component {
                 .container {
                     display: grid;
                     align-items: center;
-                    grid-template-columns: .75fr 1fr .75fr;
+                    grid-template-columns: .75fr 650px .75fr;
                     grid-gap: 10px;
+                }
+
+                .center-content {
+                    display: inline-grid;
+                    align-items: center;
+                    grid-template-columns: repeat(1, 1fr);
+                }
+
+                .bottom {
+                    display: grid;
+                    grid-template-columns: 1fr .5fr 1fr;
                 }
 
                 form {
