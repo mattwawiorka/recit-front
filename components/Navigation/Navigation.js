@@ -33,7 +33,7 @@ class Navigation extends Component {
                         <Link href="/">
                             <div className="nav-title">
                                 <img src="/rec-it.png" alt="Recit"
-                                 style={{ width: '12%', height: '12%', borderRadius: '15px'}}/>
+                                 style={{ width: '12%', height: '12%', borderRadius: '10px'}}/>
                             </div>
                         </Link>
                         <div className="links">
@@ -78,7 +78,7 @@ class Navigation extends Component {
                     }
 
                     nav .nav-title:hover {
-                        filter: opacity(50%);
+                        filter: opacity(80%);
                         cursor: pointer;
                         -webkit-user-select: none;
                     }

@@ -2,6 +2,7 @@ import Layout from '../components/Layout/Layout';
 import React, { Component } from 'react';
 import axios from 'axios';
 import Router from 'next/router';
+import Link from 'next/link';
 
 class Login extends Component {
     constructor() {
@@ -55,35 +56,84 @@ class Login extends Component {
        return (
        <Layout>
         <div>
-                <h1>Login</h1>
+                <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
                 <div className="container">
-                    <form>
-                        <div className="form-group">
-                            <label className="text-muted">Name</label>
-                            <input 
-                                onChange={this.handleChange("name")} 
-                                type="text" 
-                                className="form-control"
-                                value={name} 
-                            />
+                    <div></div>
+                    <div>
+                        <form onSubmit={this.clickLogin}>
+                            <div className="form-group">
+                                <input 
+                                    onChange={this.handleChange("name")} 
+                                    type="text" 
+                                    value={name}
+                                    className="text-fields"
+                                    placeholder="Email"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input 
+                                    onChange={this.handleChange("password")} 
+                                    type="password" 
+                                    value={password} 
+                                    className="text-fields"
+                                    placeholder="Password"
+                                />
+                            </div>
+                            <input type="submit" value="Submit" />
+                        </form><br />
+                        <div>
+                            <Link href="/Forgot_Password">
+                                <a style={{color: '#3399ff'}}>Forgot Password?</a>
+                            </Link>
                         </div>
-                        <div className="form-group">
-                            <label className="text-muted">Password</label>
-                            <input 
-                                onChange={this.handleChange("password")} 
-                                type="password" 
-                                className="form-control"
-                                value={password} 
-                            />
-                        </div>
-                        <button 
-                            className="btn btn-raised btn-primary"
-                            onClick={this.clickLogin}>
-                            Login!
-                        </button>
-                    </form>
+                    </div>
                 </div>
             </div>
+            <style jsx>{`
+                .container {
+                    display: grid;
+                    align-items: center;
+                    grid-template-columns: .75fr 1fr .75fr;
+                    grid-gap: 10px;
+                }
+
+                form {
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    padding: 12px 20px;
+                    
+                }
+
+                .text-fields {
+                    width: 100%;
+                    padding: 12px 20px;
+                    margin: 8px 0;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                }
+
+                input[type=submit] {
+                    width: 100%;
+                    background-color: var(--greenapple);
+                    color: white;
+                    padding: 14px 20px;
+                    margin 8px 0;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                input[type=submit]:hover {
+                    background-color: #45a049;
+                }
+
+                @media only screen and (max-width: 700px) {
+                    .container {
+                        grid-template-columns: .25fr 1fr .25fr;
+                    }
+                }
+            `}</style>
         </Layout>
        );
     }  
