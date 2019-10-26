@@ -8,7 +8,9 @@ const Layout = (props) => (
         <div>
             <Meta />
             <Navigation />
-            {props.children}
+            <div style={{ paddingTop: '25px', marginLeft: '50px', marginRight: '50px'}}>
+                {props.children}
+            </div>
         </div>
     </div>
 );

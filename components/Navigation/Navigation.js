@@ -32,11 +32,12 @@ class Navigation extends Component {
                     <div className="content">
                         <Link href="/">
                             <div className="nav-title">
-                                <h1>Recit</h1>
+                                <img src="/rec-it.png" alt="Recit"
+                                 style={{ width: '12%', height: '12%', borderRadius: '15px'}}/>
                             </div>
                         </Link>
                         <div className="links">
-                            <Link href="#">
+                            <Link href="/about">
                                 <a>About</a>
                             </Link>
                             <Link href="/Login">
@@ -49,7 +50,7 @@ class Navigation extends Component {
                         <i className="material-icons menu" onClick={() => this.menu()}>menu</i>
                     </div>
                     <div className="dropdown">
-                        <Link href="#">
+                        <Link href="/about">
                             <a>About</a>
                         </Link>
                         <Link href="/Login">
