@@ -34,16 +34,16 @@ const GAME_REMOVED = gql`
 `;
 
 class Games extends Component {
-    constructor(props) {
-        // props
-        super(props)
-        // state
-        this.state = {
-            listView: true,
-            mapView: false
-        };
-        // bind
-    }
+  constructor(props) {
+      // props
+      super(props)
+      // state
+      this.state = {
+          listView: true,
+          mapView: false
+      };
+      // bind
+  }
 
   render() {
     return (

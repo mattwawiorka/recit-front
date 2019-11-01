@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loading from '../Loading/Loading';
 import GameInfo from './GameInfo';
 import PlayerList from './PlayerList';
+import CommentList from './CommentList';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
@@ -25,6 +26,7 @@ const GET_PLAYERS = gql`
     players(gameId: $gameId) {
       id
       name
+      role
     }
   }
   `;
@@ -41,6 +43,32 @@ const LEAVE_GAME = gql`
   }
   `;
 
+const GET_COMMENTS = gql`
+  query Comments($gameId: ID!) {
+    comments(gameId: $gameId) {
+      id
+      userName
+      content
+    }
+  }
+  `;
+
+const CREATE_COMMENT = gql`
+  mutation CreateComment($commentInput: commentInput) {
+     createComment(commentInput: $commentInput) 
+ }
+ `;
+
+const COMMENT_ADDED = gql`
+ subscription {
+   commentAdded {
+     id
+     userName
+     content
+   }
+ }
+`;
+
 class Game extends Component {
   constructor(props) {
       // props
@@ -51,9 +79,14 @@ class Game extends Component {
           players: [],
           date: "",
           time: "",
-          loading: false
+          loading: false,
+          comment: ""
       };
     }
+
+  handleChange = (input) => (e) => {
+    this.setState({ [input]: e.target.value });
+  };
 
   componentDidMount() {
     console.log('Game Mounted')
@@ -114,6 +147,60 @@ class Game extends Component {
               variables={{ gameId }}
             >
               {LeaveGame => <button onClick={LeaveGame}>Leave Game</button>}
+            </Mutation>
+
+            <Query query={GET_COMMENTS} variables={{ gameId }}>
+            {
+              ({ loading, error, data, subscribeToMore }) => {
+                if (loading) return <Loading></Loading>
+                if (error) return <h4>ERROR!!!</h4>
+
+                const more = () => subscribeToMore({
+                  document: COMMENT_ADDED,
+                  updateQuery: (prev, { subscriptionData }) => {
+                    if (!subscriptionData.data) return prev;
+                    const newComment = subscriptionData.data.commentAdded;
+                    console.log('new Comment', newComment)
+                    const newComments = Object.assign({}, prev, {comments: [...prev.comments, newComment]});
+                    console.log('new comments', newComments)
+                    return newComments
+                  }
+                })
+
+                return <CommentList comments={data.comments} subscribeToMore={more} />
+      
+              }
+            }
+            </Query>
+
+            <br />
+
+            <Mutation
+                mutation={CREATE_COMMENT}
+                variables={{ commentInput: {
+                    gameId: gameId,
+                    content: this.state.comment
+                } }}
+                >
+                {CreateComment => (
+                  <form onSubmit={e => {
+                    e.preventDefault();
+                    document.getElementById('commentBox').value='';
+                    CreateComment();
+                  }}>
+                    <div className="form-group">
+                      <input 
+                          id='commentBox'
+                          onChange={this.handleChange("comment")} 
+                          type="text" 
+                          className="text-fields"
+                          placeholder="Add a comment"
+                          autoComplete="off"
+                      />
+                    </div>
+                  <input type="submit" value="Add Comment" />
+                </form>
+                )}
             </Mutation>
 
           </React.Fragment>

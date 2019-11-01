@@ -1,5 +1,15 @@
 import React from 'react';
 
+const Host = (props) => {
+  if (props.isHost) {
+    return (
+    <h3>Host - {props.host.name}</h3>
+    )
+  } else {
+    return <h3>No Host</h3>
+  }
+}
+
 const PlayerList = ({ players }) => {
 
   const rows = [];
@@ -12,9 +22,17 @@ const PlayerList = ({ players }) => {
     );
   });
 
+  let host = players.find(player => {
+    return player.role === 1
+  })
+
+  let isHost = (host) ? true : false;
+
   return (
     <div className="jumbotron text-center">
-
+        <br />
+        <Host isHost={isHost} host={host} />
+        <br />
         <table className="table table-hover">
         <thead>
           <tr>
