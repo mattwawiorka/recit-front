@@ -1,8 +1,21 @@
 import Layout from '../components/Layout/Layout';
 import React, { Component } from 'react';
-import axios from 'axios';
 import Router from 'next/router';
 import Link from 'next/link';
+import cookie from 'cookie';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo'
+import { withApollo } from '../lib/apollo';
+
+const LOGIN = gql`
+    mutation Login($name: String!, $password: String!) {
+        login(name: $name, password: $password) 
+        {
+            token
+            userId
+        }
+    }
+    `;
 
 class Login extends Component {
     constructor() {
@@ -17,40 +30,6 @@ class Login extends Component {
         this.setState({ [input]: e.target.value });
     };
 
-    clickLogin = e => {
-        e.preventDefault();
-        const {name, password} = this.state;
-        let graphqlQuery = {
-            query: `
-                {
-                    login(name: "${name}", password: "${password}") 
-                    {
-                        token
-                        userId
-                    }
-                }
-            `
-        }
-
-        axios({
-            url: 'http://localhost:8080/graphql',
-            method: 'post',
-            data: graphqlQuery
-        })
-        .then( response => { 
-            this.setState({
-                name: "",
-                password: ""
-            })
-            localStorage.setItem('token', response.data.data.login.token);
-            localStorage.setItem('userId', response.data.data.login.userId);
-            Router.push('/');
-        })
-        .catch( err => {
-            console.log(err);
-        })
-    }
-
     render() {
         const {name, password} = this.state;
        return (
@@ -61,27 +40,46 @@ class Login extends Component {
                     <div></div>
                     <div className="center-content">
                         <div>
-                            <form onSubmit={this.clickLogin}>
-                                <div className="form-group">
-                                    <input 
-                                        onChange={this.handleChange("name")} 
-                                        type="text" 
-                                        value={name}
-                                        className="text-fields"
-                                        placeholder="Username"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input 
-                                        onChange={this.handleChange("password")} 
-                                        type="password" 
-                                        value={password} 
-                                        className="text-fields"
-                                        placeholder="Password"
-                                    />
-                                </div>
-                                <input type="submit" value="Submit" />
-                            </form><br />
+                            <Mutation 
+                                mutation={LOGIN}
+                                variables={{ name, password }}
+                            >
+                                { Login => (    
+                                <form onSubmit={e => {
+                                    e.preventDefault();
+                                    Login()
+                                    .then(response => {
+                                        document.cookie = cookie.serialize('token', response.data.login.token, {
+                                            sameSite: true,
+                                            path: '/',
+                                            maxAge: 24 * 60 * 60
+                                        })
+                                        Router.push('/');
+                                    });
+                                }}>
+                                    <div className="form-group">
+                                        <input 
+                                            onChange={this.handleChange("name")} 
+                                            type="text" 
+                                            value={name}
+                                            className="text-fields"
+                                            placeholder="Username"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <input 
+                                            onChange={this.handleChange("password")} 
+                                            type="password" 
+                                            value={password} 
+                                            className="text-fields"
+                                            placeholder="Password"
+                                        />
+                                    </div>
+                                    <input type="submit" value="Submit" />
+                                </form>
+                                )}
+                            </Mutation>
+                            <br />
                         </div>
                         <div className="bottom">
                             <div>
@@ -158,4 +156,4 @@ class Login extends Component {
     }  
 }
 
-export default Login;
+export default withApollo(Login);

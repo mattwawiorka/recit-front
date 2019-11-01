@@ -37,7 +37,7 @@ class Navigation extends Component {
                             </div>
                         </Link>
                         <div className="links">
-                            <Link href="/about">
+                            <Link href="/About">
                                 <a>About</a>
                             </Link>
                             <Link href="/Login">
@@ -50,7 +50,7 @@ class Navigation extends Component {
                         <i className="material-icons menu" onClick={() => this.menu()}>menu</i>
                     </div>
                     <div className="dropdown">
-                        <Link href="/about">
+                        <Link href="/About">
                             <a>About</a>
                         </Link>
                         <Link href="/Login">

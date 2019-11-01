@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import GameList from '../components/GameList/GameList';
+import Games from '../components/Games';
 import Layout from '../components/Layout/Layout';
-import GameForm from '../components/CreateGame/GameForm';
+import CreateGameForm from '../components/CreateGame/CreateGameForm';
+import { withApollo } from '../lib/apollo';
 
 class Index extends Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class Index extends Component {
     renderCreateGame = () => {
         return (
             <Layout>
-                <GameForm />
+                <CreateGameForm />
                 <button className="btn" onClick={this.handleCreateGame}>Exit</button>
             </Layout>
         );
@@ -39,7 +40,7 @@ class Index extends Component {
     renderGameList = () => {
         return (
             <Layout>
-                <GameList></GameList>
+                <Games></Games>
                 <button className="btn" onClick={this.handleCreateGame}>Create Game</button>
             </Layout>
         )
@@ -62,4 +63,4 @@ class Index extends Component {
     }
 }
 
-export default Index;
+export default withApollo(Index);

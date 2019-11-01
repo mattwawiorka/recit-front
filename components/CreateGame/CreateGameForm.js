@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import CreateGameButton from './CreateGameButton';
 
-class GameForm extends Component {
+class CreateGameForm extends Component {
     constructor() {
         super()
         this.state = { 
@@ -46,60 +46,10 @@ class GameForm extends Component {
         }
     };
 
-    clickCreate = e => {
-        e.preventDefault();
+    render() {
         const {title, date, time, endDate, endTime, sport, venue, address, description} = this.state;
         const dateTime = new Date(date + "T" + time);
         const endDateTime = new Date(endDate + "T" + endTime);
-        let graphqlQuery = {
-            query: `
-            mutation {
-                createGame(gameInput: {
-                    title: "${title}",
-                    dateTime: "${dateTime}",
-                    endDateTime: "${endDateTime}",
-                    venue: "${venue}",
-                    address: "${address}",
-                    sport: "${sport}",
-                    description: "${description}",
-                    public: true
-                }) 
-                {
-                    id
-                }
-            }
-        `
-        };
-
-        axios({
-            url: 'http://localhost:8080/graphql',
-            method: 'post',
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem("token"),
-                'Content-Type': 'application/json'
-            },
-            data: graphqlQuery
-        })
-        .then( response => { 
-            this.setState({
-                title: "",
-                date: "",
-                time: "",
-                endDate: "",
-                endTime: "",
-                sport: "",
-                venue: "",
-                address: "",
-                description: ""
-            })
-        })
-        .catch( err => {
-            console.log(err);
-        })
-    }
-
-    render() {
-        const {title, date, time, endDate, endTime, sport, venue, address, description} = this.state;
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Create Game</h2>
@@ -186,15 +136,13 @@ class GameForm extends Component {
                             value={description} 
                         />
                     </div>
-                    <button 
-                        className="btn btn-raised btn-primary"
-                        onClick={this.clickCreate}>
-                        Create!
-                    </button>
                 </form>
+
+                <CreateGameButton title={title} dateTime={dateTime} endDateTime={endDateTime} 
+                    venue={venue} address={address} sport={sport} description={description} />    
             </div>
         );
     }
 }
 
-export default GameForm;
+export default CreateGameForm;

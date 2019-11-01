@@ -1,15 +1,16 @@
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout/Layout';
-import GamePage from '../components/GamePage/GamePage';
+import Game from '../components/GamePage/Game';
+import { withApollo } from '../lib/apollo';
 
-const Game = () => {
+const GamePage = () => {
   const router = useRouter();
   const gameId = router.query.id;
   return (
   <Layout>
-      <GamePage gameId={gameId} />
+      <Game gameId={gameId} />
   </Layout>
   );
 };
 
-export default Game;
+export default withApollo(GamePage);

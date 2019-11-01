@@ -1,75 +1,39 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import GameTable from './GameTable';
-import SearchBar from './SearchBar';
-import Loading from '../Loading/Loading';
+import React, { Component, useEffect } from 'react';
+import GameRow from './GameRow';
 
 class GameList extends Component {
-  constructor(props) {
-    // props
-    super(props)
-    // state
-    this.state = {
-      games: [],
-      loading: false
-    };
-    // bind
-  }
-
-  getGames() {
-    this.setState({
-      loading: true
-    })
-    const graphqlQuery = {
-      query: `
-        {
-          games {
-            id
-            title
-            sport
-            venue
-          }
-        }
-      `
-    };
-    axios({
-      url: 'http://localhost:8080/graphql',
-      method: 'post',
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem("token"),
-        'Content-Type': 'application/json'
-      },
-      data: graphqlQuery
-    })
-    .then( response => { 
-      this.setState({
-        games: response.data.data.games,
-        loading: false
-      })
-    })
-    .catch( err => {
-      console.log(err);
-    })
-  }
-
   componentDidMount() {
-    this.getGames();
+    this.props.subscribeToMore();
+    this.props.reload();
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <div className="container">
-          <Loading></Loading>
-        </div>
+    const rows = [];
+    
+    this.props.games.forEach((game) => {
+      rows.push(
+        <GameRow
+          id={game.id}
+          title={game.title}
+          sport={game.sport}
+          venue={game.venue}
+          key={game.id} />
       );
-    } else {
-      return (
-        <div>
-          <GameTable games={this.state.games} />
-        </div>
-      );
-    }
+    });
+
+    return (
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Sport</th>
+            <th>Venue</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
   }
 }
 
