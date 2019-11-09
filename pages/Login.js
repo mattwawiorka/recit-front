@@ -22,12 +22,16 @@ class Login extends Component {
         super()
         this.state = { 
             name: "",
-            password: ""
+            password: "",
+            error: ""
         }
     }
 
     handleChange = (input) => (e) => {
-        this.setState({ [input]: e.target.value });
+        this.setState({ 
+            [input]: e.target.value,
+            error: ""
+         });
     };
 
     render() {
@@ -35,51 +39,69 @@ class Login extends Component {
        return (
        <Layout>
         <div>
-                <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
-                <div className="container">
-                    <div></div>
-                    <div className="center-content">
-                        <div>
-                            <Mutation 
-                                mutation={LOGIN}
-                                variables={{ name, password }}
-                            >
-                                { Login => (    
-                                <form onSubmit={e => {
-                                    e.preventDefault();
-                                    Login()
-                                    .then(response => {
-                                        document.cookie = cookie.serialize('token', response.data.login.token, {
-                                            sameSite: true,
-                                            path: '/',
-                                            maxAge: 24 * 60 * 60
+            <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
+            <div className="container">
+                <div></div>
+                <div className="center-content">
+
+                    <span 
+                        className="alert"
+                        style={{ display: this.state.error ? "" : "none" }}
+                    >
+                        {this.state.error}
+                    </span>
+
+                    <div>
+                        <Mutation 
+                            mutation={LOGIN}
+                            variables={{ name, password }}
+                        >
+                            { Login => (    
+                            <form onSubmit={e => {
+                                e.preventDefault();
+                                Login()
+                                .then(response => {
+                                    if (response.errors) {
+                                        this.setState({
+                                            error: response.errors[0].message
                                         })
-                                        Router.push('/');
-                                    });
-                                }}>
-                                    <div className="form-group">
-                                        <input 
-                                            onChange={this.handleChange("name")} 
-                                            type="text" 
-                                            value={name}
-                                            className="text-fields"
-                                            placeholder="Username"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <input 
-                                            onChange={this.handleChange("password")} 
-                                            type="password" 
-                                            value={password} 
-                                            className="text-fields"
-                                            placeholder="Password"
-                                        />
-                                    </div>
-                                    <input type="submit" value="Submit" />
-                                </form>
-                                )}
-                            </Mutation>
-                            <br />
+                                        return;
+                                    }
+                                    window.localStorage.setItem('user', response.data.login.userId)
+                                    document.cookie = cookie.serialize('token', response.data.login.token, {
+                                        sameSite: true,
+                                        path: '/',
+                                        maxAge: 24 * 60 * 60
+                                    })
+                                    Router.push('/');
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                });
+                            }}>
+                                <div className="form-group">
+                                    <input 
+                                        onChange={this.handleChange("name")} 
+                                        type="text" 
+                                        value={name}
+                                        className="text-fields"
+                                        placeholder="Username"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input 
+                                        onChange={this.handleChange("password")} 
+                                        type="password" 
+                                        value={password} 
+                                        className="text-fields"
+                                        placeholder="Password"
+                                    />
+                                </div>
+                                <input type="submit" value="Submit" />
+                            </form>
+                            )}
+                        </Mutation>
+                        <br />
                         </div>
                         <div className="bottom">
                             <div>
@@ -132,7 +154,7 @@ class Login extends Component {
 
                 input[type=submit] {
                     width: 100%;
-                    background-color: var(--greenapple);
+                    background-color: var(--darkermatter);
                     color: white;
                     padding: 14px 20px;
                     margin 8px 0;
@@ -142,7 +164,19 @@ class Login extends Component {
                 }
 
                 input[type=submit]:hover {
-                    background-color: #45a049;
+                    background-color: var(--darkmatter);
+                }
+
+                .alert {
+                    // padding: 10px 16px;
+                    // border-style: solid;
+                    // border-color: #e14646;
+                    // border-radius: 10px;
+                    // background-color: #ffcccb; /* Red */
+                    // box-shadow: 0 0 10px #ffcccb;
+                    color: black;
+                    margin-bottom: 15px;
+                    text-align: center;
                 }
 
                 @media only screen and (max-width: 700px) {

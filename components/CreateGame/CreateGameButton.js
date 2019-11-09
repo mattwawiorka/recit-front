@@ -13,6 +13,7 @@ const CREATE_GAME = gql`
 
 const CreateGameButton = ({ title, dateTime, endDateTime, venue, address, sport, description }) => {
     return (
+        <React.Fragment>
         <Mutation
             mutation={CREATE_GAME}
             variables={{ gameInput: {
@@ -26,8 +27,47 @@ const CreateGameButton = ({ title, dateTime, endDateTime, venue, address, sport,
                 public: true
             } }}
             >
-            {CreateGame => <button onClick={CreateGame}>Create Game</button>}
+                { CreateGame => {
+                    <button onClick={e => {
+                        e.preventDefault();
+                        CreateGame()
+                        .then(response => {
+                            console.log(response);
+                            if (response.errors) {
+                                // this.setState({
+                                //     error: response.errors[0].message
+                                // })
+                                // return;
+                            }
+                            //Router.push('/');
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                    }}>Create Game</button>
+                }}
         </Mutation>
+
+        <style jsx>{`
+            button {
+                width: 50%;
+                background-color: var(--darkermatter);
+                color: white;
+                padding: 14px 20px;
+                margin: 1em;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            button:hover {
+                background-color: var(--darkmatter);
+            }
+        `}</style>
+        </React.Fragment>
     )
 }
 

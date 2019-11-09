@@ -17,35 +17,35 @@ class CommentList extends Component {
         if (this.props.comments) {    
             this.props.comments.forEach((comment) => {
                 rows.push(
-                <tr key={comment.id}>
-                    <th>{comment.userName} - {comment.content}</th>
-                </tr>
+                <React.Fragment key={comment.id}>
+                    <div>{comment.userName} - {comment.content}</div>
+                </React.Fragment>
                 );
             });
         }
         return (
 
-        <div className="jumbotron text-center">
+        <React.Fragment>
 
-            <br />
-
-            <table className="table table-hover">
-            <thead>
-                <tr>
-                <th>Comments</th>
-                <th></th>
-                </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-            </table>
-
-            <style jsx>{`
-                .jumbotron {
-                    background-color: var(--greenapple); /* Orange */
-                    color: #ffffff;
-                }
-            `}</style>
+        
+        <div className="container">
+            {rows}
         </div>
+
+        <style jsx>{`
+            .container {
+                display: flex;
+                flex-direction: column;
+                background-color: var(--greenapple); /* Orange */
+                color: #ffffff;
+                width: 100%;
+                height: 100%;
+                padding: 1em;
+                border-radius: 25px;
+                overflow: auto;
+            }
+        `}</style>
+        </React.Fragment>
         );
     }
 }

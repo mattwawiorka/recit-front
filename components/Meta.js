@@ -9,6 +9,13 @@ export default () => (
                 --greenapple: #2ecc71;
                 --darkmatter: #34495e;
                 --darkermatter: #2c3e50;
+
+
+                --darkestTurf: #094d1c;
+                --darkTurf: #45a049;
+                --turf: #55ff64;
+                --lightTurf: #3dec55;
+                --lightestTurf: #00ff00;
             }
 
             * {
@@ -29,6 +36,31 @@ export default () => (
             a:hover {
                 color: var(--greenapple);
                 cursor: pointer;
+            }
+
+            // SCROLLBAR
+            /* Bar */
+            ::-webkit-scrollbar {
+                width: 5px;
+                max-height: 10px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+                box-shadow: inset 0 0 5px grey; 
+                border-radius: 10px;
+                margin: 2em;
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: var(--darkermatter); 
+                border-radius: 10px;
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--darkmatter); 
             }
 
         `}</style>

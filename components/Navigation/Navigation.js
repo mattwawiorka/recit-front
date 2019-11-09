@@ -66,11 +66,11 @@ class Navigation extends Component {
                 <style jsx>{`
                     nav {
                         display: grid;
-                        grid-template-rows: minmax(min-content, 100px) min-content;
+                        grid-template-rows: minmax(min-content, 10vh) min-content;
                     }
 
                     nav .content {
-                        background-color: var(--greyapple);
+                        
                         display: grid;
                         place-items: center;
                         grid-auto-flow: column;
@@ -81,6 +81,12 @@ class Navigation extends Component {
                         filter: opacity(80%);
                         cursor: pointer;
                         -webkit-user-select: none;
+                    }
+
+                    .links > a {
+                        color: white;
+                        font-size: 1.5em;
+                        font-weight: bold;
                     }
 
                     nav .content .menu {
@@ -110,7 +116,6 @@ class Navigation extends Component {
                     nav .dropdown a {
                         color: white;
                         padding: 20px;
-                        
                     }
 
                     nav .dropdown a:hover {

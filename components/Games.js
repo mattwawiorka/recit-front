@@ -12,6 +12,7 @@ const GET_GAMES_QUERY = gql`
       title
       sport
       venue
+      dateTime
     }
   }
 `;
@@ -23,6 +24,7 @@ const GAME_ADDED = gql`
       title
       sport
       venue
+      dateTime
     }
   }
 `;

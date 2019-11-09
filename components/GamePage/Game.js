@@ -3,6 +3,7 @@ import Loading from '../Loading/Loading';
 import GameInfo from './GameInfo';
 import PlayerList from './PlayerList';
 import CommentList from './CommentList';
+import Discussion from './Discussion';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
@@ -69,34 +70,39 @@ const COMMENT_ADDED = gql`
  }
 `;
 
+let playerFound;
+
 class Game extends Component {
   constructor(props) {
-      // props
-      super(props)
-      // state
-      this.state = {
-          game: {},
-          players: [],
-          date: "",
-          time: "",
-          loading: false,
-          comment: ""
-      };
-    }
+    // props
+    super(props)
+    // state
+    this.state = {
+        game: {},
+        joined: false,
+        date: "",
+        time: "",
+        loading: false,
+        comment: ""
+    };
+  }
 
   handleChange = (input) => (e) => {
     this.setState({ [input]: e.target.value });
   };
 
   componentDidMount() {
-    console.log('Game Mounted')
+    console.log('game mounted')
   }
 
   render() {
     const id = this.props.gameId;
     const gameId = this.props.gameId;
+    console.log('game rendered')
         return (
           <React.Fragment>
+          <div className="container">
+            <div className="gameInfo">
             <Query query={GET_GAME} variables={{ id }}>
             {
               ({ loading, error, data }) => {
@@ -108,48 +114,15 @@ class Game extends Component {
               }
             }
             </Query>
-          
-            <Query query={GET_PLAYERS} variables={{ gameId }}>
-            {
-              ({ loading, error, data }) => {
-                if (loading) return <Loading></Loading>
-                if (error) return <h4>ERROR!!!</h4>
-
-                return <PlayerList players={data.players} />
-      
-              }
-            }
-            </Query>
-
-            <Mutation 
-              mutation={JOIN_GAME}
-              refetchQueries={() => {
-                console.log('refetch query', gameId)
-                return [{
-                  query: GET_PLAYERS,
-                  variables: {gameId: gameId}
-                }]
-              }}
-              variables={{ gameId }}
-            >
-              {JoinGame => <button onClick={JoinGame}>Join Game</button>}
-            </Mutation>
-
-            <Mutation 
-              mutation={LEAVE_GAME}
-              refetchQueries={() => {
-                console.log('refetch query', gameId)
-                return [{
-                  query: GET_PLAYERS,
-                  variables: {gameId: gameId}
-                }]
-              }}
-              variables={{ gameId }}
-            >
-              {LeaveGame => <button onClick={LeaveGame}>Leave Game</button>}
-            </Mutation>
-
-            <Query query={GET_COMMENTS} variables={{ gameId }}>
+            </div>
+            
+            <div className="players">
+              <PlayerList gameId={gameId} />
+            </div>
+            
+            <div className="discussion">
+              <Discussion gameId={gameId} />
+            {/* <Query query={GET_COMMENTS} variables={{ gameId }}>
             {
               ({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <Loading></Loading>
@@ -172,8 +145,6 @@ class Game extends Component {
               }
             }
             </Query>
-
-            <br />
 
             <Mutation
                 mutation={CREATE_COMMENT}
@@ -201,8 +172,83 @@ class Game extends Component {
                   <input type="submit" value="Add Comment" />
                 </form>
                 )}
-            </Mutation>
+            </Mutation> */}
+            </div>
+          </div>
 
+          <style jsx>{`
+            .container {
+              display: grid;
+              //flex-wrap: wrap;
+              max-width: 60vw;
+              max-height: 82vh;
+              //align-items: center;
+              justify-items: center;
+              grid-template-columns: 45vw 15vw;
+              grid-template-rows: 45vh 37vh;
+              grid-template-areas:
+                "gameInfo players"
+                "discussion discussion";
+              //grid-gap: 10px;
+              overflow: hidden;
+            }
+
+            .gameInfo {
+              width: 100%;
+              height: 100%;
+              grid-area: gameInfo;
+              overflow: hidden;
+              // justify-content: space-around;
+              // align-items: center;
+              // alight-content: center;
+              // justify-items: center;
+              //padding: 10%;
+              //margin-top: 2em;
+            }
+
+            .players {
+              width: 100%;
+              height: 100%;
+              grid-area: players;
+              overflow: hidden;
+              //padding: 10%;
+            }
+
+            .discussion {
+              width: 100%;
+              height: 100%;
+              grid-area: discussion;
+              overflow: auto;
+              //padding: 10%;
+            }
+
+            input[type=submit] {
+              width: 50%;
+              background-color: var(--darkermatter);
+              color: white;
+              padding: 14px 20px;
+              margin 8px 0;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+            
+            button {
+              width: 100%;
+              background-color: var(--darkermatter);
+              color: white;
+              padding: 14px 20px;
+              margin 8px 0;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+
+            input[type=submit]:hover {
+                background-color: var(--darkmatter);
+            }
+
+          `}</style>
           </React.Fragment>
         );
       }
