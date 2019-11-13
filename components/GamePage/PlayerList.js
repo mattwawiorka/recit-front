@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Loading from '../Loading/Loading';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
-import { of } from 'zen-observable';
 
 const GET_PLAYERS = gql`
   query Players($gameId: ID!) {

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import Loading from '../Loading/Loading';
 import GameInfo from './GameInfo';
 import PlayerList from './PlayerList';
-import CommentList from './CommentList';
 import Discussion from './Discussion';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 
 const GET_GAME = gql`
   query Game($id: ID!) {
@@ -70,8 +69,6 @@ const COMMENT_ADDED = gql`
  }
 `;
 
-let playerFound;
-
 class Game extends Component {
   constructor(props) {
     // props
@@ -122,57 +119,6 @@ class Game extends Component {
             
             <div className="discussion">
               <Discussion gameId={gameId} />
-            {/* <Query query={GET_COMMENTS} variables={{ gameId }}>
-            {
-              ({ loading, error, data, subscribeToMore }) => {
-                if (loading) return <Loading></Loading>
-                if (error) return <h4>ERROR!!!</h4>
-
-                const more = () => subscribeToMore({
-                  document: COMMENT_ADDED,
-                  updateQuery: (prev, { subscriptionData }) => {
-                    if (!subscriptionData.data) return prev;
-                    const newComment = subscriptionData.data.commentAdded;
-                    console.log('new Comment', newComment)
-                    const newComments = Object.assign({}, prev, {comments: [...prev.comments, newComment]});
-                    console.log('new comments', newComments)
-                    return newComments
-                  }
-                })
-
-                return <CommentList comments={data.comments} subscribeToMore={more} />
-      
-              }
-            }
-            </Query>
-
-            <Mutation
-                mutation={CREATE_COMMENT}
-                variables={{ commentInput: {
-                    gameId: gameId,
-                    content: this.state.comment
-                } }}
-                >
-                {CreateComment => (
-                  <form onSubmit={e => {
-                    e.preventDefault();
-                    document.getElementById('commentBox').value='';
-                    CreateComment();
-                  }}>
-                    <div className="form-group">
-                      <input 
-                          id='commentBox'
-                          onChange={this.handleChange("comment")} 
-                          type="text" 
-                          className="text-fields"
-                          placeholder="Add a comment"
-                          autoComplete="off"
-                      />
-                    </div>
-                  <input type="submit" value="Add Comment" />
-                </form>
-                )}
-            </Mutation> */}
             </div>
           </div>
 

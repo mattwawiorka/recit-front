@@ -1,4 +1,5 @@
 import React from 'react';
+import formatDate from '../../lib/formatDate';
 
 const GameInfo = ({ game }) => {
 
@@ -22,11 +23,8 @@ const GameInfo = ({ game }) => {
         <p>{game.description}</p>
       </div>
       <div className="dateTime">
-        <p>{startDate}</p>
-        <p>{startTime}</p>
-        <br />
-        {/* <p>{endDate}</p> */}
-        <p>{endTime}</p>
+        <p>{formatDate.getMonthDayTime((parseInt(game.dateTime)))} 
+         - {formatDate.getTime((parseInt(game.endDateTime)))}</p>
       </div>
       <div className="location">
         <h3>{game.venue}</h3>
@@ -36,59 +34,74 @@ const GameInfo = ({ game }) => {
 
     <style jsx>{`
       .container {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 2fr 2fr 4fr 4fr 3fr;
+        display: flex;
+        flex-direction: column;
         background-color: var(--greenapple); /* Orange */
-        // color: white;
-        // width: 30vw;
-        // height: 45vh;
-        // border-radius: 25px;
-        // top-margin: 2em;
-        // justify-content: space-around;
-        height: 80%;
-        width: 80%;
+        height: 85%;
+        width: 85%;
         color: white;
-        border-radius: 25px;
         margin: auto;
         margin-top: 2em;
         margin-bottom: 2em;
         padding: 1em;
         justify-items: center;
-      }
-
-      .container > div {
-        // justify-content: center;
-        // align-content: center;
+        border-radius: 15px;
       }
 
       .title {
-        // justify-content: center;
-        // align-content: center;
+        flex: 1.5;
+        width: 100%;
+        justify-content: center;
+        align-content: center;
+        border-bottom-style: groove;
+        border-color: white;
+        border-width: thin;
       }
 
-      // .sport {
-      //   display: flex;
-      //   justify-content: center;
-      // }
+      .sport {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        border-bottom-style: groove;
+        border-color: white;
+        border-width: thin;
+        font-weight: bold;
+      }
 
-      // .description {
-      //   display: flex;
-      //   justify-content: center;
-      // }
+      .description {
+        flex: 3;
+        width: 100%;
+        padding: 0.5em;
+        display: flex;
+        justify-content: center;
+      }
 
-      // .dateTime {
-      //   display: grid;
-      //   grid-template-columns: 1fr 1fr;
-      //   justify-items: center;
-      // }
+      .dateTime {
+        flex: 0.75;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
 
-      // .location {
-      //   display: flex;
-      //   flex: auto;
-      //   flex-direction: column;
-      //   align-items: center;
-      // }
+      .location {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        flex: auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      @media only screen and (max-width: 700px) {
+        .dateTime {
+          // font-size: 0.9em;
+          // display: flex;
+          // justify-content: center;
+          // width: 50%;
+        }
+    }
     `}</style>
     </React.Fragment>
   );

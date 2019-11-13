@@ -10,6 +10,7 @@ const GET_COMMENTS = gql`
       id
       userName
       content
+      dateTime
     }
   }
   `;
@@ -26,6 +27,7 @@ const COMMENT_ADDED = gql`
      id
      userName
      content
+     dateTime
    }
  }
 `;
@@ -36,13 +38,27 @@ class Discussion extends Component {
         super(props)
         // state
         this.state = {
-            comment: ""
+            comment: "",
+            showPostButton: false
         };
     }
 
     handleChange = (input) => (e) => {
-        this.setState({ [input]: e.target.value });
+        this.setState({ 
+            [input]: e.target.value,
+            showPostButton: true 
+        });
+
+        if (e.target.value !== "") {
+            document.getElementById("postCommentButton").style.visibility = "visible";
+        } else {
+            document.getElementById("postCommentButton").style.visibility = "hidden";
+        }
     };
+
+    componentDidMount() {
+        document.getElementById("postCommentButton").style.visibility = "hidden";
+    }
 
     render() {
         const gameId = this.props.gameId;
@@ -62,28 +78,26 @@ class Discussion extends Component {
                         } }}
                         >
                         {CreateComment => (
-                        <form onSubmit={e => {
+                        <form 
+                            className="commentForm" 
+                            onSubmit={e => {
                             e.preventDefault();
                             document.getElementById('commentBox').value='';
                             CreateComment();
                         }}>
-                            <div className="form-group">
-                                <textarea
-                                    id='commentBox'
-                                    onChange={this.handleChange("comment")} 
-                                    type="text" 
-                                    className="comment-text"
-                                    placeholder="Add a comment..."
-                                    autoComplete="off"
-                                />
-                            </div>
-                            <input className="post-button" type="submit" value="Post" />
+                            <textarea
+                                id='commentBox'
+                                onChange={this.handleChange("comment")} 
+                                type="text" 
+                                className="comment-text"
+                                placeholder="Add a comment..."
+                                autoComplete="off"
+                            />
+                            <input id="postCommentButton" className="post-button" type="submit" value="Post" />
                         </form>
                         )}
                     </Mutation>
                 </div>
-
-                <br />
 
                 <div className="comments">
                     <Query query={GET_COMMENTS} variables={{ gameId }}>
@@ -104,7 +118,17 @@ class Discussion extends Component {
                         }
                         })
 
-                        return <CommentList comments={data.comments} subscribeToMore={more} />
+                        const sortedComments = data.comments.sort( (a,b) => {
+                            let comparison;
+                            if (parseInt(b.dateTime) > parseInt(a.dateTime)) {
+                                comparison = 1;
+                            } else {
+                                comparison = -1;
+                            }
+                            return comparison;
+                        })
+
+                        return <CommentList comments={sortedComments} subscribeToMore={more} />
                     }
                     }
                     </Query>
@@ -118,44 +142,57 @@ class Discussion extends Component {
                     flex-direction: column;
                     width: 90%;
                     height: 90%;
-                    margin: 1em;
+                    margin: auto;
                 }
 
                 .title {
-                    flex: 2;
+                    flex: 1;
                     font-weight: bold;
                 }
 
                 .userInput {
                     flex: 3;
                     display: flex;
+                    border-style: groove;
+                    border-radius: 5px;
+                    overflow: auto;
                 }
 
-                form {
+                .commentForm {
                     display: flex;
                     width: 100%;
-                    height: 100%;
-                }
-
-                .form-group {
-                    flex: 8;
-                    width: 80%;
+                    background-color: white;
+                    border-radius: 5px;
                 }
 
                 textarea {
                     width: 80%;
-                    height: 80%;
-                    border-radius: 4px;
+                    height: 100%;
+                    border: none;
+                    resize: none;
+                    outline: none;
+                    border-radius: 5px;
+                    padding: 0.5em;
+                    white-space: pre-wrap;
+                }
+
+                textarea::-webkit-input-placeholder {
+                    color: #616770;
+                }
+
+                textarea:focus::-webkit-input-placeholder {
+                    color: #A9A9A9;
                 }
 
                 .post-button {
-                    flex: 2;
-                    width: 50%;
-                    height: 50%;
+                    //flex: 2;
+                    width: 20%;
+                    height: 30%;
                     background-color: var(--darkermatter);
                     color: white;
-                    padding: 14px 20px;
-                    margin 8px 0;
+                    margin-top: auto;
+                    margin-bottom: 0.5em;
+                    margin-right: 0.5em;
                     border: none;
                     border-radius: 4px;
                     cursor: pointer;
