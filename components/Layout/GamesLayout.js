@@ -20,13 +20,13 @@ const GamesLayout = (props) => (
             </aside>
             <main>
                 {props.children[1]}
-                <BottomDockable startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
             </main>
             <aside>
                 {props.children[2]}
             </aside>
             <footer>
                 <Footer />
+                <BottomDockable startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
             </footer>
         </div>
 
@@ -36,12 +36,12 @@ const GamesLayout = (props) => (
                 height: 100vh;
                 display: grid;
                 grid-template-columns: 20vw 60vw 20vw;
-                grid-template-rows: 10vh 82vh 8vh;
+                grid-template-rows: minmax(min-content, min-content) 82vh 8vh;
                 grid-template-areas:
                     "header header header"
                     "sidebar1 main sidebar2"
                     "footer footer footer";
-                overflow: hidden;
+                overflow-x: hidden;
             }
 
             header {
@@ -52,7 +52,7 @@ const GamesLayout = (props) => (
             aside:nth-of-type(1) {
                 grid-area: sidebar1;
                 background-color: var(--greyapple);
-                overflow: hidden;
+                //overflow: hidden;
             }
 
             main {
@@ -66,7 +66,7 @@ const GamesLayout = (props) => (
             aside:nth-of-type(2) {
                 grid-area: sidebar2;
                 background-color: var(--greyapple);
-                overflow: hidden;
+                //overflow: hidden;
             }
 
             footer {

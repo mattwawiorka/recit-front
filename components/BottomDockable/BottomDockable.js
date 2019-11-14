@@ -16,12 +16,12 @@ class BottomDockable extends Component {
         }
         return (
             <React.Fragment>
-            <button onClick={this.props.clickEvent} className="bottom">
+            <button onClick={this.props.clickEvent} className="createGameButton">
                 <h1>{option}</h1>
             </button>
 
             <style jsx>{`
-                .bottom {
+                .createGameButton {
                     position: fixed;
                     //bottom: 8vh;
                     bottom: 0;
@@ -37,6 +37,11 @@ class BottomDockable extends Component {
                     border-top-left-radius: 110px; 
                     border-top-right-radius: 110px;
                     border-bottom: 0;
+                    cursor: pointer;
+                }
+
+                .createGameButton:hover {
+                    background-color: var(--darkmatter);
                 }
             `}</style>
             </React.Fragment>

@@ -1,14 +1,7 @@
 import React from 'react';
-import formatDate from '../../lib/formatDate';
+import dateTool from '../../lib/dateTool';
 
 const GameInfo = ({ game }) => {
-
-  const start = new Date(parseInt(game.dateTime));
-  const startDate = start.toLocaleDateString();
-  const startTime =  start.toLocaleTimeString();
-  const end = new Date(parseInt(game.endDateTime));
-  const endDate = end.toLocaleDateString();
-  const endTime = end.toLocaleTimeString();
 
   return (
     <React.Fragment>
@@ -22,13 +15,25 @@ const GameInfo = ({ game }) => {
       <div className="description">
         <p>{game.description}</p>
       </div>
-      <div className="dateTime">
-        <p>{formatDate.getMonthDayTime((parseInt(game.dateTime)))} 
-         - {formatDate.getTime((parseInt(game.endDateTime)))}</p>
+      <div className="when">
+        <div className="timeIcon">
+          <img src="/timeIcon.svg" alt="Time" 
+            style={{ width: '60%', height: '40%', borderRadius: '10px'}} />
+        </div>
+        <div className="dateTime">
+          <p>{dateTool.getDateTime(parseInt(game.dateTime), true, true)} 
+            - {dateTool.getTime((parseInt(game.endDateTime)))}</p>
+         </div>
       </div>
-      <div className="location">
-        <h3>{game.venue}</h3>
-        <p>{game.address}</p>
+      <div className="where">
+        <div className="locationIcon">
+          <img src="/timeIcon.svg" alt="Location" 
+            style={{ width: '60%', height: '40%', borderRadius: '10px'}}  />
+        </div>
+        <div className="location">
+          <h3>{game.venue}</h3>
+          <p>{game.address}</p>
+        </div>
       </div>
     </div>
 
@@ -46,6 +51,7 @@ const GameInfo = ({ game }) => {
         padding: 1em;
         justify-items: center;
         border-radius: 15px;
+        overflow: auto;
       }
 
       .title {
@@ -75,23 +81,49 @@ const GameInfo = ({ game }) => {
         padding: 0.5em;
         display: flex;
         justify-content: center;
+        word-wrap: break-word;
+        white-space: pre-wrap;
       }
 
-      .dateTime {
+      .when {
         flex: 0.75;
         width: 100%;
         display: flex;
         justify-content: center;
       }
 
-      .location {
+      .timeIcon {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      .dateTime {
+        flex: 3;
+        width: 100%;
+        height: 100%;
+      }
+
+      .where {
         flex: 1;
         width: 100%;
         display: flex;
         flex: auto;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        margin-top: 0.75em;
+        //justify-content: center;
+      }
+
+      .locationIcon {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      .location {
+        flex: 3;
+        width: 100%;
+        height: 100%;
       }
 
       @media only screen and (max-width: 700px) {

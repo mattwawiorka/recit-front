@@ -1,44 +1,80 @@
 import Link from 'next/link';
+import dateTool from '../../lib/dateTool';
 
-const GameRow = ({id, title, sport, venue, date, time}) => {
+const GameRow = ({id, title, sport, venue, dateTime }) => {
+  let dateFormat;
+  if (parseInt(dateTime) < dateTool.getEndOfWeek().valueOf()) {
+    dateFormat = dateTool.getDateTime(parseInt(dateTime), false, true);
+  } else {
+    dateFormat = dateTool.getDateTime(parseInt(dateTime), true, false)
+  }
+
   return (
     <React.Fragment>
     <Link href={`/Game?id=${id}`} as='/'>
     <li className="container">
-      <div className="dateTime">
-        <h3>{date}</h3>
-        <h3>{time}</h3>
+      <div className="sport">
+        <h3>{sport}</h3>
       </div>
-      <h3 className="title">{title}</h3>
-      <h3>{sport}</h3>
-      <h3>{venue}</h3> 
+      <div className="dateTime">
+        <h3>{dateFormat}</h3>
+      </div>
+      <div className="title">
+        <h3>{title}</h3>
+      </div>
+      <div className="venue">
+        <h3>{venue}</h3> 
+      </div>
     </li>
     </Link> 
 
     <style jsx>{`
       .container {
-        display: grid;
-        grid-template-columns: 10vw 10vw 10vw 10vw;
-        grid-gap: 2em;
-        grid-auto-rows: 4em;
+        // display: grid;
+        // grid-template-columns: 10vw 10vw 10vw 10vw;
+        // grid-gap: 2em;
+        // grid-auto-rows: 4em;
+        display: flex;
+        width: 100%;
+        min-height: 4em;
+        height: auto;
+        padding: 0.5em;
+        //border-bottom-style: groove;
+        overflow-x: hidden;
+        border-radius: 3px;
       }
 
-      li {
-        border-bottom-style: groove;
-      }
-
-      li:hover {
+      .container:hover {
         background-color: var(--greyapple);
-        transform: scale(0.95);
+        transform: scale(0.97);
       }
 
-      .title {
-        text-align: center;
+      .sport {
+        flex: 0.75;
+        padding: 0.5em;
+        font-size: 0.75em;
       }
 
       .dateTime {
+        flex: 1;
+        padding: 0.5em;
         text-align: center;
+        color: #616770;
         font-size: 0.75em;
+      }
+
+      .title {
+        flex: 2;
+        padding: 0.5em;
+        text-align: center;
+      }
+
+      .venue {
+        flex: 1;
+        display: flex;
+        padding: 0.5em;
+        text-align: center;
+        justify-content: center;
       }
 
       @media only screen and (max-width: 1000px) {

@@ -56,19 +56,29 @@ class Games extends Component {
             if (error) return <h4>ERROR</h4>
 
             const more = () => subscribeToMore({
-                document: GAME_ADDED,
-                updateQuery: (prev, { subscriptionData }) => {
-                  if (!subscriptionData.data) return prev;
-                  const newGame = subscriptionData.data.gameAdded;
-                  const newGames = Object.assign({}, prev, {games: [...prev.games, newGame]});
-                  return newGames
-                }
-              })
+              document: GAME_ADDED,
+              updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData.data) return prev;
+                const newGame = subscriptionData.data.gameAdded;
+                const newGames = Object.assign({}, prev, {games: [...prev.games, newGame]});
+                return newGames
+              }
+            })
+
+            const chronilogicalGames = data.games.sort( (a,b) => {
+              let comparison;
+              if (parseInt(a.dateTime) > parseInt(b.dateTime)) {
+                  comparison = 1;
+              } else {
+                  comparison = -1;
+              }
+              return comparison;
+            })
 
             if (this.state.listView) {
                 return (
-                    <div>
-                      <GameList games={data.games} subscribeToMore={more} reload={refetch} />
+                    <div style={{ width: '100%', height: '100%', padding: '1.2em' }}>
+                      <GameList games={chronilogicalGames} subscribeToMore={more} reload={refetch} />
                     </div>
                 )
             }

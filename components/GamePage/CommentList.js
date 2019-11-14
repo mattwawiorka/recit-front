@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import formatDate from '../../lib/formatDate';
+import dateTool from '../../lib/dateTool';
 
 class CommentList extends Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class CommentList extends Component {
                                 {comment.userName}
                             </div>
                             <div className="dateTime">
-                                {formatDate.getMonthDayTime(parseInt(comment.dateTime))}
+                                {dateTool.getDateTime(parseInt(comment.dateTime))}
                             </div>
                         </div>
                         <div className="body">

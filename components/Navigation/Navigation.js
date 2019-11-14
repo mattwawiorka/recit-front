@@ -33,7 +33,7 @@ class Navigation extends Component {
                         <Link href="/">
                             <div className="nav-title">
                                 <img src="/rec-it.png" alt="Recit"
-                                 style={{ width: '12%', height: '12%', borderRadius: '10px'}}/>
+                                 style={{ width: '64px', height: '64px', borderRadius: '10px'}}/>
                             </div>
                         </Link>
                         <div className="links">
@@ -70,7 +70,6 @@ class Navigation extends Component {
                     }
 
                     nav .content {
-                        
                         display: grid;
                         place-items: center;
                         grid-auto-flow: column;
@@ -115,6 +114,7 @@ class Navigation extends Component {
 
                     nav .dropdown a {
                         color: white;
+                        font-weight: bold;
                         padding: 20px;
                     }
 

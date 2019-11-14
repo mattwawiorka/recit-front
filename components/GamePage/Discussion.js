@@ -81,9 +81,10 @@ class Discussion extends Component {
                         <form 
                             className="commentForm" 
                             onSubmit={e => {
-                            e.preventDefault();
-                            document.getElementById('commentBox').value='';
-                            CreateComment();
+                                e.preventDefault();
+                                console.log('this mafk submitted?')
+                                document.getElementById('commentBox').value='';
+                                CreateComment();
                         }}>
                             <textarea
                                 id='commentBox'
@@ -118,6 +119,7 @@ class Discussion extends Component {
                         }
                         })
 
+                        console.log('comments query')
                         const sortedComments = data.comments.sort( (a,b) => {
                             let comparison;
                             if (parseInt(b.dateTime) > parseInt(a.dateTime)) {

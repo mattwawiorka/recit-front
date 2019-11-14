@@ -18,7 +18,7 @@ class Index extends Component {
         };
         // bind
         this.handleCreateGame = this.handleCreateGame.bind(this);
-      }
+    }
 
     componentDidMount() {
         this.setState({

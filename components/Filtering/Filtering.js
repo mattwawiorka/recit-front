@@ -6,7 +6,7 @@ class Filtering extends Component {
         return(
             <React.Fragment>
                 <div className="container">
-                    <p>Filtering</p>
+                    {/* <p>Filtering</p> */}
                 </div>
 
                 <style jsx>{`

@@ -6,7 +6,7 @@ class Announcements extends Component {
         return(
             <React.Fragment>
                 <div className="container">
-                    <p>Announcements</p>
+                    {/* <p>Announcements</p> */}
                 </div>
 
                 <style jsx>{`
@@ -15,7 +15,7 @@ class Announcements extends Component {
                         height: 76vh;
                         display: flex;
                         justify-content: center;
-                        background-color: white;
+                        //background-color: white;
                         border-radius: 25px;
                         margin-top: 2em;
                         margin-left: 1em;

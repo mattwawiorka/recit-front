@@ -223,8 +223,6 @@ class CreateGameForm extends Component {
 
                 <br />
 
-                {/* <CreateGameButton title={title} dateTime={dateTime} endDateTime={endDateTime} 
-                    venue={venue} address={address} sport={sport} description={description} />     */}
             </div>
             <style jsx>{`
                 .container {

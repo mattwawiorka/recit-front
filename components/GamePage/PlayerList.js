@@ -162,10 +162,15 @@ class PlayerList extends Component {
 
         .button {
           flex: 1;
+          width: 100%;
+          justify-items: center;
+          justify-content: center;
+          align-items: center;
+          align-content: center;
         }
 
         button {
-          width: 100%;
+          width: 80%;
           background-color: var(--darkermatter);
           color: white;
           padding: 14px 20px;
