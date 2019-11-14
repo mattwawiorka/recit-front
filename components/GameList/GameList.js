@@ -55,7 +55,7 @@ class GameList extends Component {
         text-decoration: underline;
       }
 
-      div {
+      .section {
         width: 100%;
         //margin-top: 0.75em;
       }
@@ -75,7 +75,7 @@ class GameList extends Component {
 
     if (todayGames.length > 0) {
       today = 
-        <div>
+        <div className="section" >
           <h4 className="chronology">Today</h4>
           {todayGames}
           <div className="chronSpace"></div>
@@ -87,7 +87,7 @@ class GameList extends Component {
 
     if (tomorrowGames.length > 0) {
       tomorrow = 
-        <div>
+        <div className="section" >
           <h4 className="chronology">Tomorrow</h4>
           {tomorrowGames}
           <div className="chronSpace"></div>
@@ -99,7 +99,7 @@ class GameList extends Component {
 
     if (thisWeekGames.length > 0) {
       thisWeek = 
-        <div>
+        <div className="section" >
           <h4 className="chronology">This Week</h4>
           {thisWeekGames}
           <div className="chronSpace"></div>
@@ -111,7 +111,7 @@ class GameList extends Component {
 
     if (nextWeekGames.length > 0) {
       nextWeek = 
-        <div>
+        <div className="section" >
           <h4 className="chronology">Next Week</h4>
           {nextWeekGames}
           <div className="chronSpace"></div>
@@ -123,7 +123,7 @@ class GameList extends Component {
 
     if (laterGames.length > 0) {
       later = 
-        <div>
+        <div className="section" >
           <h4 className="chronology">Later</h4>
           {laterGames}
           {chronStyle}

@@ -50,8 +50,9 @@ class Signup extends Component {
 
         return (
        <Layout>
+        <br />
         <div>
-            <h1 style={{textAlign: 'center'}}>Signup for an Account</h1><br />
+            <h1 style={{textAlign: 'center', paddingTop: '25px'}}>Signup for an Account</h1><br />
             <div className="container">
                 <div style={{gridColumn: '2 / 3'}}>
 
@@ -153,7 +154,7 @@ class Signup extends Component {
                 .container {
                     display: grid;
                     align-items: center;
-                    grid-template-columns: .75fr 650px .75fr;
+                    grid-template-columns: 5vw 50vw 5vw;
                     grid-template-rows: auto auto;
                     grid-gap: 10px;
                 }
@@ -205,6 +206,7 @@ class Signup extends Component {
                     }
                 }
             `}</style>
+        <br />    
         </Layout>
        );
     }  

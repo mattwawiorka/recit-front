@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Games from '../components/Games';
 import Layout from '../components/Layout/Layout';
-import GamesLayout from '../components/Layout/GamesLayout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
-import BottomDockable from '../components/BottomDockable/BottomDockable';
 import Announcements from '../components/Announcements/Announcements';
 import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
@@ -34,32 +32,21 @@ class Index extends Component {
 
     renderCreateGame = () => {
         return (
-            // <Layout>
-            //     <div>
-            //     <CreateGameForm />
-            //     </div>
-            //     <br />
-            //     <BottomDockable startGame={false} submitGame={true} clickEvent={this.handleCreateGame} />
-            // </Layout>
-            <GamesLayout startGame={false} submitGame={true} clickEvent={this.handleCreateGame} >
+            <Layout startGame={false} submitGame={true} clickEvent={this.handleCreateGame} >
                 <Announcements />
                 <CreateGameForm />
                 <Filtering />
-            </GamesLayout>
+            </Layout>
         );
     }
 
     renderGameList = () => {
         return (
-            // <Layout>
-            //     <Games></Games>
-            //     <BottomDockable startGame={true} submitGame={false} clickEvent={this.handleCreateGame} />
-            // </Layout>
-            <GamesLayout startGame={true} submitGame={false} clickEvent={this.handleCreateGame} >
+            <Layout startGame={true} submitGame={false} clickEvent={this.handleCreateGame} >
                 <Announcements />
                 <Games />
                 <Filtering />
-            </GamesLayout>
+            </Layout>
         )
     }
 
@@ -77,13 +64,6 @@ class Index extends Component {
                 </div>
             );
         } 
-        // return (
-        //     <GamesLayout>
-        //         <Announcements />
-        //         <Games />
-        //         <Filtering />
-        //     </GamesLayout>
-        // );
     }
 }
 

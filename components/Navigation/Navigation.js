@@ -107,7 +107,7 @@ class Navigation extends Component {
                     }
 
                     nav .dropdown {
-                        display: grid;
+                        display: none;
                         background-color: var(--greenapple);
                         text-align: center;
                     }

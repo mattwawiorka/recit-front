@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import CreateGameButton from './CreateGameButton';
 
 const CREATE_GAME = gql`
      mutation CreateGame($gameInput: gameInput) {
@@ -226,27 +225,46 @@ class CreateGameForm extends Component {
             </div>
             <style jsx>{`
                 .container {
-                    display: grid;
+                    //display: grid;
+                    display: flex;
+                    flex-direction: column;
                     align-content: center;
-                    justify-content: center;
-                    grid-template-columns: 40vw;
-                    grid-template-rows: auto auto;
-                    grid-gap: 10px;
-                    background-color: white;
-                    border-radius: 25px;
-                    margin: 2em;
                     align-items: center;
+                    justify-content: center;
                     justify-items: center;
-                    overflow: hidden;
+                    // grid-template-columns: 40vw;
+                    // grid-template-rows: auto auto;
+                    // grid-gap: 10px;
+                    background-color: white;
+                    border-radius: 15px;
+                    margin: 1.5em;
+                    padding: 10px;
+                    overflow-x: hidden;
                 }
 
                 .gameForm {
+                    width: 100%;
+                    height: 100%;
+                    margin: 1.5em;
+                    padding: 10px
                     display: grid;
                     align-items: center;
                     grid-template-columns: 1fr;
                     grid-template-rows: auto auto;
                     grid-gap: 1em;
-                    overflow: hidden;
+                    //overflow: hidden;
+                }
+
+                textarea {
+                    width: 80%;
+                    height: 100%;
+                    border: none;
+                    resize: none;
+                    outline: none;
+                    border-radius: 5px;
+                    padding: 0.5em;
+                    white-space: pre-wrap;
+                    overflow: auto;
                 }
 
                 .form-group {

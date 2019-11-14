@@ -5,9 +5,11 @@ class Forgot extends Component {
    render() {
       return (
          <Layout>
+            <br />
             <form>
                <h1>Enter your email</h1>
             </form>
+            <br />
          </Layout>
       );
    }

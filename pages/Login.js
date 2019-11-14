@@ -38,7 +38,8 @@ class Login extends Component {
         const {name, password} = this.state;
        return (
        <Layout>
-        <div>
+        <br />
+        <div style={{ paddingTop: '25px' }}>
             <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
             <div className="container">
                 <div></div>
@@ -115,13 +116,13 @@ class Login extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
+        </div>
             <style jsx>{`
                 .container {
                     display: grid;
                     align-items: center;
-                    grid-template-columns: .75fr 650px .75fr;
+                    grid-template-columns: 5vw 50vw 5vw;
                     grid-gap: 10px;
                 }
 
@@ -185,6 +186,7 @@ class Login extends Component {
                     }
                 }
             `}</style>
+            <br />
         </Layout>
        );
     }  

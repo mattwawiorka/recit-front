@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
-import Layout from '../components/Layout/Layout';
-import GamesLayout from '../components/Layout/GamesLayout'
+import Layout from '../components/Layout/Layout'
 import Game from '../components/GamePage/Game';
+import Announcements from '../components/Announcements/Announcements';
+import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
 
 class GamePage extends Component {
@@ -22,11 +23,11 @@ class GamePage extends Component {
   render() {
     const gameId = Router.query.id;
     return (
-    <GamesLayout startGame={false} submitGame={true} clickEvent={this.handleViewGames}>
-      <br />
+    <Layout startGame={false} submitGame={true} clickEvent={this.handleViewGames}>
+      <Announcements />
       <Game gameId={gameId} />
-      <br /> 
-    </GamesLayout>
+      <Filtering />
+    </Layout>
     );
   }
 };
