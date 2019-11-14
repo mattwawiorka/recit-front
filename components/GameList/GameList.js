@@ -17,14 +17,13 @@ class GameList extends Component {
     
     this.props.games.forEach((game) => {
       let row = 
-        <React.Fragment>
+        <React.Fragment key={game.id}>
         <GameRow 
           id={game.id}
           title={game.title}
           sport={game.sport}
           venue={game.venue}
-          dateTime={game.dateTime}
-          key={game.id} />
+          dateTime={game.dateTime} />
           <div id="customBorder"></div>
         </React.Fragment>
       if (parseInt(game.dateTime) < dateTool.getTomorrow().valueOf()) {

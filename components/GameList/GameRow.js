@@ -2,11 +2,24 @@ import Link from 'next/link';
 import dateTool from '../../lib/dateTool';
 
 const GameRow = ({id, title, sport, venue, dateTime }) => {
-  let dateFormat;
+  let dateFormat, image;
   if (parseInt(dateTime) < dateTool.getEndOfWeek().valueOf()) {
     dateFormat = dateTool.getDateTime(parseInt(dateTime), false, true);
   } else {
     dateFormat = dateTool.getDateTime(parseInt(dateTime), true, false)
+  }
+
+  if (sport === 'TENNIS') {
+    image = "/tennis-ball.svg";
+  } 
+  else if (sport === 'BASKETBALL') {
+    image = "/basketball.svg";
+  }
+  else if (sport === 'FOOTBALL') {
+    image = "/american-football.svg";
+  } 
+  else {
+    image = "rec-it.png";
   }
 
   return (
@@ -14,7 +27,9 @@ const GameRow = ({id, title, sport, venue, dateTime }) => {
     <Link href={`/Game?id=${id}`} as='/'>
     <li className="container">
       <div className="sport">
-        <h3>{sport}</h3>
+        <h3 style={{ textAlign: 'center' }} >{sport}</h3>
+        <img src={image} alt={sport} className="sportImage"
+          style={{ width: '40%', height: '40%', borderRadius: '10px'}}/>
       </div>
       <div className="dateTime">
         <h3>{dateFormat}</h3>
@@ -52,7 +67,14 @@ const GameRow = ({id, title, sport, venue, dateTime }) => {
       .sport {
         flex: 0.75;
         padding: 0.5em;
-        font-size: 0.75em;
+        font-size: 0.65em;
+      }
+
+      .sportImage {
+        display: block;
+        margin-top: 2px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .dateTime {

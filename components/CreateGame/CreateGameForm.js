@@ -24,7 +24,9 @@ class CreateGameForm extends Component {
             venue: "",
             address: "",
             description: "",
-            errors: [{message: ""}]
+            errors: [{message: ""}],
+            isLoading: true,
+            textAreaRows: 3
         }
     }
 
@@ -35,8 +37,10 @@ class CreateGameForm extends Component {
         const startTime = d.getHours().toString() + ":" + (Math.ceil(d.getMinutes()/10)*10).toString() + ":" + "00";
         this.setState({
             date: startDate,
-            time: startTime
+            time: startTime,
+            isLoading: false
         })
+        this.toggleEndTime();
     }
 
     handleChange = (input) => (e) => {
@@ -60,7 +64,35 @@ class CreateGameForm extends Component {
                 errors: [{message: ""}]
             })
         }
+
+        if (input == 'description') {
+            const rowHeight = 24;
+            const currentRows = Math.ceil(e.target.scrollHeight / rowHeight);
+            console.log(currentRows)
+            console.log(e.target.scrollHeight / rowHeight)
+            console.log(this.state.textAreaRows)
+            if (currentRows > 3) {
+                this.setState({
+                    textAreaRows: currentRows
+                })
+            } 
+        }
     };
+
+    toggleEndTime = () => {
+        if (this.state.isLoading) {
+            return;
+        }
+        const endTime = document.getElementById("endDateTime");
+        if (!endTime.style.display) {
+            endTime.style.display = "none";
+        }
+        if (endTime.style.display === "none") {
+            endTime.style.display = "block";
+        } else {
+            endTime.style.display = "none";
+        }
+    }
 
     render() {
         const {title, date, time, endDate, endTime, sport, venue, address, description} = this.state;
@@ -78,8 +110,24 @@ class CreateGameForm extends Component {
 
         return (
             <React.Fragment>
+
+            <datalist id="sports">
+                <option value="Tennis" />
+                <option value="Basketball" />
+                <option value="Football" />
+                <option value="Volleyball" />
+                <option value="Softball" />
+                <option value="Baseball" />
+                <option value="Field Hockey" />
+                <option value="Table Tennis" />
+                <option value="Soccer" />
+                <option value="Badminton" />
+                <option value="Golf" />
+                <option value="Disc Golf" />
+            </datalist>
+
             <div className="container">
-                <div></div>
+                {/* <div></div> */}
 
                 <span 
                     className="alert"
@@ -96,7 +144,7 @@ class CreateGameForm extends Component {
                         endDateTime: endDateTime,
                         venue: venue,
                         address: address,
-                        sport: sport,
+                        sport: sport.toUpperCase().trim(),
                         description: description,
                         public: true
                     } }}
@@ -122,52 +170,54 @@ class CreateGameForm extends Component {
                     });
                 }}
                 >
-                    <div className="form-group">
-                        <label className="text-muted">Title</label>
-                        <input 
-                            onChange={this.handleChange("title")} 
-                            type="text" 
-                            className="input-fields"
-                            value={title}
-                            placeholder="Give your sporting event a unique title" 
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label for="textarea" className="text-muted">Description</label>
-                        <textarea
-                            onChange={this.handleChange("description")} 
-                            type="text" 
-                            className="input-fields"
-                            value={description} 
-                            placeholder="Tell people about your game"
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="text-muted">Sport</label>
-                        <input 
-                            onChange={this.handleChange("sport")} 
-                            type="text" 
-                            className="input-fields"
-                            value={sport} 
-                            placeholder="Pick a sport from the list or specify your own"
-                        />
-                    </div>
-
-                    <div className="location">
-                        <div className="form-group">
-                            <label className="text-muted">Address</label>
-                            <input 
-                                onChange={this.handleChange("address")} 
+                    <div className="section" id="titleSportForm">
+                        <div className="form-group split-form">
+                            <label className="header">Title</label>
+                            <input
+                                id="titleInput" 
+                                onChange={this.handleChange("title")} 
                                 type="text" 
                                 className="input-fields"
-                                value={address}
-                                placeholder="Where is your game located"
+                                value={title}
+                                minLength="4"
+                                placeholder="Give your sporting event a unique title" 
                             />
                         </div>
-                        <div className="form-group">
-                            <label className="text-muted">Venue</label>
+                        <div className="form-group split-form">
+                            <label className="header">Sport</label>
                             <input 
+                                id="sportInput"
+                                onChange={this.handleChange("sport")} 
+                                list="sports"
+                                type="text" 
+                                autoCapitalize="word"
+                                className="input-fields"
+                                value={sport} 
+                                placeholder="Pick a sport from the list or specify your own"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="section" id="descriptionForm">
+                        <div className="form-group">
+                            <label htmlFor="textarea" className="header">Description</label>
+                            <textarea
+                                id="descriptionInput"
+                                onChange={this.handleChange("description")} 
+                                type="text" 
+                                className="input-fields"
+                                value={description}                    
+                                placeholder="Tell people about your game"
+                                rows={this.state.textAreaRows}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="section" id="locationForm">
+                        <div className="form-group split-form" id="venueForm">
+                            <label className="header">Venue</label>
+                            <input 
+                                id="venueInput"
                                 onChange={this.handleChange("venue")} 
                                 type="text" 
                                 className="input-fields" 
@@ -175,44 +225,67 @@ class CreateGameForm extends Component {
                                 placeholder="What is this venue commonly known as"
                             />
                         </div>
+                        <div className="form-group split-form" id="addressForm">
+                            <label className="header">Address</label>
+                            <input 
+                                id="addressInput"
+                                onChange={this.handleChange("address")} 
+                                type="text" 
+                                className="input-fields"
+                                value={address}
+                                placeholder="Where is your game located"
+                            />
+                        </div>
                     </div>
                     
-                    <div className="dateTime">
-                        <div className="form-group">
-                            <label className="text-muted">Start Date</label>
+                    <div className="section" id="dateTimeForm">
+                        <label className="header" id="dateTimeLabel">Date/Time</label>
+                        <div className="form-group small-form" id="startDateForm">
                             <input 
+                                id="startDateInput"
                                 onChange={this.handleChange("date")} 
                                 type="date" 
                                 className="input-fields"
                                 value={date} 
                             />
                         </div>
-                        <div className="form-group">
-                            <label className="text-muted">Start Time</label>
+                        <div className="form-group small-form" id="stateTimeForm">
                             <input 
+                                id="startTimeInput"
                                 onChange={this.handleChange("time")} 
                                 type="time" 
                                 className="input-fields"
                                 value={time} 
                             />
                         </div>
-                        <div className="form-group">
-                            <label className="text-muted">End Date</label>
-                            <input 
-                                onChange={this.handleChange("endDate")} 
-                                type="date" 
-                                className="input-fields"
-                                value={endDate} 
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label className="text-muted">End Time</label>
-                            <input 
-                                onChange={this.handleChange("endTime")} 
-                                type="time" 
-                                className="input-fields"
-                                value={endTime} 
-                            />
+
+                        <a 
+                            id="toggleEndTime"
+                            href="#" 
+                            onClick={this.toggleEndTime}
+                        >+End Time</a>
+
+                        <div className="endDateTime" id="endDateTime">
+                            <div className="form-group small-form" id="endDateForm">
+                                <label className="header">End Date</label>
+                                <input 
+                                    id="endDateInput"
+                                    onChange={this.handleChange("endDate")} 
+                                    type="date" 
+                                    className="input-fields"
+                                    value={endDate} 
+                                />
+                            </div>
+                            <div className="form-group small-form" id="endTimeForm">
+                                <label className="header">End Time</label>
+                                <input 
+                                    id="endTimeInput"
+                                    onChange={this.handleChange("endTime")} 
+                                    type="time" 
+                                    className="input-fields"
+                                    value={endTime} 
+                                />
+                            </div>
                         </div>
                     </div>
                     <input type="submit" value="Create Game!" />
@@ -225,53 +298,45 @@ class CreateGameForm extends Component {
             </div>
             <style jsx>{`
                 .container {
-                    //display: grid;
-                    display: flex;
+                    display: block;
                     flex-direction: column;
                     align-content: center;
                     align-items: center;
                     justify-content: center;
                     justify-items: center;
-                    // grid-template-columns: 40vw;
-                    // grid-template-rows: auto auto;
-                    // grid-gap: 10px;
                     background-color: white;
-                    border-radius: 15px;
+                    border-radius: 10px;
                     margin: 1.5em;
                     padding: 10px;
-                    overflow-x: hidden;
                 }
 
                 .gameForm {
                     width: 100%;
                     height: 100%;
-                    margin: 1.5em;
                     padding: 10px
-                    display: grid;
-                    align-items: center;
-                    grid-template-columns: 1fr;
-                    grid-template-rows: auto auto;
-                    grid-gap: 1em;
-                    //overflow: hidden;
+                    display: block;
                 }
 
-                textarea {
-                    width: 80%;
-                    height: 100%;
-                    border: none;
-                    resize: none;
-                    outline: none;
-                    border-radius: 5px;
-                    padding: 0.5em;
-                    white-space: pre-wrap;
-                    overflow: auto;
+                .section {
+                    padding: 5px;
+                    display: block;
+                }
+
+                .header {
+                    display: block;
+                    color: #4b4f56;
+                    padding-left: 5px;
+                    font-weight: 500;
                 }
 
                 .form-group {
                     vertical-align: middle;
+                    padding-top: 5px;
                 }
 
                 .input-fields {
+                    display: block;
+                    margin : 0 auto;
                     width: 100%;
                     padding: 12px 20px;
                     margin: 8px 0;
@@ -280,30 +345,52 @@ class CreateGameForm extends Component {
                     box-sizing: border-box;
                 }
 
-                .location {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    grid-template-rows: auto auto;
-                    grid-gap: 2em;
+                .split-form {
+                    width: 50%;
+                    display: inline-block;
+                    padding-left: 5px;
+                    padding-right: 5px;
                 }
 
-                .dateTime {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    grid-template-rows: auto auto;
-                    grid-gap: 2em;
+                textarea {
+                    width: 80%;
+                    height: auto;
+                    border: none;
+                    resize: none;
+                    outline: none;
+                    border-radius: 5px;
+                    padding: 0.5em;
+                    white-space: pre-wrap;
+                    //overflow: auto;
                 }
 
-                label {
-                    font-weight: bold;
+                .small-form {
+                    width: 40%;
+                    display: inline-block;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+                #toggleEndTime {
+                    display: inline-block;
+                    font-size: 0.85em;
+                    color: var(--greenapple);
+                    margin-left: 15px;
+                }
+
+                #endDateTime {
+                    display: none;
                 }
 
                 input[type=submit] {
-                    width: 100%;
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 50%;
                     background-color: var(--darkermatter);
                     color: white;
                     padding: 14px 20px;
-                    margin 8px 0;
+                    margin-top: 12px;
                     border: none;
                     border-radius: 4px;
                     cursor: pointer;
@@ -313,21 +400,90 @@ class CreateGameForm extends Component {
                     background-color: var(--darkmatter);
                 }
 
-                .alert {
-                    color: black;
-                    margin-bottom: 15px;
-                    text-align: center;
-                }
+                // #descriptionForm {
+                //     display: inline-block;
+                //     margin: auto;
+                //     width: 100%;
+                // }
 
-                ::-webkit-input-placeholder {
-                    font-style: italic;
-                }
+                
 
-                @media only screen and (max-width: 700px) {
-                    .container {
-                        grid-template-columns: .25fr 1fr .25fr;
-                    }
-                }
+                
+
+                // .location {
+                //     display: flex;
+                //     // grid-template-columns: 1fr 1fr;
+                //     // grid-template-rows: auto auto;
+                //     // grid-gap: 2em;
+                // }
+
+                // #venueForm {
+                //     margin: auto;
+                //     display: inline-block;
+                // }
+
+                // #addressForm {
+                //     margin: auto;
+                //     display: inline-block;
+                // }
+
+                // .dateTime {
+                //     display: flex;
+                //     flex-wrap: wrap;
+                //     align-items: flex-start;
+                //     flex-direction: row;
+                //     width: 100%;
+                //     overflow-x: hidden;
+                // }
+
+                // #dateTimeLabel {
+                //     display: inline-flex;
+                //     // width: 100%;
+                //     flex: 1;
+                // }
+
+                // #startDateForm {
+                //     display: inline-flex;
+                //     //width: 50%;
+                //     flex: 5;
+                // }
+
+                // #startTimeForm {
+                //     display: inline-flex;
+                //     // width: 100%;
+                //     flex: 5;
+                // }
+
+                // #toggleEndTime {
+                //     display: inline-flex;
+                //     flex: 0.5;
+                // }
+
+                // #endDateTime {
+                //     display: none;
+                // }
+
+                // label {
+                //     font-weight: bold;
+                // }
+
+                
+
+                // .alert {
+                //     color: black;
+                //     margin-bottom: 15px;
+                //     text-align: center;
+                // }
+
+                // ::-webkit-input-placeholder {
+                //     font-style: italic;
+                // }
+
+                // @media only screen and (max-width: 700px) {
+                //     .container {
+                //         //grid-template-columns: .25fr 1fr .25fr;
+                //     }
+                // }
             `}</style>
             </React.Fragment>
         );
