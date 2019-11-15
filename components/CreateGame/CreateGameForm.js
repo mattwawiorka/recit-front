@@ -21,6 +21,7 @@ class CreateGameForm extends Component {
             endDate: "",
             endTime: "",
             sport: "",
+            players: 2,
             venue: "",
             address: "",
             description: "",
@@ -95,7 +96,7 @@ class CreateGameForm extends Component {
     }
 
     render() {
-        const {title, date, time, endDate, endTime, sport, venue, address, description} = this.state;
+        const {title, date, time, endDate, endTime, sport, players, venue, address, description} = this.state;
         const dateTime = new Date(date + "T" + time);
         const endDateTime = new Date(endDate + "T" + endTime);
 
@@ -127,7 +128,6 @@ class CreateGameForm extends Component {
             </datalist>
 
             <div className="container">
-                {/* <div></div> */}
 
                 <span 
                     className="alert"
@@ -163,7 +163,7 @@ class CreateGameForm extends Component {
                             })
                             return;
                         }
-                        Router.push('/Login');
+                        location.reload();
                     })
                     .catch(error => {
                         console.log(error);
@@ -171,7 +171,7 @@ class CreateGameForm extends Component {
                 }}
                 >
                     <div className="section" id="titleSportForm">
-                        <div className="form-group split-form">
+                        <div className="form-group">
                             <label className="header">Title</label>
                             <input
                                 id="titleInput" 
@@ -180,9 +180,14 @@ class CreateGameForm extends Component {
                                 className="input-fields"
                                 value={title}
                                 minLength="4"
-                                placeholder="Give your sporting event a unique title" 
+                                placeholder="Give your sporting event a unique title"
+                                autoComplete="off" 
                             />
                         </div>
+                        
+                    </div>
+
+                    <div className="section">
                         <div className="form-group split-form">
                             <label className="header">Sport</label>
                             <input 
@@ -194,6 +199,20 @@ class CreateGameForm extends Component {
                                 className="input-fields"
                                 value={sport} 
                                 placeholder="Pick a sport from the list or specify your own"
+                                autoComplete="off"
+                            />
+                        </div>
+                        <div className="form-group split-form">
+                            <label className="header">No. Players</label>
+                            <input
+                                id="playersInput"
+                                className="input-fields"
+                                onChange={this.handleChange("players")}
+                                type="number"
+                                autoComplete="off"
+                                min="1"
+                                max="32"
+                                value={players}
                             />
                         </div>
                     </div>
@@ -209,6 +228,7 @@ class CreateGameForm extends Component {
                                 value={description}                    
                                 placeholder="Tell people about your game"
                                 rows={this.state.textAreaRows}
+                                autoComplete="off"
                             />
                         </div>
                     </div>
@@ -223,6 +243,7 @@ class CreateGameForm extends Component {
                                 className="input-fields" 
                                 value={venue}
                                 placeholder="What is this venue commonly known as"
+                                autoComplete="off"
                             />
                         </div>
                         <div className="form-group split-form" id="addressForm">
@@ -234,6 +255,7 @@ class CreateGameForm extends Component {
                                 className="input-fields"
                                 value={address}
                                 placeholder="Where is your game located"
+                                autoComplete="off"
                             />
                         </div>
                     </div>
@@ -247,6 +269,7 @@ class CreateGameForm extends Component {
                                 type="date" 
                                 className="input-fields"
                                 value={date} 
+                                autoComplete="off"
                             />
                         </div>
                         <div className="form-group small-form" id="stateTimeForm">
@@ -256,6 +279,7 @@ class CreateGameForm extends Component {
                                 type="time" 
                                 className="input-fields"
                                 value={time} 
+                                autoComplete="off"
                             />
                         </div>
 
@@ -327,6 +351,7 @@ class CreateGameForm extends Component {
                     color: #4b4f56;
                     padding-left: 5px;
                     font-weight: 500;
+                    font-weight: bold;
                 }
 
                 .form-group {
@@ -343,6 +368,10 @@ class CreateGameForm extends Component {
                     border: 1px solid #ccc;
                     border-radius: 4px;
                     box-sizing: border-box;
+                }
+
+                #titleInput {
+                    max-width: 33vw;
                 }
 
                 .split-form {
@@ -400,84 +429,15 @@ class CreateGameForm extends Component {
                     background-color: var(--darkmatter);
                 }
 
-                // #descriptionForm {
-                //     display: inline-block;
-                //     margin: auto;
-                //     width: 100%;
-                // }
-
-                
-
-                
-
-                // .location {
-                //     display: flex;
-                //     // grid-template-columns: 1fr 1fr;
-                //     // grid-template-rows: auto auto;
-                //     // grid-gap: 2em;
-                // }
-
-                // #venueForm {
-                //     margin: auto;
-                //     display: inline-block;
-                // }
-
-                // #addressForm {
-                //     margin: auto;
-                //     display: inline-block;
-                // }
-
-                // .dateTime {
-                //     display: flex;
-                //     flex-wrap: wrap;
-                //     align-items: flex-start;
-                //     flex-direction: row;
-                //     width: 100%;
-                //     overflow-x: hidden;
-                // }
-
-                // #dateTimeLabel {
-                //     display: inline-flex;
-                //     // width: 100%;
-                //     flex: 1;
-                // }
-
-                // #startDateForm {
-                //     display: inline-flex;
-                //     //width: 50%;
-                //     flex: 5;
-                // }
-
-                // #startTimeForm {
-                //     display: inline-flex;
-                //     // width: 100%;
-                //     flex: 5;
-                // }
-
-                // #toggleEndTime {
-                //     display: inline-flex;
-                //     flex: 0.5;
-                // }
-
-                // #endDateTime {
-                //     display: none;
-                // }
-
-                // label {
-                //     font-weight: bold;
-                // }
-
-                
-
                 // .alert {
                 //     color: black;
                 //     margin-bottom: 15px;
                 //     text-align: center;
                 // }
 
-                // ::-webkit-input-placeholder {
-                //     font-style: italic;
-                // }
+                ::-webkit-input-placeholder {
+                    font-style: italic;
+                }
 
                 // @media only screen and (max-width: 700px) {
                 //     .container {

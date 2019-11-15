@@ -5,6 +5,7 @@ import BottomDockable from '../BottomDockable/BottomDockable';
 import Meta from '../Meta';
 
 const GamesLayout = (props) => (
+
     <React.Fragment>
         <Header />
         <Meta />
