@@ -146,6 +146,7 @@ class CreateGameForm extends Component {
                         address: address,
                         sport: sport.toUpperCase().trim(),
                         description: description,
+                        players: parseInt(players),
                         public: true
                     } }}
                 >

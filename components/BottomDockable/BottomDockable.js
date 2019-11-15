@@ -23,7 +23,6 @@ class BottomDockable extends Component {
             <style jsx>{`
                 .createGameButton {
                     position: fixed;
-                    //bottom: 8vh;
                     bottom: 0;
                     left: 30vw;
                     right: 30vw;
@@ -32,8 +31,6 @@ class BottomDockable extends Component {
                     background-color: var(--darkermatter);
                     color: white;
                     text-align: center;
-                    //border-top-left-radius: 50px 20px;
-                    //border-top-right-radius: 50px 20px;
                     border-top-left-radius: 110px; 
                     border-top-right-radius: 110px;
                     border-bottom: 0;

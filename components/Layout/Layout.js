@@ -26,7 +26,7 @@ const GamesLayout = (props) => (
                 {props.children[2]}
             </aside>
             <footer>
-                <Footer />
+                {/* <Footer /> */}
                 <BottomDockable startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
             </footer>
         </div>
@@ -37,42 +37,47 @@ const GamesLayout = (props) => (
                 height: 100vh;
                 display: grid;
                 grid-template-columns: 20vw 60vw 20vw;
-                grid-template-rows: minmax(min-content, min-content) 82vh 8vh;
+                grid-template-rows: minmax(min-content, min-content) minmax(82vh, max-content) minmax(min-content, min-content);
                 grid-template-areas:
                     "header header header"
                     "sidebar1 main sidebar2"
                     "footer footer footer";
-                overflow-x: hidden;
+                overflow-y: auto;
+                overflow-x: hidden; 
+                background-color: var(--greyapple);
             }
 
             header {
                 grid-area: header;
                 background-color: var(--greenapple);
+                overflow-x: hidden;
             }
 
             aside:nth-of-type(1) {
                 grid-area: sidebar1;
                 background-color: var(--greyapple);
-                //overflow: hidden;
+                // overflow: auto;
             }
 
             main {
                 grid-area: main;
-                overflow: auto;
                 justify-items: center;
                 align-items: center;
                 background-color: var(--greyapple);
+                // overflow: auto;
             }
 
             aside:nth-of-type(2) {
                 grid-area: sidebar2;
                 background-color: var(--greyapple);
-                //overflow: hidden;
+                // overflow: auto;
             }
 
             footer {
                 grid-area: footer;
+                margin-top: 4.5em;
                 background-color: var(--greyapple);
+                overflow-x: hidden;
             }
         `}</style>
     </React.Fragment>

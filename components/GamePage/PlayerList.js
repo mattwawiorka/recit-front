@@ -28,14 +28,45 @@ const LEAVE_GAME = gql`
 const Host = (props) => {
   if (props.isHost) {
     return (
-    <div>  
-      <h3 style={{textAlign: 'center', textDecoration: 'underline'}} >Host</h3>
-      <h3>{props.host.name}</h3>
-    </div>
+    <React.Fragment>
+      <div className='host'>  
+        <h3>Hosted by {props.host.name}</h3>
+      </div>
+
+      <style jsx>{`
+        .host {
+          display: inline-block;
+          width: 100%;
+        }
+
+      `}</style>
+    </React.Fragment>
     )
   } else {
     return <h3>No Host</h3>
   }
+}
+
+const Spots = (props) => {
+  const { spots } = props;
+  let result;
+  console.log('spots', spots)
+  console.log(props)
+  if (spots === 0) {
+    result = <h4>Game is full</h4>
+  } 
+  else if (spots === 1) {
+    result = <h4>1 spot left</h4>
+  }
+  else {
+    result = <h4>Open Spots: {spots}</h4>
+  }
+
+  return (
+    <React.Fragment>
+      {result}
+    </React.Fragment>
+  )
 }
 
 class PlayerList extends Component {
@@ -60,8 +91,9 @@ class PlayerList extends Component {
             if (loading) return <Loading></Loading>
             if (error) return <h4>ERROR!!!</h4>
 
+            const openSpots = this.props.playerSpots - data.players.length;
+          
             const rows = [];
-      
             data.players.forEach((player) => {
               rows.push(
                 <React.Fragment key={player.id} >
@@ -95,7 +127,14 @@ class PlayerList extends Component {
                   }}
                   variables={{ gameId }}
                 >
-                  {LeaveGame => <button onClick={LeaveGame}>Leave Game</button>}
+                  {LeaveGame => {
+                    return (                    
+                      <button 
+                        id="joinLeaveButton" 
+                        onClick={LeaveGame}
+                      >Leave Game</button>               
+                    )
+                  }}
                 </Mutation> 
             } else {
               button =  
@@ -110,21 +149,26 @@ class PlayerList extends Component {
                   }}
                   variables={{ gameId }}
                 >
-                  {JoinGame => <button onClick={JoinGame}>Join Game</button>}
+                  {JoinGame => {
+                    return (
+                      <button id="joinLeaveButton" onClick={JoinGame}>Join Game</button>
+                    )
+                  }}
                 </Mutation> 
             }
 
             return (
               <div className="container">
-                <Host className="host" isHost={isHost} host={host} />
-                <br />
+                <Host isHost={isHost} host={host} />
                 <div className="players">
-                  <h3 style={{textAlign: 'center', textDecoration: 'underline'}}>Players</h3>
+                  <h3 style={{ textDecoration: 'underline' }}>Players</h3>
                   {rows}
                 </div>
-
+                <div className="spots">
+                  <Spots spots={openSpots} />
+                </div>
                 <div className="button">
-                  {button}
+                {button}
                 </div>
               </div>
             );
@@ -134,47 +178,47 @@ class PlayerList extends Component {
 
       <style jsx>{`
         .container {
-          display: flex;
-          flex-direction: column;
+          display: block;
           align-items: center;
           background-color: var(--greenapple); /* Orange */
           color: white;
           max-width: 20vw;
-          max-height: 40vh;
-          height: 70%;
           width: 100%;
-          border-radius: 25px;
-          overflow: auto;
+          height: auto;
+          // height: 85%;
+          border-radius: 15px;
           margin: auto;
           margin-top: 2em;
-          margin-bottom: 1em;
           padding: 1em;
           justify-items: center;
-        }
-
-        .host {
-          flex: 1;
+          // overflow: auto;
         }
 
         .players {
-          flex: 4;
+          padding-top: 1.5em;
+          text-align: center;
+          margin-bottom: 1.5em;
+        }
+
+        .spots {
+          padding-top: 1em;
+          text-align: center;
+          margin-bottom: 1em;
+          text-align: center;
         }
 
         .button {
-          flex: 1;
           width: 100%;
-          justify-items: center;
-          justify-content: center;
-          align-items: center;
-          align-content: center;
+          display: inline-block;
         }
 
-        button {
-          width: 80%;
+        #joinLeaveButton {
+          width: 100%;
+          height: 85%;
+          text-align: center;
           background-color: var(--darkermatter);
           color: white;
-          padding: 14px 20px;
-          margin 8px 0;
+          padding: 7px 20px;
           border: none;
           border-radius: 4px;
           cursor: pointer;

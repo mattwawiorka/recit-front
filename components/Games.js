@@ -77,7 +77,7 @@ class Games extends Component {
 
             if (this.state.listView) {
                 return (
-                    <div style={{ width: '100%', height: '100%', padding: '1.2em' }}>
+                    <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}>
                       <GameList games={chronilogicalGames} subscribeToMore={more} reload={refetch} />
                     </div>
                 )

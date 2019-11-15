@@ -3,32 +3,52 @@ import dateTool from '../../lib/dateTool';
 
 const GameInfo = ({ game }) => {
 
+  let image;
+  if (game.sport === 'TENNIS') {
+    image = "/tennis-ball.svg";
+  } 
+  else if (game.sport === 'BASKETBALL') {
+    image = "/basketball.svg";
+  }
+  else if (game.sport === 'FOOTBALL') {
+    image = "/american-football.svg";
+  } 
+  else {
+    image = "rec-it.png";
+  }
+
   return (
     <React.Fragment>
     <div className="container">
-      <div className="title">
-        <h1 style={{ textAlign: 'center' }}>{game.title}</h1>
+      <div className="section heading">
+        <div className="titleSport">
+          <h2 style={{ textAlign: 'left' }}>{game.title}</h2>
+          <div id="customBorder"></div>
+          <h4 style={{ display: 'inline-block', width: '50%',  }}>{game.sport}</h4>
+        </div>
+        <div className="sportImage">
+          <img src={image} alt={game.sport} className="image" />
+        </div>
       </div>
-      <div className="sport">
-        <p>{game.sport}</p>
-      </div>
-      <div className="description">
+
+      <div className="section description">
         <p>{game.description}</p>
       </div>
-      <div className="when">
-        <div className="timeIcon">
-          <img src="/timeIcon.svg" alt="Time" 
-            style={{ width: '60%', height: '40%', borderRadius: '10px'}} />
+
+      <div className="section">
+        <div className="icon-section">
+          <img src="/time-icon.svg" alt="Time" className="icon"
+             />
         </div>
         <div className="dateTime">
           <p>{dateTool.getDateTime(parseInt(game.dateTime), true, true)} 
             - {dateTool.getTime((parseInt(game.endDateTime)))}</p>
          </div>
       </div>
-      <div className="where">
-        <div className="locationIcon">
-          <img src="/timeIcon.svg" alt="Location" 
-            style={{ width: '60%', height: '40%', borderRadius: '10px'}}  />
+
+      <div className="section">
+        <div className="icon-section">
+          <img src="/pin.svg" alt="Location" className="icon"  />
         </div>
         <div className="location">
           <h3>{game.venue}</h3>
@@ -39,36 +59,60 @@ const GameInfo = ({ game }) => {
 
     <style jsx>{`
       .container {
-        display: flex;
-        flex-direction: column;
+        display: block;
         background-color: var(--greenapple); /* Orange */
-        height: 85%;
+        height: auto;
         width: 85%;
         color: white;
         margin: auto;
         margin-top: 2em;
-        margin-bottom: 2em;
         padding: 1em;
-        justify-items: center;
         border-radius: 15px;
-        overflow: auto;
+        // overflow: hidden;
       }
 
-      .title {
-        flex: 1.5;
+      .section {
+        display: block;
         width: 100%;
-        justify-content: center;
-        align-content: center;
-        border-bottom-style: groove;
+        padding: 5px 0 5px 0;
+      }
+      
+      .image {
+        width: 100%; 
+        height: 100%; 
+        max-height: 3em;
+        max-width: 3em; 
+        border-radius: 10px;
+      }
+
+      .heading {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .titleSport {
+        flex: 4;
+        margin-right: 10px;
+      }
+
+      .sportImage {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      #customBorder {
+        border-bottom-style: solid;
         border-color: white;
         border-width: thin;
+        width: 65%;
       }
 
       .sport {
-        flex: 1;
+        display: inline-block;
+        text-align: center;
         width: 100%;
-        display: flex;
-        justify-content: center;
         border-bottom-style: groove;
         border-color: white;
         border-width: thin;
@@ -76,54 +120,45 @@ const GameInfo = ({ game }) => {
       }
 
       .description {
-        flex: 3;
         width: 100%;
         padding: 0.5em;
-        display: flex;
-        justify-content: center;
+        padding-left: 20%;
+        //text-align: center;
         word-wrap: break-word;
         white-space: pre-wrap;
+        font-weight: 600;
+        font-size: 0.9em;
+        color: #4b4f56;
+        line-height: 15px;
       }
 
-      .when {
-        flex: 0.75;
-        width: 100%;
-        display: flex;
-        justify-content: center;
+      .icon {
+        width: 80%;
+        height: 80%; 
+        borderRadius: 10px;
+        max-height: 2em;
+        max-width: 2em;
       }
 
-      .timeIcon {
-        flex: 1;
-        width: 100%;
+      .icon-section {
+        display: inline-block;
+        width: 15%;
         height: 100%;
+        padding-left: 10px;
       }
 
       .dateTime {
-        flex: 3;
-        width: 100%;
+        display: inline-block;
+        width: 85%;
         height: 100%;
-      }
-
-      .where {
-        flex: 1;
-        width: 100%;
-        display: flex;
-        flex: auto;
-        align-items: center;
-        margin-top: 0.75em;
-        //justify-content: center;
-      }
-
-      .locationIcon {
-        flex: 1;
-        width: 100%;
-        height: 100%;
+        padding-left: 10px;
       }
 
       .location {
-        flex: 3;
-        width: 100%;
+        display: inline-block;
+        width: 85%;
         height: 100%;
+        padding-left: 10px;
       }
 
       @media only screen and (max-width: 700px) {

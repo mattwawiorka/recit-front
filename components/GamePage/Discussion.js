@@ -145,6 +145,7 @@ class Discussion extends Component {
                     width: 90%;
                     height: 90%;
                     margin: auto;
+                    margin-bottom: 10em;
                 }
 
                 .title {
