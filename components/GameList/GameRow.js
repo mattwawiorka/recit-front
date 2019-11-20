@@ -17,7 +17,6 @@ class GameRow extends Component {
   }
 
   componentDidMount() {
-    console.log('mounted')
     loggedIn = this.props.auth.loggedIn();
     this.setState({
       loading: false
@@ -25,7 +24,6 @@ class GameRow extends Component {
   }
 
   render() {
-    console.log('rendered')
     let {id, title, sport, venue, dateTime } = this.props;
     let dateFormat, image;
 

@@ -15,12 +15,10 @@ class BottomDockable extends Component {
     }
 
     componentDidMount() {
-        console.log('game button mounts')
         loggedIn = this.props.auth.loggedIn();
     }
 
     render() {
-        console.log('game button renders')
         let option;
         if (this.props.startGame) {
             option = "Start New Game";
