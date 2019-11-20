@@ -1,3 +1,5 @@
+// This will eventually house the sorting and filtering functionality for the games
+
 import React, { Component } from 'react';
 
 class Filtering extends Component {

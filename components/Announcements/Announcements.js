@@ -1,3 +1,5 @@
+// This will eventually display rec-it announcements such as app news and user broadcasts
+
 import React, { Component } from 'react';
 
 class Announcements extends Component {

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
 import Layout from '../components/Layout/Layout'
-import Game from '../components/GamePage/Game';
+import GameContainer from '../components/GamePage/GameContainer';
 import Announcements from '../components/Announcements/Announcements';
 import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
+import withAuth from '../lib/withAuth';
 
 class GamePage extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class GamePage extends Component {
   }
 
   handleViewGames = () => {
+    // Gives bottom game button power to leave game page
     Router.push('/');
   }
 
@@ -25,11 +27,11 @@ class GamePage extends Component {
     return (
     <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.handleViewGames}>
       <Announcements />
-      <Game gameId={gameId} />
+      <GameContainer gameId={gameId} canEdit={false} />
       <Filtering />
     </Layout>
     );
   }
 };
 
-export default withApollo(GamePage);
+export default withApollo(withAuth(GamePage));

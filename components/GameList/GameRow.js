@@ -59,7 +59,7 @@ class GameRow extends Component {
 
     return (
       <React.Fragment>
-      <Link href={`/Game?id=${id}`} as='/'>
+      <Link href={`/Game?id=${id}`} as='/' prefetch={true}>
       <li className="container">
         <div className="sport">
           <h3 style={{ textAlign: 'center' }} >{sport}</h3>

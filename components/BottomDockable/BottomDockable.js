@@ -1,4 +1,4 @@
-// This will eventually be the dockable create game form
+// This might eventually be the dockable create game form
 // For now just a create game button
 
 import React, { Component } from 'react';

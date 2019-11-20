@@ -29,6 +29,7 @@ const GAME_ADDED = gql`
   }
 `;
 
+// Not implementing subscription for game removes (yet?)
 const GAME_REMOVED = gql`
   subscription {
     gameDeleted
@@ -44,7 +45,6 @@ class Games extends Component {
           listView: true,
           mapView: false
       };
-      // bind
   }
 
   render() {

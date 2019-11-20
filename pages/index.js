@@ -14,8 +14,6 @@ class Index extends Component {
         this.state = {
           createGame: false
         };
-        // bind
-        this.handleCreateGame = this.handleCreateGame.bind(this);
     }
 
     componentDidMount() {
@@ -24,7 +22,7 @@ class Index extends Component {
         })
     }
 
-    handleCreateGame() {
+    toggleCreateGame = () => {
         this.setState({
             createGame: !this.state.createGame
         })
@@ -32,7 +30,7 @@ class Index extends Component {
 
     renderCreateGame = () => {
         return (
-            <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.handleCreateGame} >
+            <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.toggleCreateGame} >
                 <Announcements />
                 <CreateGameForm />
                 <Filtering />
@@ -42,7 +40,7 @@ class Index extends Component {
 
     renderGameList = () => {
         return (
-            <Layout showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.handleCreateGame} >
+            <Layout showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.toggleCreateGame} >
                 <Announcements />
                 <Games />
                 <Filtering />
@@ -50,8 +48,7 @@ class Index extends Component {
         )
     }
 
-    render() {
-        
+    render() {  
         if (this.state.createGame) {
             return (
                 <div>
