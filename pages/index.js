@@ -32,7 +32,7 @@ class Index extends Component {
 
     renderCreateGame = () => {
         return (
-            <Layout startGame={false} submitGame={true} clickEvent={this.handleCreateGame} >
+            <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.handleCreateGame} >
                 <Announcements />
                 <CreateGameForm />
                 <Filtering />
@@ -42,7 +42,7 @@ class Index extends Component {
 
     renderGameList = () => {
         return (
-            <Layout startGame={true} submitGame={false} clickEvent={this.handleCreateGame} >
+            <Layout showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.handleCreateGame} >
                 <Announcements />
                 <Games />
                 <Filtering />
@@ -51,6 +51,7 @@ class Index extends Component {
     }
 
     render() {
+        
         if (this.state.createGame) {
             return (
                 <div>

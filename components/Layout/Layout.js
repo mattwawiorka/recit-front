@@ -27,7 +27,7 @@ const GamesLayout = (props) => (
             </aside>
             <footer>
                 {/* <Footer /> */}
-                <BottomDockable startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
+                <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
             </footer>
         </div>
 
@@ -50,7 +50,7 @@ const GamesLayout = (props) => (
             header {
                 grid-area: header;
                 background-color: var(--greenapple);
-                overflow-x: hidden;
+                overflow: hidden;
             }
 
             aside:nth-of-type(1) {

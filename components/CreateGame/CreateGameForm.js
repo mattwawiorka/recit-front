@@ -152,24 +152,24 @@ class CreateGameForm extends Component {
                 >
                 { CreateGame => (
                 <form 
-                className="gameForm"
-                onSubmit={ e => {
-                    e.preventDefault();
-                    CreateGame()
-                    .then(response => {
-                        console.log(response)
-                        if (response.errors) {
-                            this.setState({
-                                errors: response.errors[0].data
-                            })
-                            return;
-                        }
-                        location.reload();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                }}
+                    className="gameForm"
+                    onSubmit={ e => {
+                        e.preventDefault();
+                        CreateGame()
+                        .then(response => {
+                            console.log(response)
+                            if (response.errors) {
+                                this.setState({
+                                    errors: response.errors[0].data
+                                })
+                                return;
+                            }
+                            location.reload();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                    }}
                 >
                     <div className="section" id="titleSportForm">
                         <div className="form-group">

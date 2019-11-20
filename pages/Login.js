@@ -2,7 +2,7 @@ import Layout from '../components/Layout/Layout';
 import React, { Component } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
-import cookie from 'cookie';
+import cookie from 'js-cookie';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
@@ -69,11 +69,7 @@ class Login extends Component {
                                         return;
                                     }
                                     window.localStorage.setItem('user', response.data.login.userId)
-                                    document.cookie = cookie.serialize('token', response.data.login.token, {
-                                        sameSite: true,
-                                        path: '/',
-                                        maxAge: 24 * 60 * 60
-                                    })
+                                    cookie.set('token', response.data.login.token, { expires: 1 })
                                     Router.push('/');
                                 })
                                 .catch(error => {

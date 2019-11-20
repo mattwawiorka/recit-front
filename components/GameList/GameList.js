@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import GameRow from './GameRow';
 import dateTool from '../../lib/dateTool';
+import withAuth from '../../lib/withAuth';
+
+let loggedIn;
+let loginWarning = <React.Fragment></React.Fragment>
 
 class GameList extends Component {
   componentDidMount() {
     this.props.subscribeToMore();
     this.props.reload();
+    loggedIn = (this.props.auth.loggedIn())
+    if (!loggedIn) {
+      loginWarning = <strong id="listLoginWarning">Log in to open games and see details</strong>
+    }
+    else {
+      loginWarning = <React.Fragment></React.Fragment>
+    }
   }
 
   render() {
+
     const todayGames = [];
     const tomorrowGames = [];
     const thisWeekGames = [];
@@ -69,6 +81,20 @@ class GameList extends Component {
       .chronSpace {
         background-color: var(--greyapple);
         height: 1em;
+      }
+
+      #listLoginWarning {
+        background-color: #333;
+        color: #fff;
+        text-align: center; 
+        //border-radius: 2px; 
+        padding: 8px;
+        margin-top: 1em;
+        margin-bottom: 0.75em;
+        width:85%;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px; 
       }
     `}</style>
 
@@ -135,6 +161,7 @@ class GameList extends Component {
       <React.Fragment>
       <div className="container">
         <h3 id="upcomingGames">Upcoming Games</h3>
+        {loginWarning}
         {today}
         {tomorrow}
         {thisWeek}
@@ -169,4 +196,4 @@ class GameList extends Component {
   }
 }
 
-export default GameList;
+export default withAuth(GameList);

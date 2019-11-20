@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loading from '../Loading/Loading';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import Link from 'next/link';
 
 const GET_PLAYERS = gql`
   query Players($gameId: ID!) {
@@ -96,9 +97,11 @@ class PlayerList extends Component {
             const rows = [];
             data.players.forEach((player) => {
               rows.push(
-                <React.Fragment key={player.id} >
-                  <h3>{player.name}</h3>
-                </React.Fragment>
+                <Link href={`/Profile?id=${player.id}`} as='/' key={player.id}>
+                  <div className="player">
+                    <h3>{player.name}</h3>
+                  </div>
+                </Link>
               );
             });
 
@@ -198,6 +201,14 @@ class PlayerList extends Component {
           padding-top: 1.5em;
           text-align: center;
           margin-bottom: 1.5em;
+        }
+
+        .player:hover {
+          background-color: white;
+          color: var(--greenapple);
+          cursor: pointer;
+          transform: scale(0.97);
+          border-radius: 15px;
         }
 
         .spots {

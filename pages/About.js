@@ -1,4 +1,5 @@
 import Layout from '../components/Layout/Layout';
+import withAuth from '../lib/withAuth';
 
 const About = () => (
     <Layout>
@@ -10,4 +11,4 @@ const About = () => (
     </Layout>
 );
 
-export default About;
+export default withAuth(About);

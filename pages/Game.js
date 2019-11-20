@@ -23,7 +23,7 @@ class GamePage extends Component {
   render() {
     const gameId = Router.query.id;
     return (
-    <Layout startGame={false} submitGame={true} clickEvent={this.handleViewGames}>
+    <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.handleViewGames}>
       <Announcements />
       <Game gameId={gameId} />
       <Filtering />
