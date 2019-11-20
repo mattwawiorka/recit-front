@@ -27,7 +27,7 @@ class GamePage extends Component {
     return (
     <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.handleViewGames}>
       <Announcements />
-      <GameContainer gameId={gameId} canEdit={false} />
+      <GameContainer gameId={gameId} currentUser={this.props.auth.getUser()} loggedIn={this.props.auth.loggedIn()} />
       <Filtering />
     </Layout>
     );

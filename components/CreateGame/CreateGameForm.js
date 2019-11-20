@@ -67,11 +67,9 @@ class CreateGameForm extends Component {
         }
 
         if (input == 'description') {
+            // This isn't perfect, rows not increasing at correct pace
             const rowHeight = 24;
             const currentRows = Math.ceil(e.target.scrollHeight / rowHeight);
-            console.log(currentRows)
-            console.log(e.target.scrollHeight / rowHeight)
-            console.log(this.state.textAreaRows)
             if (currentRows > 3) {
                 this.setState({
                     textAreaRows: currentRows

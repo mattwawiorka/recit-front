@@ -5,6 +5,9 @@ import CreateGameForm from '../components/CreateGame/CreateGameForm';
 import Announcements from '../components/Announcements/Announcements';
 import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
+import withAuth from '../lib/withAuth';
+
+let loggedIn;
 
 class Index extends Component {
     constructor(props) {
@@ -20,6 +23,7 @@ class Index extends Component {
         this.setState({
             createGame: false
         })
+        loggedIn =this.props.auth.loggedIn();
     }
 
     toggleCreateGame = () => {
@@ -42,7 +46,7 @@ class Index extends Component {
         return (
             <Layout showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.toggleCreateGame} >
                 <Announcements />
-                <Games />
+                <Games loggedIn={loggedIn} />
                 <Filtering />
             </Layout>
         )
@@ -65,4 +69,4 @@ class Index extends Component {
     }
 }
 
-export default withApollo(Index);
+export default withApollo(withAuth(Index));

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import withAuth from '../../lib/withAuth';
 
 class UserProfile extends Component {
     constructor(props) {
@@ -118,4 +117,4 @@ class UserProfile extends Component {
     }
 }
 
-export default withAuth(UserProfile);
+export default UserProfile;

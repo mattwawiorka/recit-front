@@ -36,15 +36,17 @@ const GAME_REMOVED = gql`
   }
 `;
 
+let loggedIn;
+
 class Games extends Component {
   constructor(props) {
-      // props
-      super(props)
-      // state
-      this.state = {
-          listView: true,
-          mapView: false
-      };
+    // props
+    super(props)
+    // state
+    this.state = {
+        listView: true,
+        mapView: false
+    };
   }
 
   render() {
@@ -78,7 +80,7 @@ class Games extends Component {
             if (this.state.listView) {
                 return (
                     <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}>
-                      <GameList games={chronilogicalGames} subscribeToMore={more} reload={refetch} />
+                      {typeof this.props.loggedIn !== 'undefined' ? <GameList games={chronilogicalGames} subscribeToMore={more} reload={refetch} loggedIn={this.props.loggedIn} /> : <Loading />}
                     </div>
                 )
             }
@@ -98,5 +100,5 @@ class Games extends Component {
   }
 }
 
-export default Games
+export default Games;
 

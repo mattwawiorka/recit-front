@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
 import GameRow from './GameRow';
 import dateTool from '../../lib/dateTool';
-import withAuth from '../../lib/withAuth';
 
-let loggedIn;
 let loginWarning = <React.Fragment></React.Fragment>
 
 class GameList extends Component {
   componentDidMount() {
     this.props.subscribeToMore();
     this.props.reload();
-    loggedIn = (this.props.auth.loggedIn())
-    if (!loggedIn) {
+  }
+
+  render() {
+
+    if (!this.props.loggedIn) {
       loginWarning = <strong id="listLoginWarning">Log in to open games and see details</strong>
     }
     else {
       loginWarning = <React.Fragment></React.Fragment>
     }
-  }
-
-  render() {
 
     const todayGames = [];
     const tomorrowGames = [];
@@ -35,7 +33,8 @@ class GameList extends Component {
           title={game.title}
           sport={game.sport}
           venue={game.venue}
-          dateTime={game.dateTime} />
+          dateTime={game.dateTime} 
+          loggedIn={this.props.loggedIn} />
           <div id="customBorder"></div>
         </React.Fragment>
       if (parseInt(game.dateTime) < dateTool.getTomorrow().valueOf()) {
@@ -95,6 +94,18 @@ class GameList extends Component {
         -webkit-border-radius: 4px;
         -moz-border-radius: 4px;
         border-radius: 4px; 
+        -webkit-animation: fadein 1s;
+        animation: fadein 1s;
+      }
+
+      @-webkit-keyframes fadein {
+        from {opacity: 0;}
+        to {opacity: 1;}
+      }
+
+      @keyframes fadein {
+        from {opacity: 0;}
+        to {opacity: 1;}
       }
     `}</style>
 
@@ -196,4 +207,4 @@ class GameList extends Component {
   }
 }
 
-export default withAuth(GameList);
+export default GameList;

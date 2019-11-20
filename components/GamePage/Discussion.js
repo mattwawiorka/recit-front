@@ -8,6 +8,7 @@ const GET_COMMENTS = gql`
   query Comments($gameId: ID!) {
     comments(gameId: $gameId) {
       id
+      user
       userName
       content
       dateTime
@@ -25,9 +26,10 @@ const COMMENT_ADDED = gql`
  subscription {
    commentAdded {
      id
+     user
      userName
      content
-     dateTime
+     dateTime  
    }
  }
 `;
@@ -39,7 +41,8 @@ class Discussion extends Component {
         // state
         this.state = {
             comment: "",
-            showPostButton: false
+            showPostButton: false,
+            commentBoxRows: 2
         };
     }
 
@@ -51,8 +54,18 @@ class Discussion extends Component {
 
         if (e.target.value !== "") {
             document.getElementById("postCommentButton").style.visibility = "visible";
+            const rowHeight = 24;
+            const currentRows = Math.ceil(e.target.scrollHeight / rowHeight);
+            if (currentRows > 2) {
+                this.setState({
+                    commentBoxRows: currentRows
+                })
+            }
         } else {
             document.getElementById("postCommentButton").style.visibility = "hidden";
+            this.setState({
+                commentBoxRows: 2
+            })
         }
     };
 
@@ -79,19 +92,29 @@ class Discussion extends Component {
                         >
                         {CreateComment => (
                         <form 
-                            className="commentForm" 
+                            id="commentForm" 
                             onSubmit={e => {
                                 e.preventDefault();
                                 console.log('this mafk submitted?')
                                 document.getElementById('commentBox').value='';
-                                CreateComment();
+                                CreateComment()
+                                .then(response => {
+                                    console.log(response)
+                                    if (response.errors) {
+                                        console.log(response.errors)
+                                    }
+                                    document.getElementById("postCommentButton").style.visibility = "hidden";
+                                    this.setState({
+                                        commentBoxRows: 2
+                                    })
+                                })
                         }}>
                             <textarea
                                 id='commentBox'
                                 onChange={this.handleChange("comment")} 
                                 type="text" 
-                                className="comment-text"
                                 placeholder="Add a comment..."
+                                rows={this.state.commentBoxRows}
                                 autoComplete="off"
                             />
                             <input id="postCommentButton" className="post-button" type="submit" value="Post" />
@@ -130,7 +153,7 @@ class Discussion extends Component {
                             return comparison;
                         })
 
-                        return <CommentList comments={sortedComments} subscribeToMore={more} />
+                        return <CommentList comments={sortedComments} subscribeToMore={more} currentUser={this.props.currentUser} />
                     }
                     }
                     </Query>
@@ -140,28 +163,24 @@ class Discussion extends Component {
 
             <style jsx>{`
                 .container {
-                    display: flex;
-                    flex-direction: column;
+                    display: block;
                     width: 90%;
                     height: 90%;
                     margin: auto;
-                    margin-bottom: 10em;
+                    margin-bottom: 5em;
                 }
 
                 .title {
-                    flex: 1;
                     font-weight: bold;
                 }
 
                 .userInput {
-                    flex: 3;
-                    display: flex;
                     border-style: groove;
                     border-radius: 5px;
                     overflow: auto;
                 }
 
-                .commentForm {
+                #commentForm {
                     display: flex;
                     width: 100%;
                     background-color: white;
@@ -188,9 +207,8 @@ class Discussion extends Component {
                 }
 
                 .post-button {
-                    //flex: 2;
                     width: 20%;
-                    height: 30%;
+                    height: 40%;
                     background-color: var(--darkermatter);
                     color: white;
                     margin-top: auto;
@@ -204,7 +222,6 @@ class Discussion extends Component {
                 }
 
                 .comments {
-                    flex: 8;
                     height: 100%;
                 }
             `}</style>

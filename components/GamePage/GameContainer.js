@@ -42,7 +42,7 @@ const GameContainer = (props) => {
           </div>
           
           <div className="discussion">
-            <Discussion gameId={props.gameId} />
+            <Discussion gameId={props.gameId} currentUser={props.currentUser}/>
           </div>
         </div>
       )

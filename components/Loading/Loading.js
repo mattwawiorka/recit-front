@@ -11,7 +11,11 @@ const Loading = (props) => (
     <style jsx>{`
       .loader {
         display: inline-block;
-        position: relative;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -50px;
+        margin-left: -50px;
         width: 64px;
         height: 64px;
       }

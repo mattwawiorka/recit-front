@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import dateTool from '../../lib/dateTool';
-import withAuth from '../../lib/withAuth';
 import Loading from '../Loading/Loading';
-
-let loggedIn;
 
 class GameRow extends Component {
   constructor(props) {
@@ -17,7 +14,6 @@ class GameRow extends Component {
   }
 
   componentDidMount() {
-    loggedIn = this.props.auth.loggedIn();
     this.setState({
       loading: false
     })
@@ -46,7 +42,7 @@ class GameRow extends Component {
       image = "rec-it.png";
     }
 
-    if (!loggedIn) {
+    if (!this.props.loggedIn) {
       dateFormat = "";
       venue = "";
     }
@@ -57,7 +53,7 @@ class GameRow extends Component {
 
     return (
       <React.Fragment>
-      <Link href={`/Game?id=${id}`} as='/' prefetch={true}>
+      <Link href={`/Game?id=${id}`} as='/' >
       <li className="container">
         <div className="sport">
           <h3 style={{ textAlign: 'center' }} >{sport}</h3>
@@ -95,6 +91,7 @@ class GameRow extends Component {
         .container:hover {
           background-color: var(--greyapple);
           transform: scale(0.97);
+          cursor: pointer;
         }
 
         .sport {
@@ -146,4 +143,4 @@ class GameRow extends Component {
   } 
 }
 
-export default withAuth(GameRow);
+export default GameRow;
