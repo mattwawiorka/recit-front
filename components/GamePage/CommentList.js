@@ -20,7 +20,7 @@ class CommentList extends Component {
         if (this.props.comments) {    
             this.props.comments.forEach((comment) => {
                 rows.push(
-                    <Comment comment={comment} />
+                    <Comment comment={comment} currentUser={this.props.currentUser === comment.user} key={comment.id} />
                 );
             });
         }

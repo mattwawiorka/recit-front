@@ -5,33 +5,42 @@ import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
 const GET_COMMENTS = gql`
-  query Comments($gameId: ID!) {
-    comments(gameId: $gameId) {
-      id
-      user
-      userName
-      content
-      dateTime
+    query Comments($gameId: ID!) {
+        comments(gameId: $gameId) {
+            id
+            user
+            userName
+            content
+            dateTime
+        }
     }
-  }
-  `;
+`;
 
 const CREATE_COMMENT = gql`
-  mutation CreateComment($commentInput: commentInput) {
-     createComment(commentInput: $commentInput) 
- }
- `;
+    mutation CreateComment($commentInput: commentInput) {
+        createComment(commentInput: $commentInput) {
+            id
+            user
+        }
+    }
+`;
+
+const DELETE_COMMENT = gql`
+    mutation DeleteComment($id: ID!) {
+        deleteComment(id: $id)
+    }
+`;
 
 const COMMENT_ADDED = gql`
- subscription {
-   commentAdded {
-     id
-     user
-     userName
-     content
-     dateTime  
-   }
- }
+    subscription {
+        commentAdded {
+            id
+            user
+            userName
+            content
+            dateTime  
+        }
+    }
 `;
 
 class Discussion extends Component {
@@ -41,17 +50,16 @@ class Discussion extends Component {
         // state
         this.state = {
             comment: "",
-            showPostButton: false,
             commentBoxRows: 2
         };
     }
 
     handleChange = (input) => (e) => {
         this.setState({ 
-            [input]: e.target.value,
-            showPostButton: true 
+            [input]: e.target.value
         });
 
+        // Adjust size of post box based on input, and decide whether to show post button
         if (e.target.value !== "") {
             document.getElementById("postCommentButton").style.visibility = "visible";
             const rowHeight = 24;
@@ -70,11 +78,11 @@ class Discussion extends Component {
     };
 
     componentDidMount() {
+        // Make sure post button is originally hidden
         document.getElementById("postCommentButton").style.visibility = "hidden";
     }
 
     render() {
-        const gameId = this.props.gameId;
         return (
             <React.Fragment>
             <div className="container">
@@ -86,7 +94,7 @@ class Discussion extends Component {
                     <Mutation
                         mutation={CREATE_COMMENT}
                         variables={{ commentInput: {
-                            gameId: gameId,
+                            gameId: this.props.gameId,
                             content: this.state.comment
                         } }}
                         >
@@ -95,7 +103,6 @@ class Discussion extends Component {
                             id="commentForm" 
                             onSubmit={e => {
                                 e.preventDefault();
-                                console.log('this mafk submitted?')
                                 document.getElementById('commentBox').value='';
                                 CreateComment()
                                 .then(response => {
@@ -124,7 +131,7 @@ class Discussion extends Component {
                 </div>
 
                 <div className="comments">
-                    <Query query={GET_COMMENTS} variables={{ gameId }}>
+                    <Query query={GET_COMMENTS} variables={{ gameId: this.props.gameId }}>
                     {
                     ({ loading, error, data, subscribeToMore }) => {
                         if (loading) return <Loading></Loading>
@@ -135,14 +142,11 @@ class Discussion extends Component {
                         updateQuery: (prev, { subscriptionData }) => {
                             if (!subscriptionData.data) return prev;
                             const newComment = subscriptionData.data.commentAdded;
-                            console.log('new Comment', newComment)
                             const newComments = Object.assign({}, prev, {comments: [...prev.comments, newComment]});
-                            console.log('new comments', newComments)
                             return newComments
                         }
                         })
 
-                        console.log('comments query')
                         const sortedComments = data.comments.sort( (a,b) => {
                             let comparison;
                             if (parseInt(b.dateTime) > parseInt(a.dateTime)) {
@@ -157,6 +161,7 @@ class Discussion extends Component {
                     }
                     }
                     </Query>
+
                 </div>
 
             </div>

@@ -51,8 +51,6 @@ const Host = (props) => {
 const Spots = (props) => {
   const { spots } = props;
   let result;
-  console.log('spots', spots)
-  console.log(props)
   if (spots === 0) {
     result = <h4>Game is full</h4>
   } 
