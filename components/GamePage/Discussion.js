@@ -25,12 +25,6 @@ const CREATE_COMMENT = gql`
     }
 `;
 
-const DELETE_COMMENT = gql`
-    mutation DeleteComment($id: ID!) {
-        deleteComment(id: $id)
-    }
-`;
-
 const COMMENT_ADDED = gql`
     subscription {
         commentAdded {
@@ -133,7 +127,7 @@ class Discussion extends Component {
                 <div className="comments">
                     <Query query={GET_COMMENTS} variables={{ gameId: this.props.gameId }}>
                     {
-                    ({ loading, error, data, subscribeToMore }) => {
+                    ({ loading, error, data, subscribeToMore, refetch }) => {
                         if (loading) return <Loading></Loading>
                         if (error) return <h4>ERROR!!!</h4>
 
@@ -156,8 +150,8 @@ class Discussion extends Component {
                             }
                             return comparison;
                         })
-
-                        return <CommentList comments={sortedComments} subscribeToMore={more} currentUser={this.props.currentUser} />
+                        
+                        return <CommentList comments={sortedComments} subscribeToMore={more} currentUser={this.props.currentUser} refetch={refetch} gameId={this.props.gameId} />
                     }
                     }
                     </Query>

@@ -36,8 +36,6 @@ const GAME_REMOVED = gql`
   }
 `;
 
-let loggedIn;
-
 class Games extends Component {
   constructor(props) {
     // props
@@ -47,6 +45,19 @@ class Games extends Component {
         listView: true,
         mapView: false
     };
+  }
+
+  componentDidMount() {
+    console.log('yo?')
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+    console.log(window.innerHeight)
+    console.log(document.documentElement.scrollTop)
+    console.log(document.getElementById('gameList').offsetHeight)
+    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+    console.log('fetch more games!')
   }
 
   render() {
@@ -79,7 +90,7 @@ class Games extends Component {
 
             if (this.state.listView) {
                 return (
-                    <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}>
+                    <div id="gameList" style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}>
                       {typeof this.props.loggedIn !== 'undefined' ? <GameList games={chronilogicalGames} subscribeToMore={more} reload={refetch} loggedIn={this.props.loggedIn} /> : <Loading />}
                     </div>
                 )

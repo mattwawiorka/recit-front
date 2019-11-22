@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const CREATE_GAME = gql`
-     mutation CreateGame($gameInput: gameInput) {
+    mutation CreateGame($gameInput: gameInput) {
         createGame(gameInput: $gameInput) 
         {
             id
@@ -11,37 +11,67 @@ const CREATE_GAME = gql`
     }
     `;
 
+const UPDATE_GAME = gql`
+    mutation UpdateGame($id: ID!, $gameInput: gameInput) {
+        updateGame(id: $id, gameInput: $gameInput) 
+        {
+            id
+        }
+    }
+    `;
+
 class CreateGameForm extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = { 
-            title: "",
-            date: "",
-            time: "",
-            endDate: "",
-            endTime: "",
-            sport: "",
-            players: 2,
-            venue: "",
-            address: "",
-            description: "",
+            id: this.props.id || "",
+            title: this.props.title || "",
+            date: this.props.date || "",
+            time: this.props.time || "",
+            endDate: this.props.endDate || "",
+            endTime: this.props.endTime || "",
+            sport: this.props.sport ? (this.props.sport.charAt(0) + this.props.sport.substring(1).toLowerCase()) : "",
+            players: this.props.players || 2,
+            venue: this.props.venue || "",
+            address: this.props.address || "",
+            description: this.props.description || "Let's Play!",
             errors: [{message: ""}],
-            isLoading: true,
-            textAreaRows: 3
+            loading: true
         }
     }
 
     componentDidMount() {
-        const d = new Date(Date.now());
-        const startDate = d.toISOString().split("T")[0];
-        d.setHours(d.getHours() + 2);
-        const startTime = d.getHours().toString() + ":" + (Math.ceil(d.getMinutes()/10)*10).toString() + ":" + "00";
         this.setState({
-            date: startDate,
-            time: startTime,
-            isLoading: false
+            loading: false
         })
+
+        if (!this.props.id) {
+            const d = new Date();
+            const startDate = d.toISOString().split("T")[0];
+            d.setHours(d.getHours() + 2);
+            let startTime;
+            if ((Math.ceil(d.getMinutes()/10)*10) > 59) {
+                d.setHours(d.getHours() + 1);
+                startTime = d.getHours().toString() + ":" + "00"
+            } else {
+                startTime = d.getHours().toString() + ":" + (Math.ceil(d.getMinutes()/10)*10).toString();
+            }
+            this.setState({
+                date: startDate,
+                time: startTime,
+                endDate: startDate
+            })
+        }
+
         this.toggleEndTime();
+
+        document.getElementById('descriptionInput').innerText = this.state.description
+
+        document.getElementById('descriptionInput').addEventListener("input", e => {
+            this.setState({
+                description: e.target.innerText
+            })
+        })
     }
 
     handleChange = (input) => (e) => {
@@ -49,37 +79,27 @@ class CreateGameForm extends Component {
             [input]: e.target.value,
             errors: [{message: ""}] 
         });
-        if (input == 'date') {
-            console.log('date');
+
+        if (input === 'date') {
             this.setState({
-                endDate: e.target.value,
-                errors: [{message: ""}]
-            })
-        }
-        if (input == 'time') {
-            let d = new Date();
-            d.setHours(parseInt(e.target.value.split(":")[0]) + 2)
-            d.setMinutes(parseInt(e.target.value.split(":")[1]))
-            this.setState({
-                endTime: (d.getHours()).toString() + ":" + (d.getMinutes()).toString(),
-                errors: [{message: ""}]
+                endDate: e.target.value
             })
         }
 
-        if (input == 'description') {
-            // This isn't perfect, rows not increasing at correct pace
-            const rowHeight = 24;
-            const currentRows = Math.ceil(e.target.scrollHeight / rowHeight);
-            if (currentRows > 3) {
-                this.setState({
-                    textAreaRows: currentRows
-                })
-            } 
+        if (input === 'time') {
+            let d = new Date();
+            d.setHours(parseInt(e.target.value.split(":")[0]) + 2)
+            d.setMinutes(parseInt(e.target.value.split(":")[1]))
+            let endTime = (d.getHours() < 10 ? '0' + d.getHours().toString() : d.getHours().toString()) + ":" + (d.getMinutes() < 10 ? '0' + d.getMinutes().toString() : d.getMinutes().toString());
+            this.setState({
+                endTime: endTime,
+                errors: [{message: ""}]
+            })
         }
     };
 
     toggleEndTime = () => {
-        if (this.state.isLoading) {
+        if (this.state.loading) {
             return;
         }
         const endTime = document.getElementById("endDateTime");
@@ -96,6 +116,7 @@ class CreateGameForm extends Component {
     render() {
         const {title, date, time, endDate, endTime, sport, players, venue, address, description} = this.state;
         const dateTime = new Date(date + "T" + time);
+
         const endDateTime = new Date(endDate + "T" + endTime);
 
         const errors = [];
@@ -106,6 +127,28 @@ class CreateGameForm extends Component {
             </li>
             );
         })
+
+        let input = this.props.id ? { id: this.props.id, gameInput: {
+            title: title,
+            dateTime: dateTime,
+            endDateTime: endDateTime,
+            venue: venue,
+            address: address,
+            sport: sport.toUpperCase().trim(),
+            description: description,
+            players: parseInt(players),
+            public: true
+        } } : { gameInput: {
+            title: title,
+            dateTime: dateTime,
+            endDateTime: endDateTime,
+            venue: venue,
+            address: address,
+            sport: sport.toUpperCase().trim(),
+            description: description,
+            players: parseInt(players),
+            public: true
+        } }
 
         return (
             <React.Fragment>
@@ -135,18 +178,8 @@ class CreateGameForm extends Component {
                 </span>
 
                 <Mutation
-                    mutation={CREATE_GAME}
-                    variables={{ gameInput: {
-                        title: title,
-                        dateTime: dateTime,
-                        endDateTime: endDateTime,
-                        venue: venue,
-                        address: address,
-                        sport: sport.toUpperCase().trim(),
-                        description: description,
-                        players: parseInt(players),
-                        public: true
-                    } }}
+                    mutation={this.props.id ? UPDATE_GAME : CREATE_GAME}
+                    variables={input}
                 >
                 { CreateGame => (
                 <form 
@@ -162,7 +195,12 @@ class CreateGameForm extends Component {
                                 })
                                 return;
                             }
-                            location.reload();
+                            if (!this.props.id) this.props.exitFunc(); 
+                            else {
+                                this.props.refetch(); 
+                                this.props.exitFunc();
+                            }
+                             
                         })
                         .catch(error => {
                             console.log(error);
@@ -171,7 +209,8 @@ class CreateGameForm extends Component {
                 >
                     <div className="section" id="titleSportForm">
                         <div className="form-group">
-                            <label className="header">Title</label>
+                            <label id="title" className="header">Title</label>
+                            <button onClick={this.props.exitFunc} id="exitButton" type="button">X</button>
                             <input
                                 id="titleInput" 
                                 onChange={this.handleChange("title")} 
@@ -218,17 +257,14 @@ class CreateGameForm extends Component {
 
                     <div className="section" id="descriptionForm">
                         <div className="form-group">
-                            <label htmlFor="textarea" className="header">Description</label>
-                            <textarea
+                            <label className="header">Description</label>
+                            <div
                                 id="descriptionInput"
-                                onChange={this.handleChange("description")} 
-                                type="text" 
                                 className="input-fields"
-                                value={description}                    
-                                placeholder="Tell people about your game"
-                                rows={this.state.textAreaRows}
+                                contentEditable="true"                  
                                 autoComplete="off"
-                            />
+                            >
+                            </div>
                         </div>
                     </div>
 
@@ -311,7 +347,7 @@ class CreateGameForm extends Component {
                             </div>
                         </div>
                     </div>
-                    <input type="submit" value="Create Game!" />
+                    <input type="submit" value={this.props.id ? "Update Game" : "Create Game!"} />
                 </form>
                 )}
                 </Mutation>
@@ -353,6 +389,21 @@ class CreateGameForm extends Component {
                     font-weight: bold;
                 }
 
+                #title {
+                    display: inline-block;
+                    width: 95%;
+                }
+
+                #exitButton {
+                    background: none;
+                    border: none;
+                    text-align: center;
+                    outline: none;
+                    font-weight: bold;
+                    color: #4b4f56;
+                    cursor: pointer;
+                }
+
                 .form-group {
                     vertical-align: middle;
                     padding-top: 5px;
@@ -380,16 +431,20 @@ class CreateGameForm extends Component {
                     padding-right: 5px;
                 }
 
-                textarea {
-                    width: 80%;
-                    height: auto;
-                    border: none;
-                    resize: none;
+                // textarea {
+                //     width: 80%;
+                //     height: auto;
+                //     border: none;
+                //     resize: none;
+                //     outline: none;
+                //     border-radius: 5px;
+                //     padding: 0.5em;
+                //     white-space: pre-wrap;
+                //     //overflow: auto;
+                // }
+
+                #descriptionInput {
                     outline: none;
-                    border-radius: 5px;
-                    padding: 0.5em;
-                    white-space: pre-wrap;
-                    //overflow: auto;
                 }
 
                 .small-form {

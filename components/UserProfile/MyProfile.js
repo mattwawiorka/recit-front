@@ -20,18 +20,17 @@ class MyProfile extends Component {
         // state
         this.state = {
             loading: true,
-            myProfile: false,
-            status: this.props.user.status
+            myProfile: true,
+            status: this.props.user.status,
+            editingStatus: false
         };
     }
 
     componentDidMount() {
-        console.log('profile mounted')
         this.setState({
             loading: false
         })
 
-        document.getElementById("statusButton").style.visibility = "hidden";
     }
 
     handleChange = (input) => (e) => {
@@ -39,16 +38,19 @@ class MyProfile extends Component {
             [input]: e.target.value
          });
 
-        if (e.target.value !== this.state.status) {
-            document.getElementById("statusButton").style.visibility = "visible";
+        if (e.target.value !== this.props.user.status) {
+            this.setState({
+                editingStatus: true
+            })
         } else {
-            document.getElementById("statusButton").style.visibility = "hidden";
+            this.setState({
+                editingStatus: false
+            })
         }
     };
 
     render() {
         const id = this.props.user;
-        console.log(this.props)
 
          return(
             <React.Fragment>
@@ -72,7 +74,6 @@ class MyProfile extends Component {
                                             if (response.errors) {
                                                 console.log(response.errors)
                                             }
-                                            document.getElementById("statusButton").style.visibility = "hidden";
                                         })
                                         .catch(error => {
                                             console.log(error);
@@ -88,7 +89,7 @@ class MyProfile extends Component {
                                         placeholder="What's your status?"
                                         autoComplete="off"
                                     />   
-                                    <input id="statusButton" type="submit" value="Update Status" />
+                                    {this.state.editingStatus ? <input id="statusButton" type="submit" value="Update Status" /> : null}
                                 </form>
                             )}
                             </Mutation>
@@ -174,7 +175,7 @@ class MyProfile extends Component {
                         border: none;
                         resize: none;
                         outline: none;
-                        overflow: none;
+                        overflow: hidden;
                     }
 
                     #statusButton {

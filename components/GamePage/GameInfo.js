@@ -1,7 +1,7 @@
 import React from 'react';
 import dateTool from '../../lib/dateTool';
 
-const GameInfo = ({ game }) => {
+const GameInfo = ({ game, isHost, toggleEditing }) => {
 
   let image;
   if (game.sport === 'TENNIS') {
@@ -18,6 +18,7 @@ const GameInfo = ({ game }) => {
   }
 
   return (
+    
     <React.Fragment>
     <div className="container">
       <div className="section heading">
@@ -29,6 +30,10 @@ const GameInfo = ({ game }) => {
         <div className="sportImage">
           <img src={image} alt={game.sport} className="image" />
         </div>
+      </div>
+
+      <div className="section actions">
+        {isHost ? <button onClick={toggleEditing} id="editButton">Edit</button> : null}
       </div>
 
       <div className="section description">
@@ -116,6 +121,19 @@ const GameInfo = ({ game }) => {
         border-bottom-style: groove;
         border-color: white;
         border-width: thin;
+        font-weight: bold;
+      }
+
+      #editButton {
+        width: 20%;
+        height: 2em;
+        text-align: center;
+        background-color: var(--darkermatter);
+        color: white;
+        padding: 7px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
         font-weight: bold;
       }
 

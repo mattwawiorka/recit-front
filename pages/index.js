@@ -36,7 +36,7 @@ class Index extends Component {
         return (
             <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.toggleCreateGame} >
                 <Announcements />
-                <CreateGameForm />
+                <CreateGameForm exitFunc={this.toggleCreateGame}/>
                 <Filtering />
             </Layout>
         );
