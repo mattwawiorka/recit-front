@@ -109,7 +109,7 @@ class MyProfile extends Component {
 
                 <style jsx>{`
                     .container {
-                        width: 100%;
+                        width: 70%;
                         height: 76vh;
                         display: block;
                         justify-content: center;

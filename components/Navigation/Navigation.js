@@ -90,7 +90,7 @@ class Navigation extends Component {
                                 <Link href="/About">
                                     <a>About</a>
                                 </Link>
-                                <Link href={`/Profile?id=${user}`} as='/'>
+                                <Link href='/Profile/[user]' as={`/Profile/${user}`}>
                                     <a>My Profile</a>
                                 </Link>
                                 <a 
@@ -104,7 +104,7 @@ class Navigation extends Component {
                             <Link href="/About">
                                 <a>About</a>
                             </Link>
-                            <Link href={`/Profile?id=${user}`} as='/'>
+                            <Link href='/Profile/[user]' as={`/Profile/${user}`}>
                                 <a>My Profile</a>
                             </Link>
                             <a 

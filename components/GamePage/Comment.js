@@ -71,7 +71,7 @@ class Comment extends Component {
                 <div className="comment">
                     <div className="heading">
                         <div className="userName">
-                            <Link href={`/Profile?id=${comment.user}`} as='/'>
+                            <Link href='/Profile/[user]' as={`/Profile/${comment.user}`}>
                                 <a>{comment.userName}</a>
                             </Link>
                         </div>

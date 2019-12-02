@@ -4,18 +4,12 @@
 import React, { Component } from 'react';
 import withAuth from '../../lib/withAuth';
 
-let loggedIn;
-
 class BottomDockable extends Component {
 
     showLoginWarning() {
         const warning = document.getElementById('loginWarning')
         warning.id = "loginWarningShow";
         setTimeout(() => warning.id = "loginWarning", 3000)
-    }
-
-    componentDidMount() {
-        loggedIn = this.props.auth.loggedIn();
     }
 
     render() {
@@ -29,7 +23,7 @@ class BottomDockable extends Component {
         }
 
         let action;
-        if (loggedIn) {
+        if (this.props.auth.loggedIn()) {
             action = this.props.clickEvent;
         } 
         else {

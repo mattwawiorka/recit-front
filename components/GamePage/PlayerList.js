@@ -80,7 +80,7 @@ class PlayerList extends Component {
 
   render() {
     const gameId = this.props.gameId;
-    const user = window.localStorage.getItem('user');
+    const user = this.props.currentUser;
     return (
       <React.Fragment>
       
@@ -95,7 +95,7 @@ class PlayerList extends Component {
             const rows = [];
             data.players.forEach((player) => {
               rows.push(
-                <Link href={`/Profile?id=${player.id}`} as='/' key={player.id}>
+                <Link href='/Profile/[user]' as={`/Profile/${player.id}`} key={player.id}>
                   <div className="player">
                     <h3>{player.name}</h3>
                   </div>

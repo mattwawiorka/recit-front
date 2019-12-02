@@ -68,7 +68,6 @@ class Login extends Component {
                                         })
                                         return;
                                     }
-                                    window.localStorage.setItem('user', response.data.login.userId)
                                     cookie.set('token', response.data.login.token, { expires: 1 })
                                     Router.push('/');
                                 })

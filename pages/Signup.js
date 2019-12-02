@@ -6,12 +6,19 @@ import Link from 'next/link';
 import { Mutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
+import cookie from 'js-cookie';
 
 const SIGNUP = gql`
-    mutation CreateUser($userInput: userInput) {
+    mutation CreateUser($userInput: userInput, $name: String!, $password: String!) {
         createUser(userInput: $userInput) 
         {
             name
+        }
+
+        login(name: $name, password: $password) 
+        {
+            token
+            userId
         }
     }
     `;
@@ -71,7 +78,7 @@ class Signup extends Component {
                             phoneNumber: phoneNumber,
                             age: parseInt(age),
                             gender: gender
-                        } }}
+                        }, name: name, password: password }}
                     >
                         { Signup => (  
                         <form onSubmit={e => {
@@ -85,7 +92,9 @@ class Signup extends Component {
                                     })
                                     return;
                                 }
-                                Router.push('/Login');
+                                // Router.push('/Login');
+                                cookie.set('token', response.data.login.token, { expires: 1 })
+                                Router.push('/');
                             })
                             .catch(error => {
                                 console.log(error)

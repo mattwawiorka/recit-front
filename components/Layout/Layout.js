@@ -20,11 +20,13 @@ const GamesLayout = (props) => (
                 {props.children[0]}
             </aside>
             <main>
-                {props.children[1]}
+                {/* <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}> */}
+                    {props.children[1]}
+                {/* </div> */}
             </main>
-            <aside>
+            {/* <aside>
                 {props.children[2]}
-            </aside>
+            </aside> */}
             <footer>
                 {/* <Footer /> */}
                 <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
@@ -36,7 +38,7 @@ const GamesLayout = (props) => (
                 width: 100vw;
                 height: 100vh;
                 display: grid;
-                grid-template-columns: 20vw 60vw 20vw;
+                grid-template-columns: 20vw 80vw;
                 grid-template-rows: minmax(min-content, min-content) minmax(82vh, max-content) minmax(min-content, min-content);
                 grid-template-areas:
                     "header header header"

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Games from '../components/Games';
+import SortingFiltering from '../components/SortingFiltering';
 import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
 import Announcements from '../components/Announcements/Announcements';
@@ -7,6 +7,7 @@ import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
 import withAuth from '../lib/withAuth';
 
+// const AuthContext = React.createContext(false);
 let loggedIn;
 
 class Index extends Component {
@@ -23,7 +24,8 @@ class Index extends Component {
         this.setState({
             createGame: false
         })
-        loggedIn =this.props.auth.loggedIn();
+        
+        loggedIn = this.props.auth.loggedIn();
     }
 
     toggleCreateGame = () => {
@@ -46,8 +48,11 @@ class Index extends Component {
         return (
             <Layout showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.toggleCreateGame} >
                 <Announcements />
-                <Games loggedIn={loggedIn} />
-                <Filtering />
+                <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}>
+                    {/* <AuthContext.Provider value={this.props.auth.loggedIn()}> */}
+                        <SortingFiltering loggedIn={loggedIn} />
+                    {/* </AuthContext.Provider> */}
+                </div>
             </Layout>
         )
     }

@@ -3,24 +3,26 @@ import Link from 'next/link';
 import dateTool from '../../lib/dateTool';
 import Loading from '../Loading/Loading';
 
-class GameRow extends Component {
-  constructor(props) {
-    // props
-    super(props)
-    // state
-    this.state = {
-        loading: true
-    };
-  }
+// class GameRow extends Component {
+//   constructor(props) {
+//     // props
+//     super(props)
+//     // state
+//     this.state = {
+//         loading: true
+//     };
+//   }
 
-  componentDidMount() {
-    this.setState({
-      loading: false
-    })
-  }
+//   componentDidMount() {
+//     this.setState({
+//       loading: false
+//     })
+//   }
 
-  render() {
-    let {id, title, sport, venue, dateTime } = this.props;
+//   render() {
+
+function GameRow(props) {
+    let {id, title, sport, venue, dateTime } = props;
     let dateFormat, image;
 
     if (parseInt(dateTime) < dateTool.getEndOfWeek().valueOf()) {
@@ -42,34 +44,30 @@ class GameRow extends Component {
       image = "rec-it.png";
     }
 
-    if (!this.props.loggedIn) {
+    if (!props.loggedIn) {
       dateFormat = "";
       venue = "";
     }
 
-    if (this.state.loading) {
-      return <Loading />
-    }
-
     return (
       <React.Fragment>
-      <Link href={`/Game?id=${id}`} as='/' >
-      <li className="container">
-        <div className="sport">
-          <h3 style={{ textAlign: 'center' }} >{sport}</h3>
-          <img src={image} alt={sport} className="sportImage"
-            style={{ width: '40%', height: '40%', borderRadius: '10px'}}/>
-        </div>
-        <div className="dateTime">
-          <h3>{dateFormat}</h3>
-        </div>
-        <div className="title">
-          <h3>{title}</h3>
-        </div>
-        <div className="venue">
-          <h3>{venue}</h3> 
-        </div>
-      </li>
+      <Link href='/Game/[game]' as={`/Game/${id}`} >
+        <li className="container">
+          <div className="sport">
+            <h3 style={{ textAlign: 'center' }} >{sport}</h3>
+            <img src={image} alt={sport} className="sportImage"
+              style={{ width: '40%', height: '40%', borderRadius: '10px'}}/>
+          </div>
+          <div className="dateTime">
+            <h3>{dateFormat}</h3>
+          </div>
+          <div className="title">
+            <h3>{title}</h3>
+          </div>
+          <div className="venue">
+            <h3>{venue}</h3> 
+          </div>
+        </li>
       </Link> 
 
       <style jsx>{`
@@ -140,7 +138,7 @@ class GameRow extends Component {
       `}</style>
       </React.Fragment>
     ); 
-  } 
+   
 }
 
 export default GameRow;

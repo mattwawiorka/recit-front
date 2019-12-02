@@ -195,7 +195,10 @@ class CreateGameForm extends Component {
                                 })
                                 return;
                             }
-                            if (!this.props.id) this.props.exitFunc(); 
+                            if (!this.props.id) {
+                                this.props.exitFunc(); 
+                                location.reload();
+                            }
                             else {
                                 this.props.refetch(); 
                                 this.props.exitFunc();

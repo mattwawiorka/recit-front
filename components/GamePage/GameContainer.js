@@ -64,9 +64,9 @@ class GameContainer extends Component {
               <CreateGameForm 
                 id={this.props.gameId}
                 title={data.game.title}
-                date={d.getFullYear().toString() + '-' + (d.getMonth() + 1).toString() + '-' +  d.getDate().toString()}
+                date={d.getFullYear().toString() + '-' + ((d.getMonth() + 1) < 10 ? '0' + (d.getMonth() + 1).toString() : (d.getMonth() + 1).toString()) + '-' +  (d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate().toString())}
                 time={time}
-                endDate={endD.getFullYear().toString() + '-' + (endD.getMonth() + 1).toString() + '-' +  endD.getDate().toString()}
+                endDate={endD.getFullYear().toString() + '-' + ((endD.getMonth() + 1) < 10 ? '0' + (endD.getMonth() + 1).toString() : (endD.getMonth() + 1).toString()) + '-' +  (endD.getDate() < 10 ? '0' + endD.getDate().toString() : endD.getDate().toString())}
                 endTime={endTime}
                 sport={data.game.sport}
                 players={data.game.players}
@@ -81,7 +81,7 @@ class GameContainer extends Component {
             </div>
             
             <div className="players">
-              <PlayerList gameId={this.props.gameId} playerSpots={data.game.players} />
+              <PlayerList gameId={this.props.gameId} playerSpots={data.game.players} currentUser={this.props.currentUser} />
             </div>
             
             <div className="discussion">
