@@ -37,7 +37,7 @@ class Login extends Component {
     render() {
         const {name, password} = this.state;
        return (
-       <Layout>
+       <Layout main={false}>
         <br />
         <div style={{ paddingTop: '25px' }}>
             <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
@@ -112,76 +112,76 @@ class Login extends Component {
                         </div>
                     </div>
             </div>
-        </div>
             <style jsx>{`
+            .container {
+                display: grid;
+                align-items: center;
+                grid-template-columns: 5vw 50vw 5vw;
+                grid-gap: 10px;
+            }
+
+            .center-content {
+                display: inline-grid;
+                align-items: center;
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .bottom {
+                display: grid;
+                grid-template-columns: 1fr .5fr 1fr;
+            }
+
+            form {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 12px 20px;
+                
+            }
+
+            .text-fields {
+                width: 100%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+            input[type=submit] {
+                width: 100%;
+                background-color: var(--darkermatter);
+                color: white;
+                padding: 14px 20px;
+                margin 8px 0;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            input[type=submit]:hover {
+                background-color: var(--darkmatter);
+            }
+
+            .alert {
+                // padding: 10px 16px;
+                // border-style: solid;
+                // border-color: #e14646;
+                // border-radius: 10px;
+                // background-color: #ffcccb; /* Red */
+                // box-shadow: 0 0 10px #ffcccb;
+                color: black;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            @media only screen and (max-width: 700px) {
                 .container {
-                    display: grid;
-                    align-items: center;
-                    grid-template-columns: 5vw 50vw 5vw;
-                    grid-gap: 10px;
+                    grid-template-columns: .25fr 1fr .25fr;
                 }
-
-                .center-content {
-                    display: inline-grid;
-                    align-items: center;
-                    grid-template-columns: repeat(1, 1fr);
-                }
-
-                .bottom {
-                    display: grid;
-                    grid-template-columns: 1fr .5fr 1fr;
-                }
-
-                form {
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    padding: 12px 20px;
-                    
-                }
-
-                .text-fields {
-                    width: 100%;
-                    padding: 12px 20px;
-                    margin: 8px 0;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    box-sizing: border-box;
-                }
-
-                input[type=submit] {
-                    width: 100%;
-                    background-color: var(--darkermatter);
-                    color: white;
-                    padding: 14px 20px;
-                    margin 8px 0;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                }
-
-                input[type=submit]:hover {
-                    background-color: var(--darkmatter);
-                }
-
-                .alert {
-                    // padding: 10px 16px;
-                    // border-style: solid;
-                    // border-color: #e14646;
-                    // border-radius: 10px;
-                    // background-color: #ffcccb; /* Red */
-                    // box-shadow: 0 0 10px #ffcccb;
-                    color: black;
-                    margin-bottom: 15px;
-                    text-align: center;
-                }
-
-                @media only screen and (max-width: 700px) {
-                    .container {
-                        grid-template-columns: .25fr 1fr .25fr;
-                    }
-                }
-            `}</style>
-            <br />
+            }
+        `}</style>
+        </div>
+        <br />
         </Layout>
        );
     }  

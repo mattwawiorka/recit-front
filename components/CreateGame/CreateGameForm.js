@@ -168,7 +168,7 @@ class CreateGameForm extends Component {
                 <option value="Disc Golf" />
             </datalist>
 
-            <div className="container">
+            <div className={this.props.id ? "container update" : "container create"}>
 
                 <span 
                     className="alert"
@@ -370,6 +370,14 @@ class CreateGameForm extends Component {
                     border-radius: 10px;
                     margin: 1.5em;
                     padding: 10px;
+                }
+
+                .update {
+                    width: 85%;
+                }
+
+                .create {
+                    width: 70%;
                 }
 
                 .gameForm {

@@ -9,7 +9,7 @@ const GamesLayout = (props) => (
     <React.Fragment>
         <Header />
         <Meta />
-        <div className="container">
+        <div className={ props.main ? "container" : "container-alt"}>
             <header>
                 <Navigation />
             </header>
@@ -24,9 +24,12 @@ const GamesLayout = (props) => (
                     {props.children[1]}
                 {/* </div> */}
             </main>
-            {/* <aside>
+            {props.main ?
+            null:
+            <aside>
                 {props.children[2]}
-            </aside> */}
+            </aside>
+            }
             <footer>
                 {/* <Footer /> */}
                 <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
@@ -39,6 +42,21 @@ const GamesLayout = (props) => (
                 height: 100vh;
                 display: grid;
                 grid-template-columns: 20vw 80vw;
+                grid-template-rows: minmax(min-content, min-content) minmax(82vh, max-content) minmax(min-content, min-content);
+                grid-template-areas:
+                    "header header header"
+                    "sidebar1 main sidebar2"
+                    "footer footer footer";
+                overflow-y: auto;
+                overflow-x: hidden; 
+                background-color: var(--greyapple);
+            }
+
+            .container-alt {
+                width: 100vw;
+                height: 100vh;
+                display: grid;
+                grid-template-columns: 20vw 60vw 20vw;
                 grid-template-rows: minmax(min-content, min-content) minmax(82vh, max-content) minmax(min-content, min-content);
                 grid-template-areas:
                     "header header header"

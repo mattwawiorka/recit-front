@@ -44,7 +44,7 @@ const ProfilePage = (props) => {
     }
     
     return (
-        <Layout>
+        <Layout main={true} >
             <MyGames />
             {profile} 
             <FriendsList />

@@ -57,6 +57,7 @@ class BottomDockable extends Component {
                         border-top-left-radius: 110px; 
                         border-top-right-radius: 110px;
                         border-bottom: 0;
+                        border-style: none;
                         cursor: pointer;
                         outline: none;
                     }

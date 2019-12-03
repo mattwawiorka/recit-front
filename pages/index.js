@@ -16,7 +16,8 @@ class Index extends Component {
         super(props)
         // state
         this.state = {
-          createGame: false
+          createGame: false,
+          sortingFiltering: false
         };
     }
 
@@ -34,9 +35,15 @@ class Index extends Component {
         })
     }
 
+    toggleSortingFiltering = () => {
+        this.setState({
+            sortingFiltering: !this.state.sortingFiltering
+        })
+    }
+
     renderCreateGame = () => {
         return (
-            <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.toggleCreateGame} >
+            <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.toggleCreateGame} >
                 <Announcements />
                 <CreateGameForm exitFunc={this.toggleCreateGame}/>
                 <Filtering />
@@ -46,11 +53,11 @@ class Index extends Component {
 
     renderGameList = () => {
         return (
-            <Layout showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.toggleCreateGame} >
+            <Layout main={true} showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.toggleCreateGame} >
                 <Announcements />
-                <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}>
+                <div style={{ width: '100%', height: 'auto', paddingTop: '1.2em', paddingLeft: '1.2em', marginBottom: '5em' }}>
                     {/* <AuthContext.Provider value={this.props.auth.loggedIn()}> */}
-                        <SortingFiltering loggedIn={loggedIn} />
+                        <SortingFiltering loggedIn={loggedIn} showPanel={this.state.sortingFiltering} toggleSortingFiltering={this.toggleSortingFiltering} />
                     {/* </AuthContext.Provider> */}
                 </div>
             </Layout>

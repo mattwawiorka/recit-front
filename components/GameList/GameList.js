@@ -1,5 +1,5 @@
 
-let loginWarning = <React.Fragment></React.Fragment>
+let loginWarning;
 
 function GameList(props) {
   
@@ -7,7 +7,7 @@ function GameList(props) {
     loginWarning = <strong id="listLoginWarning">Log in to open games and see details</strong>
   }
   else {
-    loginWarning = <React.Fragment></React.Fragment>
+    loginWarning = null;
   }
 
   let today, tomorrow, thisWeek, nextWeek, later;
@@ -39,13 +39,13 @@ function GameList(props) {
     }
 
     #listLoginWarning {
+      display: block;
       background-color: #333;
       color: #fff;
       text-align: center; 
       //border-radius: 2px; 
       padding: 8px;
-      margin-top: 1em;
-      margin-bottom: 0.75em;
+      margin: 1em auto 0.75em auto;
       width:85%;
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
@@ -74,7 +74,7 @@ function GameList(props) {
         {chronStyle}
       </div>
   } else {
-    today = <React.Fragment></React.Fragment>
+    today = null;
   }
 
   if (props.tomorrowGames.length > 0) {
@@ -86,7 +86,7 @@ function GameList(props) {
         {chronStyle}
       </div>
   } else {
-    tomorrow = <React.Fragment></React.Fragment>
+    tomorrow = null;
   }
 
   if (props.thisWeekGames.length > 0) {
@@ -98,7 +98,7 @@ function GameList(props) {
         {chronStyle}
       </div>
   } else {
-    thisWeek = <React.Fragment></React.Fragment>
+    thisWeek = null;
   }
 
   if (props.nextWeekGames.length > 0) {
@@ -110,7 +110,7 @@ function GameList(props) {
         {chronStyle}
       </div>
   } else {
-    nextWeek = <React.Fragment></React.Fragment>
+    nextWeek = null;
   }
 
   if (props.laterGames.length > 0) {
@@ -121,7 +121,7 @@ function GameList(props) {
         {chronStyle}
       </div>
   } else {
-    later = <React.Fragment></React.Fragment>
+    later = null;
   }
 
   return (

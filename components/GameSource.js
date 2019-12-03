@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import GamesPrep from './GamesPrep';
 import Loading from './Loading/Loading';
 
 const GET_GAMES = gql`
-query Games($cursor: String) {
-  games(cursor: $cursor) @connection(key: "GameFeed") {
+query Games($cursor: String, $sport: String, $startDate: String) {
+  games(cursor: $cursor, sport: $sport, startDate: $startDate) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -40,8 +40,22 @@ const GAME_ADDED = gql`
 `;
 
 function GameSource(props) {
-  
-  const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {ssr: "false"});
+
+  let variables;
+
+  if (props.sport === "ALL" && props.startDate === "ALL") {
+    variables = {}
+  } else {
+    variables = {sport: props.sport.toUpperCase(), startDate: props.startDate.toUpperCase()}
+  }
+
+  console.log(variables)
+
+  useEffect(() => {
+    refetch();
+  }, [props.sport, props.startDate])
+
+  const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: "false"});
   if (loading) return <Loading />
   if (error) return <p>Error</p>
 
@@ -95,6 +109,7 @@ function GameSource(props) {
             const newGameFeed = Object.assign({}, prev, { games: {
               edges: newGames, 
               pageInfo: {
+                endCursor: prev.games.pageInfo.endCursor,
                 hasNextPage: prev.games.pageInfo.hasNextPage,
                 __typename: "PageInfo"
               }, 

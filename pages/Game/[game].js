@@ -11,7 +11,7 @@ const GamePage = props => {
   const router = useRouter();
   const { game } = router.query;
   return (
-    <Layout showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
+    <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
       <Announcements />
       <GameContainer gameId={game} currentUser={props.auth.getUser()} loggedIn={props.auth.loggedIn()} />
       <Filtering />
