@@ -3,15 +3,20 @@ import Navigation from '../Navigation/Navigation';
 import Footer from '../Footer/Footer';
 import BottomDockable from '../BottomDockable/BottomDockable';
 import Meta from '../Meta';
+import { useContext } from 'react';
+import AuthContext from '../../lib/AuthContext';
 
-const GamesLayout = (props) => (
+const GamesLayout = (props) => {
 
+    const auth = useContext(AuthContext);
+
+    return (
     <React.Fragment>
         <Header />
         <Meta />
         <div className={ props.main ? "container" : "container-alt"}>
             <header>
-                <Navigation />
+                <Navigation auth={auth} />
             </header>
             {/* <div style={{ paddingTop: '25px', marginLeft: '50px', marginRight: '50px'}}>
                 {props.children}
@@ -101,6 +106,7 @@ const GamesLayout = (props) => (
             }
         `}</style>
     </React.Fragment>
-);
+    );
+}
 
 export default GamesLayout;

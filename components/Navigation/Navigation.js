@@ -63,7 +63,6 @@ class Navigation extends Component {
                             display: grid;
                             grid-template-rows: minmax(min-content, 10vh) min-content;
                         }
-
                         nav .content {
                             display: grid;
                             place-items: center;
@@ -120,37 +119,31 @@ class Navigation extends Component {
                             display: grid;
                             grid-template-rows: minmax(min-content, 10vh) min-content;
                         }
-
                         nav .content {
                             display: grid;
                             place-items: center;
                             grid-auto-flow: column;
                             align-content: space-evenly;
                         }
-
                         nav .nav-title:hover {
                             filter: opacity(80%);
                             cursor: pointer;
                             -webkit-user-select: none;
                         }
-
                         .links > a {
                             color: white;
                             font-size: 1.5em;
                             font-weight: bold;
                             text-align: center;
                         }
-
                         nav .content .menu {
                             display: none;
                         }
-
                         nav .content .menu:hover {
                             filter: opacity(50%);
                             cursor: pointer;
                             -webkit-user-select: none;
                         }
-
                         nav .content .links {
                             display: grid;
                             grid-gap: 15px;
@@ -158,24 +151,20 @@ class Navigation extends Component {
                             grid-auto-flow: column;
                             grid-auto-columns: minmax(min-content, max-content);
                         }
-
                         nav .dropdown {
                             display: none;
                             background-color: var(--greenapple);
                             text-align: center;
                         }
-
                         nav .dropdown a {
                             color: white;
                             font-weight: bold;
                             padding: 20px;
                         }
-
                         nav .dropdown a:hover {
                             color: var(--greenapple);
                             background-color: var(--greyapple);
                         }
-
                         @media only screen and (max-width: 700px) {
                             nav .content .menu { display: initial;}
                             nav .content .links { display: none;}
@@ -227,36 +216,30 @@ class Navigation extends Component {
                             display: grid;
                             grid-template-rows: minmax(min-content, 10vh) min-content;
                         }
-
                         nav .content {
                             display: grid;
                             place-items: center;
                             grid-auto-flow: column;
                             align-content: space-evenly;
                         }
-
                         nav .nav-title:hover {
                             filter: opacity(80%);
                             cursor: pointer;
                             -webkit-user-select: none;
                         }
-
                         .links > a {
                             color: white;
                             font-size: 1.5em;
                             font-weight: bold;
                         }
-
                         nav .content .menu {
                             display: none;
                         }
-
                         nav .content .menu:hover {
                             filter: opacity(50%);
                             cursor: pointer;
                             -webkit-user-select: none;
                         }
-
                         nav .content .links {
                             display: grid;
                             grid-gap: 15px;
@@ -264,24 +247,20 @@ class Navigation extends Component {
                             grid-auto-flow: column;
                             grid-auto-columns: minmax(min-content, 80px);
                         }
-
                         nav .dropdown {
                             display: none;
                             background-color: var(--greenapple);
                             text-align: center;
                         }
-
                         nav .dropdown a {
                             color: white;
                             font-weight: bold;
                             padding: 20px;
                         }
-
                         nav .dropdown a:hover {
                             color: var(--greenapple);
                             background-color: var(--greyapple);
                         }
-
                         @media only screen and (max-width: 700px) {
                             nav .content .menu { display: initial;}
                             nav .content .links { display: none;}

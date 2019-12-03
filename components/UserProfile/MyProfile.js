@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import Loading from '../Loading/Loading';
-import withAuth from '../../lib/withAuth';
+import { Mutation } from 'react-apollo';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($id: ID!, $userInput: userInput) {

@@ -49,8 +49,6 @@ function GameSource(props) {
     variables = {sport: props.sport.toUpperCase(), startDate: props.startDate.toUpperCase()}
   }
 
-  console.log(variables)
-
   useEffect(() => {
     refetch();
   }, [props.sport, props.startDate])
