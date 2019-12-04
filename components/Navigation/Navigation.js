@@ -197,9 +197,9 @@ class Navigation extends Component {
                                     <a>Signup</a>
                                 </Link>
                             </div>
-                            <i className="material-icons menu" onClick={() => this.menu()}>menu</i>
+                            <i className="material-icons menu" onClick={() => this.menu()} ref={this.button}>menu</i>
                         </div>
-                        <div className="dropdown">
+                        <div className="dropdown" ref={this.dropdown}>
                             <Link href="/About">
                                 <a>About</a>
                             </Link>
