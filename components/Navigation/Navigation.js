@@ -10,23 +10,25 @@ class Navigation extends Component {
         this.state = {
             loading: true
         };
+        this.dropdown = React.createRef();
+        this.button = React.createRef();
     }
 
     componentDidMount() {
-        this.menu();
-        loggedIn = this.props.auth.loggedIn();
-        user = this.props.auth.getUser();
         this.setState({
             loading: false
         })
+        loggedIn = this.props.auth.loggedIn();
+        user = this.props.auth.getUser();
+        this.menu();
     }
 
     menu = () => {
         if (this.state.loading) {
             return;
         }
-        var dropdown = document.querySelector("nav .dropdown");
-        var button = document.querySelector("nav .menu");
+        var dropdown = this.dropdown.current;
+        var button = this.button.current;
         if (dropdown.style.display === "none") {
             dropdown.style.display = "grid";
             button.innerHTML = "close";
@@ -97,9 +99,9 @@ class Navigation extends Component {
                                     onClick={this.props.auth.logout}
                                 >Logout</a>
                             </div>
-                            <i className="material-icons menu" onClick={() => this.menu()}>menu</i>
+                            <i className="material-icons menu" onClick={() => this.menu()} ref={this.button}>menu</i>
                         </div>
-                        <div className="dropdown">
+                        <div className="dropdown" ref={this.dropdown}>
                             <Link href="/About">
                                 <a>About</a>
                             </Link>

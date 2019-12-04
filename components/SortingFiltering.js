@@ -6,15 +6,12 @@ function SortingFiltering(props) {
     const [sport, setSport] = useState("All");
     const [startDate, setStartDate] = useState("All");
 
-    // let footballSelected;
-    // sport === "Football" ? footballSelected="selected" : footballSelected=null;
-
     return (
         <React.Fragment>
             <div className="container">
                 <GameSource loggedIn={props.loggedIn} sport={sport} startDate={startDate} />
 
-                <aside id="sorting-panel">
+                <aside>
                     <button onClick={props.toggleSortingFiltering} id="sort-toggle-button">
                         <h1 style={{ writingMode: "vertical-rl" }}>Search</h1>
                     </button>
@@ -51,11 +48,11 @@ function SortingFiltering(props) {
                                 className="input-fields"
                             >
                                 <option value="All">All</option>
-                                <option value="Today">Today</option>
-                                <option value="Tomorrow">Tomorrow</option>
-                                <option value="LaterThisWeek">Later This Week</option>
-                                <option value="NextWeek">Next Week</option>
-                                <option value="Later">Later</option>
+                                <option value="Today" selected={startDate === "Today" ? true : false}>Today</option>
+                                <option value="Tomorrow" selected={startDate === "Tomorrow" ? true : false}>Tomorrow</option>
+                                <option value="LaterThisWeek" selected={startDate === "LaterThisWeek" ? true : false}>Later This Week</option>
+                                <option value="NextWeek" selected={startDate === "NextWeek" ? true : false}>Next Week</option>
+                                <option value="Later" selected={startDate === "Later" ? true : false}>Later</option>
                             </select>
                         </div>
 
@@ -72,17 +69,17 @@ function SortingFiltering(props) {
                     display: flex;
                 }
 
-                #sorting-panel {
+                aside {
                     display: flex;
                     position: sticky;
                     padding-left: 1em;
-                    top: 50%;
                     left: 100%;
+                    height: 85vh;
                 }
 
                 #sort-toggle-button {
                     position: sticky;
-                    top: 50%;
+                    top: 40%;
                     height: 15em;
                     background-color: var(--greenapple);
                     color: white;
@@ -98,8 +95,10 @@ function SortingFiltering(props) {
                 }
 
                 #sorting-filtering {
+                    position: sticky;;
                     display: block;
                     width: 100%;
+                    height: 100%;
                     padding: 1em;
                     background-color: var(--greenapple);
                     border-radius: 15px;

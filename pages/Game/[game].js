@@ -4,21 +4,17 @@ import GameContainer from '../../components/GamePage/GameContainer';
 import Announcements from '../../components/Announcements/Announcements';
 import Filtering from '../../components/Filtering/Filtering';
 import { withApollo } from '../../lib/apollo';
-import { useContext } from 'react';
-import AuthContext from '../../lib/AuthContext';
+import withAuth from '../../lib/withAuth';
 
 const GamePage = props => {
-  const auth = useContext(AuthContext);
   const router = useRouter();
   const { game } = router.query;
 
-  console.log('auth',auth)
-
-  if (auth.loggedIn) {
+  if (props.auth.loggedIn()) {
     return (
       <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
         <Announcements />
-        <GameContainer gameId={game} currentUser={auth.user} />
+        <GameContainer gameId={game} currentUser={props.auth.getUser()} />
         <Filtering />
       </Layout>
     );
@@ -33,4 +29,4 @@ const handleViewGames = () => {
   Router.push('/');
 }
 
-export default withApollo(GamePage);
+export default withApollo(withAuth(GamePage));

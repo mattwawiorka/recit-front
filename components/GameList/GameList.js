@@ -140,6 +140,7 @@ function GameList(props) {
       .container {
         display: block;
         width: 70%;
+        height: min-content;
         text-align: center;
         background-color: white;
         border-radius: 15px;

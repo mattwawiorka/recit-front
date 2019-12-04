@@ -8,8 +8,7 @@ import { withApollo } from '../../lib/apollo';
 import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo';
 import Loading from '../../components/Loading/Loading';
-import { useContext } from 'react';
-import AuthContext from '../../lib/AuthContext';
+import withAuth from '../../lib/withAuth';
 
 const GET_USER = gql`
   query User($id: ID!) {
@@ -25,11 +24,10 @@ const GET_USER = gql`
   `;
 
 const ProfilePage = (props) => {
-    const auth = useContext(AuthContext);
 
     const router = useRouter();
 
-    if (!auth.loggedIn) {
+    if (!props.auth.loggedIn()) {
         if (typeof window !== 'undefined') router.push('/')
         return null
     }
@@ -43,7 +41,7 @@ const ProfilePage = (props) => {
     if (loading) return <Loading />
     if (error) return <h1>ERROR</h1>
 
-    if (auth.user === user) {
+    if (props.auth.getUser() === user) {
         profile = <MyProfile user={data.user} userId={user} /> 
     }
     else {
@@ -59,4 +57,4 @@ const ProfilePage = (props) => {
     ) 
 }
 
-export default withApollo(ProfilePage);
+export default withApollo(withAuth(ProfilePage));
