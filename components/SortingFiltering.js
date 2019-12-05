@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import GameSource from './GameSource';
 
+// GET classnames package
+
 function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
     const [sport, setSport] = useState("All");
@@ -9,35 +11,36 @@ function SortingFiltering(props) {
     return (
         <React.Fragment>
             <div className="container">
-                <GameSource loggedIn={props.loggedIn} sport={sport} startDate={startDate} />
+                <GameSource loggedIn={props.loggedIn} sport={sport} startDate={startDate} currentLoc={props.currentLoc}/>
 
-                <aside>
-                    <button onClick={props.toggleSortingFiltering} id="sort-toggle-button">
-                        <h1 style={{ writingMode: "vertical-rl" }}>Search</h1>
+                <aside className='side-panel'>
+                    <button onClick={props.toggleSortingFiltering} id="side-panel-toggle-button">
+                        <h1 style={{ writingMode: "vertical-rl" }}>+</h1>
                     </button>
 
                     {props.showPanel ?
-                    <form id="sorting-filtering">
+                    <form className='sorting-filtering'>
                         <div className="form-group">
                             <h2>Filter</h2>
                             <label className="header">Sport</label>
                             <select 
                                 onChange={e => setSport(e.target.value)} 
                                 className="input-fields"
+                                value={sport}
                             >
                                 <option value="All">All</option>
-                                <option value="Tennis" selected={sport === "Tennis" ? true : false}>Tennis</option>
-                                <option value="Basketball" selected={sport === "Basketball" ? true : false}>Basketball</option>
-                                <option value="Football" selected={sport === "Football" ? true : false}>Football</option>
-                                <option value="Volleyball" selected={sport === "Volleyball" ? true : false}>Volleyball</option>
-                                <option value="Softball" selected={sport === "Softball" ? true : false}>Softball</option>
-                                <option value="Baseball" selected={sport === "Baseball" ? true : false}>Baseball</option>
-                                <option value="Field Hockey" selected={sport === "Field Hockey" ? true : false}>Field Hockey</option>
-                                <option value="Table Tennis" selected={sport === "Table Tennis" ? true : false}>Table Tennis</option>
-                                <option value="Soccer" selected={sport === "Soccer" ? true : false}>Soccer</option>
-                                <option value="Badminton" selected={sport === "Badminton" ? true : false}>Badminton</option>
-                                <option value="Golf" selected={sport === "Golf" ? true : false}>Golf</option>
-                                <option value="Disc Golf" selected={sport === "Disc Golf" ? true : false}>Disc Golf</option>
+                                <option value="Tennis">Tennis</option>
+                                <option value="Basketball" >Basketball</option>
+                                <option value="Football">Football</option>
+                                <option value="Volleyball" >Volleyball</option>
+                                <option value="Softball">Softball</option>
+                                <option value="Baseball">Baseball</option>
+                                <option value="Field Hockey">Field Hockey</option>
+                                <option value="Table Tennis">Table Tennis</option>
+                                <option value="Soccer">Soccer</option>
+                                <option value="Badminton">Badminton</option>
+                                <option value="Golf">Golf</option>
+                                <option value="Disc Golf">Disc Golf</option>
                             </select>
                         </div>
 
@@ -46,19 +49,20 @@ function SortingFiltering(props) {
                             <select 
                                 onChange={e => setStartDate(e.target.value)} 
                                 className="input-fields"
+                                value={startDate}
                             >
                                 <option value="All">All</option>
-                                <option value="Today" selected={startDate === "Today" ? true : false}>Today</option>
-                                <option value="Tomorrow" selected={startDate === "Tomorrow" ? true : false}>Tomorrow</option>
-                                <option value="LaterThisWeek" selected={startDate === "LaterThisWeek" ? true : false}>Later This Week</option>
-                                <option value="NextWeek" selected={startDate === "NextWeek" ? true : false}>Next Week</option>
-                                <option value="Later" selected={startDate === "Later" ? true : false}>Later</option>
+                                <option value="Today" >Today</option>
+                                <option value="Tomorrow">Tomorrow</option>
+                                <option value="LaterThisWeek">Later This Week</option>
+                                <option value="NextWeek">Next Week</option>
+                                <option value="Later">Later</option>
                             </select>
                         </div>
 
                         <h2>Sort</h2>
                         
-                    </form>  
+                    </form>
                     :
                     null}
                 </aside>
@@ -68,17 +72,17 @@ function SortingFiltering(props) {
                 .container {
                     display: flex;
                 }
-
                 aside {
                     display: flex;
                     position: sticky;
                     padding-left: 1em;
                     left: 100%;
                     height: 85vh;
+                    // transition: 1s;
                 }
-
-                #sort-toggle-button {
+                #side-panel-toggle-button {
                     position: sticky;
+                    right: 0;
                     top: 40%;
                     height: 15em;
                     background-color: var(--greenapple);
@@ -92,23 +96,22 @@ function SortingFiltering(props) {
                     border-style: none;
                     cursor: pointer;
                     outline: none;
+                    // transition: 1s;
                 }
-
-                #sorting-filtering {
-                    position: sticky;;
+                .sorting-filtering {
+                    position: sticky;
                     display: block;
                     width: 100%;
                     height: 100%;
                     padding: 1em;
                     background-color: var(--greenapple);
                     border-radius: 15px;
+                    // transition: 1s;
                 }
-
                 .form-group {
                     vertical-align: middle;
                     padding-top: 5px;
                 }
-
                 h2 {
                     text-align: center;
                     color: white;
@@ -116,7 +119,6 @@ function SortingFiltering(props) {
                     margin-bottom: 0.75em;
                     margin-top: 0.75em;
                 }
-
                 .header {
                     display: block;
                     color: white;
@@ -124,7 +126,6 @@ function SortingFiltering(props) {
                     font-weight: 500;
                     font-weight: bold;
                 }
-
                 .input-fields {
                     display: block;
                     background-color: white;

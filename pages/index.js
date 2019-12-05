@@ -6,9 +6,9 @@ import Announcements from '../components/Announcements/Announcements';
 import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
 import withAuth from '../lib/withAuth';
+import Loading from '../components/Loading/Loading';
 
 // const AuthContext = React.createContext(false);
-let loggedIn;
 
 class Index extends Component {
     constructor(props) {
@@ -16,17 +16,23 @@ class Index extends Component {
         super(props)
         // state
         this.state = {
-          createGame: false,
-          sortingFiltering: false
+            loading: true,
+            loggedIn: this.props.auth.loggedIn(),
+            currentLoc: [],
+            createGame: false,
+            sortingFiltering: false,
         };
     }
 
     componentDidMount() {
-        this.setState({
-            createGame: false
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                currentLoc: [position.coords.latitude, position.coords.longitude],
+                loading: false
+            })
         })
-        
-        loggedIn = this.props.auth.loggedIn();
+
     }
 
     toggleCreateGame = () => {
@@ -41,41 +47,44 @@ class Index extends Component {
         })
     }
 
-    renderCreateGame = () => {
-        return (
-            <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={this.toggleCreateGame} >
-                <Announcements />
-                <CreateGameForm exitFunc={this.toggleCreateGame}/>
-                <Filtering />
-            </Layout>
-        );
-    }
-
-    renderGameList = () => {
-        return (
-            <Layout main={true} showGamesButton={true} startGame={true} submitGame={false} clickEvent={this.toggleCreateGame} >
-                <Announcements />
-                <div style={{ width: '100%', height: 'auto', paddingTop: '1.2em', paddingLeft: '1.2em', marginBottom: '5em' }}>
-                    {/* <AuthContext.Provider value={this.props.auth.loggedIn()}> */}
-                        <SortingFiltering loggedIn={loggedIn} showPanel={this.state.sortingFiltering} toggleSortingFiltering={this.toggleSortingFiltering} />
-                    {/* </AuthContext.Provider> */}
-                </div>
-            </Layout>
-        )
-    }
-
     render() {  
+        if (this.state.loading) return <Loading />
+
         if (this.state.createGame) {
             return (
-                <div>
-                    {this.renderCreateGame()}
-                </div>
+                <Layout 
+                    main={true} 
+                    showGamesButton={true} 
+                    startGame={false} 
+                    submitGame={true} 
+                    clickEvent={this.toggleCreateGame} 
+                >
+                    <Announcements />
+                    <CreateGameForm 
+                        exitFunc={this.toggleCreateGame}
+                    />
+                    <Filtering />
+                </Layout>
             );
         } else {
             return (
-                <div>
-                    {this.renderGameList()}
-                </div>
+                <Layout 
+                    main={true} 
+                    showGamesButton={true} 
+                    startGame={true} 
+                    submitGame={false} 
+                    clickEvent={this.toggleCreateGame} 
+                >
+                    <Announcements />
+                    <div style={{ width: '100%', height: 'auto', paddingTop: '1.2em', paddingLeft: '1.2em', marginBottom: '5em' }}>
+                            <SortingFiltering 
+                                loggedIn={this.state.loggedIn} 
+                                showPanel={this.state.sortingFiltering} 
+                                toggleSortingFiltering={this.toggleSortingFiltering} 
+                                currentLoc={this.state.currentLoc} 
+                            />
+                    </div>
+                </Layout>
             );
         } 
     }

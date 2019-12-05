@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import PlaceSearch from '../GoogleMaps/PlaceSearch';
 
 const CREATE_GAME = gql`
     mutation CreateGame($gameInput: gameInput) {
@@ -34,6 +35,7 @@ class CreateGameForm extends Component {
             players: this.props.players || 2,
             venue: this.props.venue || "",
             address: this.props.address || "",
+            coords: this.props.coords || [],
             description: this.props.description || "Let's Play!",
             errors: [{message: ""}],
             loading: true
@@ -98,6 +100,13 @@ class CreateGameForm extends Component {
         }
     };
 
+    handleGooglePlace = (place) => {
+        this.setState({
+            address: place.formatted_address,
+            coords: [place.geometry.location.lat(), place.geometry.location.lng()]
+        })
+    }
+
     toggleEndTime = () => {
         if (this.state.loading) {
             return;
@@ -114,7 +123,7 @@ class CreateGameForm extends Component {
     }
 
     render() {
-        const {title, date, time, endDate, endTime, sport, players, venue, address, description} = this.state;
+        const {title, date, time, endDate, endTime, sport, players, venue, address, coords, description} = this.state;
         const dateTime = new Date(date + "T" + time);
 
         const endDateTime = new Date(endDate + "T" + endTime);
@@ -134,6 +143,7 @@ class CreateGameForm extends Component {
             endDateTime: endDateTime,
             venue: venue,
             address: address,
+            coords: coords,
             sport: sport.toUpperCase().trim(),
             description: description,
             players: parseInt(players),
@@ -144,6 +154,7 @@ class CreateGameForm extends Component {
             endDateTime: endDateTime,
             venue: venue,
             address: address,
+            coords: coords,
             sport: sport.toUpperCase().trim(),
             description: description,
             players: parseInt(players),
@@ -286,14 +297,10 @@ class CreateGameForm extends Component {
                         </div>
                         <div className="form-group split-form" id="addressForm">
                             <label className="header">Address</label>
-                            <input 
-                                id="addressInput"
-                                onChange={this.handleChange("address")} 
-                                type="text" 
+                            <PlaceSearch
                                 className="input-fields"
-                                value={address}
-                                placeholder="Where is your game located"
-                                autoComplete="off"
+                                onChangeFunc={this.handleGooglePlace}
+                                prevPlace={this.props.address}
                             />
                         </div>
                     </div>

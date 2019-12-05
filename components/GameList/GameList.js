@@ -126,7 +126,7 @@ function GameList(props) {
 
   return (
     <React.Fragment>
-    <div className="container">
+    <div className="list-container">
       <h3 id="upcomingGames">Upcoming Games</h3>
       {loginWarning}
       {today}
@@ -137,13 +137,14 @@ function GameList(props) {
     </div>
       
     <style jsx>{`
-      .container {
+      .list-container {
         display: block;
-        width: 70%;
+        width: 50%;
         height: min-content;
         text-align: center;
         background-color: white;
         border-radius: 15px;
+        margin-left: 1em;
       }
 
       #upcomingGames {

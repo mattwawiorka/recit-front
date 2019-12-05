@@ -5,8 +5,8 @@ import GamesPrep from './GamesPrep';
 import Loading from './Loading/Loading';
 
 const GET_GAMES = gql`
-query Games($cursor: String, $sport: String, $startDate: String) {
-  games(cursor: $cursor, sport: $sport, startDate: $startDate) @connection(key: "GameFeed") {
+query Games($cursor: String, $sport: String, $startDate: String, $currentLoc: [Float]) {
+  games(cursor: $cursor, sport: $sport, startDate: $startDate, currentLoc: $currentLoc) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -14,7 +14,12 @@ query Games($cursor: String, $sport: String, $startDate: String) {
         sport
         venue
         dateTime
+        location {
+          coordinates
+        }
       }
+      cursor
+      distance
     }
     pageInfo {     
       endCursor
@@ -34,20 +39,21 @@ const GAME_ADDED = gql`
         sport
         venue
         dateTime
+        location {
+          coordinates
+        }
       }
     }
   }
 `;
 
 function GameSource(props) {
-
-  let variables;
-
-  if (props.sport === "ALL" && props.startDate === "ALL") {
-    variables = {}
-  } else {
-    variables = {sport: props.sport.toUpperCase(), startDate: props.startDate.toUpperCase()}
-  }
+  
+  let variables = {
+    currentLoc: props.currentLoc,
+    sport: props.sport.toUpperCase(),
+    startDate: props.startDate.toUpperCase()
+  };
 
   useEffect(() => {
     refetch();
@@ -61,6 +67,8 @@ function GameSource(props) {
     <>
     {typeof props.loggedIn !== 'undefined' ?
     <GamesPrep
+      loggedIn={props.loggedIn} 
+      currentLoc={props.currentLoc}
       games={data.games.edges || []} 
       hasMore={data.games.pageInfo.hasNextPage}
       loadMore={() => 
@@ -82,7 +90,6 @@ function GameSource(props) {
           }
         })
       }
-      loggedIn={props.loggedIn} 
       refetch={refetch}
       subscribeToGames={() => 
         subscribeToMore({

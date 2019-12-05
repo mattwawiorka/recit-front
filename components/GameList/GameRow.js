@@ -22,26 +22,13 @@ import Loading from '../Loading/Loading';
 //   render() {
 
 function GameRow(props) {
-    let {id, title, sport, venue, dateTime } = props;
-    let dateFormat, image;
+    let {id, title, sport, venue, dateTime, image } = props;
+    let dateFormat;
 
     if (parseInt(dateTime) < dateTool.getEndOfWeek().valueOf()) {
       dateFormat = dateTool.getDateTime(parseInt(dateTime), false, true);
     } else {
       dateFormat = dateTool.getDateTime(parseInt(dateTime), true, false)
-    }
-
-    if (sport === 'TENNIS') {
-      image = "/tennis-ball.svg";
-    } 
-    else if (sport === 'BASKETBALL') {
-      image = "/basketball.svg";
-    }
-    else if (sport === 'FOOTBALL') {
-      image = "/american-football.svg";
-    } 
-    else {
-      image = "rec-it.png";
     }
 
     if (!props.loggedIn) {
