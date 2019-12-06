@@ -1,13 +1,25 @@
+import React, { useCallback } from 'react';
+import classNames from 'classnames';
+
 import Link from 'next/link';
 
 const GameMarker = (props) => {
 
     const { id, sport, title, image } = props;
 
+    const getHovered = useCallback(() => {
+        props.onMouseEnter(id)
+    })
+
+    let markerClass = classNames({
+        'marker': true,
+        'hovered': props.hovered
+    })
+
     return (
         <>
             <Link href='/Game/[game]' as={`/Game/${id}`} >
-                <div className="marker">
+                <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={props.clearHovered}>
                     <img src={image} alt={sport}
                         style={{ width: '100%', height: '100%', borderRadius: '10px'}}
                     />
@@ -20,10 +32,11 @@ const GameMarker = (props) => {
                     height: 2.5em;
                 }
 
-                .marker:hover {
+                .hovered {
                     transform: scale(1.5);
                     cursor: pointer;
                 }
+
             `}</style>
         </>
     );

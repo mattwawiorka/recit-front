@@ -8,11 +8,11 @@ import MapContainer from './GoogleMaps/MapContainer';
 function GamesPrep(props) {
 
     const [games, setGames] = useState(props.games || [])
+    const [hovered, setHovered] = useState(null);
 
     useEffect(() => {
         props.subscribeToGames();
         setGames(props.games)
-        console.log(games.length)
     }, [props.games])
 
     const todayGames = [];
@@ -36,6 +36,15 @@ function GamesPrep(props) {
         })
         if (node) observer.current.observe(node)
     },[props.games, props.hasMore])
+
+    // For connecting Markers to Game Rows
+    const getHovered = useCallback((id) => {
+        setHovered(id)
+    })
+
+    const clearHovered = useCallback(() => {
+        setHovered(null)
+    })
     
     games.forEach((game, index) => {
         let image;
@@ -63,6 +72,9 @@ function GamesPrep(props) {
                 title={game.node.title}
                 sport={game.node.sport}
                 image={image}
+                onMouseEnter={getHovered}
+                hovered={hovered === game.node.id}
+                clearHovered={clearHovered}
             />
 
         markers.push(marker)
@@ -78,17 +90,22 @@ function GamesPrep(props) {
                     image={image}
                     venue={game.node.venue}
                     dateTime={game.node.dateTime} 
-                    loggedIn={props.loggedIn} />
-                    <div id="customBorder" ref={lastGameRef}></div>
+                    loggedIn={props.loggedIn} 
+                    onMouseEnter={getHovered}
+                    hovered={hovered === game.node.id}
+                    clearHovered={clearHovered}
+                />
+          
+                <div id="customBorder" ref={lastGameRef}></div>
 
-                    <style jsx>{`
-                    #customBorder {
-                        border-bottom-style: groove;
-                        border-width: thin;
-                        width: 85%;
-                        margin: 0 auto;
-                    }
-                    `}</style>
+                <style jsx>{`
+                #customBorder {
+                    border-bottom-style: groove;
+                    border-width: thin;
+                    width: 85%;
+                    margin: 0 auto;
+                }
+                `}</style>
             </React.Fragment>
         } else {
             row = 
@@ -100,17 +117,22 @@ function GamesPrep(props) {
                     image={image}
                     venue={game.node.venue}
                     dateTime={game.node.dateTime} 
-                    loggedIn={props.loggedIn} />
-                    <div id="customBorder"></div>
+                    loggedIn={props.loggedIn} 
+                    onMouseEnter={getHovered}
+                    hovered={hovered === game.node.id}
+                    clearHovered={clearHovered}
+                />
+                    
+                <div id="customBorder"></div>
 
-                    <style jsx>{`
-                    #customBorder {
-                        border-bottom-style: groove;
-                        border-width: thin;
-                        width: 85%;
-                        margin: 0 auto;
-                    }
-                    `}</style>
+                <style jsx>{`
+                #customBorder {
+                    border-bottom-style: groove;
+                    border-width: thin;
+                    width: 85%;
+                    margin: 0 auto;
+                }
+                `}</style>
             </React.Fragment>
         }
         if (parseInt(game.node.dateTime) < dateTool.getTomorrow().valueOf()) {

@@ -15,7 +15,7 @@ const MapContainer = (props) => {
                         lng: props.currentLoc[1]
                     }
                 }
-                defaultZoom={11}
+                defaultZoom={12}
                 options={{
                     zoomControl: false,
                     styles: 
