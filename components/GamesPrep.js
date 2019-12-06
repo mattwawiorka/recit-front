@@ -12,6 +12,7 @@ function GamesPrep(props) {
     useEffect(() => {
         props.subscribeToGames();
         setGames(props.games)
+        console.log(games.length)
     }, [props.games])
 
     const todayGames = [];

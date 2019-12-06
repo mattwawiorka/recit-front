@@ -141,10 +141,12 @@ function GameList(props) {
         display: block;
         width: 50%;
         height: min-content;
+        max-height: 80vh;
         text-align: center;
         background-color: white;
         border-radius: 15px;
         margin-left: 1em;
+        overflow: auto;
       }
 
       #upcomingGames {

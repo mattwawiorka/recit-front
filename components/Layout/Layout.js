@@ -48,7 +48,7 @@ const GamesLayout = (props) => {
                     "header header header"
                     "sidebar1 main sidebar2"
                     "footer footer footer";
-                overflow-y: auto;
+                overflow-y: hidden;
                 overflow-x: hidden; 
                 background-color: var(--greyapple);
             }
