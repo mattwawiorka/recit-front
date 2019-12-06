@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from 'react';
 
 let loginWarning;
 
@@ -9,6 +10,14 @@ function GameList(props) {
   else {
     loginWarning = null;
   }
+
+  const list = useRef(null);
+
+  useEffect(() => {
+    if (props.scroll 
+        && ( (props.scrollTo < list.current.scrollTop) || (props.scrollTo > (list.current.scrollTop + list.current.clientHeight)))) 
+        list.current.scrollTo(0, props.scrollTo - 100)
+  }, [props.scrollTo])
 
   let today, tomorrow, thisWeek, nextWeek, later;
   const chronStyle = 
@@ -126,7 +135,7 @@ function GameList(props) {
 
   return (
     <React.Fragment>
-    <div className="list-container">
+    <div className="list-container" ref={list}>
       <h3 id="upcomingGames">Upcoming Games</h3>
       {loginWarning}
       {today}

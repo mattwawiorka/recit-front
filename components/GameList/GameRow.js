@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import dateTool from '../../lib/dateTool';
 import classNames from 'classnames';
@@ -18,9 +18,17 @@ function GameRow(props) {
     venue = "";
   }
 
+  const row = useRef(null);
+
   const getHovered = useCallback(() => {
     props.onMouseEnter(id)
   })
+
+  useEffect(() => {
+    let scrollHeight = props.hovered ? (row.current.offsetTop - row.current.clientHeight) : null
+    console.log('row ', id, 'height: ', scrollHeight)
+    if (scrollHeight !== null) props.getScrollHeight(scrollHeight)
+  }, [props.hovered])
 
   let rowClass = classNames({
     'game-row': true,
@@ -30,7 +38,7 @@ function GameRow(props) {
   return (
     <React.Fragment>
     <Link href='/Game/[game]' as={`/Game/${id}`} >
-      <li className={rowClass} onMouseEnter={getHovered} onMouseLeave={props.clearHovered}>
+      <li className={rowClass} onMouseEnter={getHovered} onMouseLeave={props.clearHovered} ref={row} >
         <div className="sport">
           <h3 style={{ textAlign: 'center' }} >{sport}</h3>
           <img src={image} alt={sport} className="sportImage"

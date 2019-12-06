@@ -9,6 +9,8 @@ function GamesPrep(props) {
 
     const [games, setGames] = useState(props.games || [])
     const [hovered, setHovered] = useState(null);
+    const [scroll, setScroll] = useState(false);
+    const [scrollHeight, setScrollHeight] = useState(null);
 
     useEffect(() => {
         props.subscribeToGames();
@@ -38,12 +40,18 @@ function GamesPrep(props) {
     },[props.games, props.hasMore])
 
     // For connecting Markers to Game Rows
-    const getHovered = useCallback((id) => {
+    const getHovered = useCallback((id, fromMap) => {
         setHovered(id)
+        if (fromMap) setScroll(true)
     })
 
     const clearHovered = useCallback(() => {
         setHovered(null)
+        setScroll(false)
+    })
+
+    const scrollList = useCallback((height) => {
+        setScrollHeight(height)
     })
     
     games.forEach((game, index) => {
@@ -94,6 +102,7 @@ function GamesPrep(props) {
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
+                    getScrollHeight={scrollList}
                 />
           
                 <div id="customBorder" ref={lastGameRef}></div>
@@ -121,6 +130,7 @@ function GamesPrep(props) {
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
+                    getScrollHeight={scrollList}
                 />
                     
                 <div id="customBorder"></div>
@@ -165,6 +175,8 @@ function GamesPrep(props) {
                 thisWeekGames={thisWeekGames}
                 nextWeekGames={nextWeekGames}
                 laterGames={laterGames}
+                scroll={scroll}
+                scrollTo={scrollHeight}
             />
         </>
     )

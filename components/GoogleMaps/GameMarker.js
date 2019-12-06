@@ -8,7 +8,7 @@ const GameMarker = (props) => {
     const { id, sport, title, image } = props;
 
     const getHovered = useCallback(() => {
-        props.onMouseEnter(id)
+        props.onMouseEnter(id, true)
     })
 
     let markerClass = classNames({
