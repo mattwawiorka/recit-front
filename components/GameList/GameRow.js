@@ -26,7 +26,6 @@ function GameRow(props) {
 
   useEffect(() => {
     let scrollHeight = props.hovered ? (row.current.offsetTop - row.current.clientHeight) : null
-    console.log('row ', id, 'height: ', scrollHeight)
     if (scrollHeight !== null) props.getScrollHeight(scrollHeight)
   }, [props.hovered])
 

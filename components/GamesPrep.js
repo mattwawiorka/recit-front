@@ -167,6 +167,7 @@ function GamesPrep(props) {
             <MapContainer 
                 currentLoc={props.currentLoc}
                 markers={markers}
+                getMapBounds={props.getMapBounds}
             />
             <GamesList 
                 loggedIn={props.loggedIn}

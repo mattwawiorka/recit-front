@@ -4,6 +4,34 @@ import Map from 'google-map-react';
 
 const MapContainer = (props) => {
 
+  const handleApiLoaded = useCallback((map, maps) => {
+
+    props.getMapBounds([
+      map.getBounds().getNorthEast().lat(),
+      map.getBounds().getNorthEast().lng(),
+      map.getBounds().getSouthWest().lat(),
+      map.getBounds().getSouthWest().lng()
+    ])
+
+    maps.event.addListener(map, 'dragend', () => {
+      props.getMapBounds([
+        map.getBounds().getNorthEast().lat(),
+        map.getBounds().getNorthEast().lng(),
+        map.getBounds().getSouthWest().lat(),
+        map.getBounds().getSouthWest().lng()
+      ])
+    })
+
+    maps.event.addListener(map, 'zoom_changed', () => {
+      props.getMapBounds([
+        map.getBounds().getNorthEast().lat(),
+        map.getBounds().getNorthEast().lng(),
+        map.getBounds().getSouthWest().lat(),
+        map.getBounds().getSouthWest().lng()
+      ])
+    })
+  })
+
     return (
         <>
         <div className="map-container">
@@ -16,6 +44,8 @@ const MapContainer = (props) => {
                     }
                 }
                 defaultZoom={12}
+                yesIWantToUseGoogleMapApiInternals
+                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                 options={{
                     zoomControl: false,
                     styles: 

@@ -5,8 +5,8 @@ import GamesPrep from './GamesPrep';
 import Loading from './Loading/Loading';
 
 const GET_GAMES = gql`
-query Games($cursor: String, $sport: String, $startDate: String, $currentLoc: [Float]) {
-  games(cursor: $cursor, sport: $sport, startDate: $startDate, currentLoc: $currentLoc) @connection(key: "GameFeed") {
+query Games($cursor: String, $sport: String, $startDate: String, $currentLoc: [Float], $bounds: [Float]) {
+  games(cursor: $cursor, sport: $sport, startDate: $startDate, currentLoc: $currentLoc, bounds: $bounds) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -52,18 +52,19 @@ function GameSource(props) {
   let variables = {
     currentLoc: props.currentLoc,
     sport: props.sport.toUpperCase(),
-    startDate: props.startDate.toUpperCase()
+    startDate: props.startDate.toUpperCase(),
+    bounds: props.bounds
   };
 
   useEffect(() => {
     refetch();
-  }, [props.sport, props.startDate])
+  }, [props.sport, props.startDate, props.bounds])
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: "false"});
   if (loading) return <Loading />
   if (error) return <p>Error</p>
 
-  console.log('data', data)
+  console.log('got data', data)
 
   return (
     <>
@@ -71,6 +72,7 @@ function GameSource(props) {
     <GamesPrep
       loggedIn={props.loggedIn} 
       currentLoc={props.currentLoc}
+      getMapBounds={props.getMapBounds}
       games={data.games.edges || []} 
       hasMore={data.games.pageInfo.hasNextPage}
       loadMore={() => 

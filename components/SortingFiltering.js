@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useCallback } from 'react';
 import GameSource from './GameSource';
 
 // GET classnames package
@@ -7,11 +7,24 @@ function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
     const [sport, setSport] = useState("All");
     const [startDate, setStartDate] = useState("All");
+    const [bounds, setBounds] = useState([])
+
+    const setMapBounds = useCallback((mapBounds) => {
+        console.log('update bounds state change')
+        setBounds(mapBounds)
+    })
 
     return (
         <React.Fragment>
             <div className="container">
-                <GameSource loggedIn={props.loggedIn} sport={sport} startDate={startDate} currentLoc={props.currentLoc}/>
+                <GameSource 
+                    loggedIn={props.loggedIn} 
+                    sport={sport} 
+                    startDate={startDate} 
+                    currentLoc={props.currentLoc} 
+                    getMapBounds={setMapBounds}
+                    bounds={bounds}
+                />
 
                 <aside className='side-panel'>
                     <button onClick={props.toggleSortingFiltering} id="side-panel-toggle-button">
