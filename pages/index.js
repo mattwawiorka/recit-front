@@ -3,7 +3,6 @@ import SortingFiltering from '../components/SortingFiltering';
 import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
 import Announcements from '../components/Announcements/Announcements';
-import Filtering from '../components/Filtering/Filtering';
 import { withApollo } from '../lib/apollo';
 import withAuth from '../lib/withAuth';
 import Loading from '../components/Loading/Loading';
@@ -63,7 +62,7 @@ class Index extends Component {
                     <CreateGameForm 
                         exitFunc={this.toggleCreateGame}
                     />
-                    <Filtering />
+                    <br />
                 </Layout>
             );
         } else {
