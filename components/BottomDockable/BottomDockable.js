@@ -1,131 +1,127 @@
-// This might eventually be the dockable create game form
-// For now just a create game button
-
-import React, { Component } from 'react';
+import React, { useRef } from 'react';
 import withAuth from '../../lib/withAuth';
 
-class BottomDockable extends Component {
+function BottomDockable(props) {
 
-    showLoginWarning() {
-        const warning = document.getElementById('loginWarning')
-        warning.id = "loginWarningShow";
-        setTimeout(() => warning.id = "loginWarning", 3000)
+    const loginWarning = useRef();
+
+    const showLoginWarning = () => {
+        loginWarning.current.id = "loginWarningShow";
+        setTimeout(() => loginWarning.current.id = "loginWarning", 3000)
     }
 
-    render() {
-        let option;
-        if (this.props.startGame) {
-            option = "Start New Game";
-        } else if (this.props.submitGame) {
-            option = "View Games";
-        } else {
-            option = "View Games"
-        }
+    let option;
+    if (props.startGame) {
+        option = "Start New Game";
+    } else if (props.submitGame) {
+        option = "View Games";
+    } else {
+        option = "View Games"
+    }
 
-        let action;
-        if (this.props.auth.loggedIn()) {
-            action = this.props.clickEvent;
-        } 
-        else {
-            action = this.showLoginWarning;
-        }
+    let action;
+    if (props.auth.loggedIn()) {
+        action = props.clickEvent;
+    } 
+    else {
+        action = showLoginWarning;
+    }
 
-        if (this.props.show) {
-            return (
-                <React.Fragment>
-                <span id='loginWarning'>
-                    <strong>
-                        You must be logged in to start a new game
-                    </strong>
-                </span>
+    if (props.show) {
+        return (
+            <React.Fragment>
+            <span id='loginWarning' ref={loginWarning}>
+                <strong>
+                    You must be logged in to start a new game
+                </strong>
+            </span>
 
-                <button onClick={action} className="createGameButton">
-                    <h1>{option}</h1>
-                </button>
+            <button onClick={action} className="createGameButton">
+                <h1>{option}</h1>
+            </button>
 
-                <style jsx>{`
-                    .createGameButton {
-                        position: fixed;
-                        bottom: 0;
-                        left: 30vw;
-                        right: 30vw;
-                        width: 40vw;
-                        height: 4.5em;
-                        background-color: var(--darkermatter);
-                        color: white;
-                        text-align: center;
-                        border-top-left-radius: 110px; 
-                        border-top-right-radius: 110px;
-                        border-bottom: 0;
-                        border-style: none;
-                        cursor: pointer;
-                        outline: none;
-                    }
+            <style jsx>{`
+                .createGameButton {
+                    position: fixed;
+                    bottom: 0;
+                    left: 30vw;
+                    right: 30vw;
+                    width: 40vw;
+                    height: 4.5em;
+                    background-color: var(--darkermatter);
+                    color: white;
+                    text-align: center;
+                    border-top-left-radius: 110px; 
+                    border-top-right-radius: 110px;
+                    border-bottom: 0;
+                    border-style: none;
+                    cursor: pointer;
+                    outline: none;
+                }
 
-                    .createGameButton:hover {
-                        background-color: var(--darkmatter);
-                    }
+                .createGameButton:hover {
+                    background-color: var(--darkmatter);
+                }
 
-                    #loginWarning {
-                        visibility: hidden;
-                        position: fixed;
-                        bottom: 10vh;
-                        left: 30vw;
-                        right: 30vw;
-                        width: 40vw;
-                        background-color: #333;
-                        color: #fff;
-                        text-align: center; 
-                        border-radius: 2px; 
-                        padding: 16px;
-                    }
+                #loginWarning {
+                    visibility: hidden;
+                    position: fixed;
+                    bottom: 10vh;
+                    left: 30vw;
+                    right: 30vw;
+                    width: 40vw;
+                    background-color: #333;
+                    color: #fff;
+                    text-align: center; 
+                    border-radius: 2px; 
+                    padding: 16px;
+                }
 
-                    #loginWarningShow {
-                        visibility: visible;
-                        position: fixed;
-                        bottom: 10vh;
-                        left: 30vw;
-                        right: 30vw;
-                        width: 40vw;
-                        background-color: #333;
-                        color: #fff;
-                        text-align: center; 
-                        border-radius: 2px; 
-                        padding: 16px;
-                        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                        animation: fadein 0.5s, fadeout 0.5s 2.5s;
-                    }
+                #loginWarningShow {
+                    visibility: visible;
+                    position: fixed;
+                    bottom: 10vh;
+                    left: 30vw;
+                    right: 30vw;
+                    width: 40vw;
+                    background-color: #333;
+                    color: #fff;
+                    text-align: center; 
+                    border-radius: 2px; 
+                    padding: 16px;
+                    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                }
 
-                    /* Animations to fade the login warning in and out */
-                    @-webkit-keyframes fadein {
-                        from {bottom: 0; opacity: 0;}
-                        to {bottom: 10vh; opacity: 1;}
-                    }
+                /* Animations to fade the login warning in and out */
+                @-webkit-keyframes fadein {
+                    from {bottom: 0; opacity: 0;}
+                    to {bottom: 10vh; opacity: 1;}
+                }
 
-                    @keyframes fadein {
-                        from {bottom: 0; opacity: 0;}
-                        to {bottom: 10vh; opacity: 1;}
-                    }
+                @keyframes fadein {
+                    from {bottom: 0; opacity: 0;}
+                    to {bottom: 10vh; opacity: 1;}
+                }
 
-                    @-webkit-keyframes fadeout {
-                        from {bottom: 10vh; opacity: 1;}
-                        to {bottom: 0; opacity: 0;}
-                    }
+                @-webkit-keyframes fadeout {
+                    from {bottom: 10vh; opacity: 1;}
+                    to {bottom: 0; opacity: 0;}
+                }
 
-                    @keyframes fadeout {
-                        from {bottom: 10vh; opacity: 1;}
-                        to {bottom: 0; opacity: 0;}
-                    }
+                @keyframes fadeout {
+                    from {bottom: 10vh; opacity: 1;}
+                    to {bottom: 0; opacity: 0;}
+                }
 
-                `}</style>
-                </React.Fragment>
-            );
-        }
-        else {
-            return (
-                <React.Fragment></React.Fragment>
-            )
-        }
+            `}</style>
+            </React.Fragment>
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        );
     }
 }
 

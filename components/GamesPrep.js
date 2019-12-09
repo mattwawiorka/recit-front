@@ -72,17 +72,16 @@ function GamesPrep(props) {
 
         let marker = 
             <GameMarker
-                id={game.node.id}
                 key={game.node.id}
+                id={game.node.id}
+                sport={game.node.sport}
                 lat={game.node.location.coordinates[0]}
                 lng={game.node.location.coordinates[1]}
-                text={game.node.title}
-                title={game.node.title}
-                sport={game.node.sport}
                 image={image}
                 onMouseEnter={getHovered}
                 hovered={hovered === game.node.id}
                 clearHovered={clearHovered}
+                loggedIn={props.loggedIn}
             />
 
         markers.push(marker)
@@ -92,12 +91,8 @@ function GamesPrep(props) {
             row = 
             <React.Fragment key={game.node.id}>
                 <GameRow 
-                    id={game.node.id}
-                    title={game.node.title}
-                    sport={game.node.sport}
+                    game={game.node}
                     image={image}
-                    venue={game.node.venue}
-                    dateTime={game.node.dateTime} 
                     loggedIn={props.loggedIn} 
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
@@ -120,12 +115,8 @@ function GamesPrep(props) {
             row = 
             <React.Fragment key={game.node.id}>
                 <GameRow 
-                    id={game.node.id}
-                    title={game.node.title}
-                    sport={game.node.sport}
+                    game={game.node}
                     image={image}
-                    venue={game.node.venue}
-                    dateTime={game.node.dateTime} 
                     loggedIn={props.loggedIn} 
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}

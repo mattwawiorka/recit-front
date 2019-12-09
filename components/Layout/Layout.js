@@ -1,44 +1,45 @@
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
-import Footer from '../Footer/Footer';
 import BottomDockable from '../BottomDockable/BottomDockable';
 import Meta from '../Meta';
+import classNames from 'classnames';
 
-const GamesLayout = (props) => {
+function GamesLayout(props) {
+
+    let containerClass = classNames({
+        'container-two-parts': props.main,
+        'container-three-parts': !props.main
+    })
 
     return (
     <React.Fragment>
         <Header />
         <Meta />
-        <div className={ props.main ? "container" : "container-alt"}>
+        <div className={containerClass}>
             <header>
                 <Navigation />
             </header>
-            {/* <div style={{ paddingTop: '25px', marginLeft: '50px', marginRight: '50px'}}>
-                {props.children}
-            </div> */}
             <aside>
                 {props.children[0]}
             </aside>
             <main>
-                {/* <div style={{ width: '100%', height: 'auto', padding: '1.2em', marginBottom: '4em' }}> */}
-                    {props.children[1]}
-                {/* </div> */}
+                {props.children[1]}
             </main>
-            {props.main ?
-            null:
+            {
+            props.main ?
+            null
+            :
             <aside>
                 {props.children[2]}
             </aside>
             }
             <footer>
-                {/* <Footer /> */}
                 <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
             </footer>
         </div>
 
         <style jsx>{`
-            .container {
+            .container-two-parts {
                 width: 100vw;
                 height: 100vh;
                 display: grid;
@@ -53,7 +54,7 @@ const GamesLayout = (props) => {
                 background-color: var(--greyapple);
             }
 
-            .container-alt {
+            .container-three-parts {
                 width: 100vw;
                 height: 100vh;
                 display: grid;

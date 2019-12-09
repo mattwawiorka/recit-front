@@ -11,7 +11,6 @@ class UserProfile extends Component {
     }
 
     componentDidMount() {
-        console.log('profile mounted')
         this.setState({
             loading: false
         })

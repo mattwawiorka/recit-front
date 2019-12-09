@@ -32,7 +32,7 @@ class CreateGameForm extends Component {
             endDate: this.props.endDate || "",
             endTime: this.props.endTime || "",
             sport: this.props.sport ? (this.props.sport.charAt(0) + this.props.sport.substring(1).toLowerCase()) : "",
-            players: this.props.players || 2,
+            spots: this.props.spots || 2,
             venue: this.props.venue || "",
             address: this.props.address || "",
             coords: this.props.coords || [],
@@ -40,6 +40,9 @@ class CreateGameForm extends Component {
             errors: [{message: ""}],
             loading: true
         }
+
+        this.descriptionInput = React.createRef();
+        this.endDateTime = React.createRef();
     }
 
     componentDidMount() {
@@ -67,9 +70,9 @@ class CreateGameForm extends Component {
 
         this.toggleEndTime();
 
-        document.getElementById('descriptionInput').innerText = this.state.description
+        this.descriptionInput.current.innerText = this.state.description
 
-        document.getElementById('descriptionInput').addEventListener("input", e => {
+        this.descriptionInput.current.addEventListener("input", e => {
             this.setState({
                 description: e.target.innerText
             })
@@ -111,19 +114,19 @@ class CreateGameForm extends Component {
         if (this.state.loading) {
             return;
         }
-        const endTime = document.getElementById("endDateTime");
-        if (!endTime.style.display) {
-            endTime.style.display = "none";
+
+        if (!this.endDateTime.current.style.display) {
+            this.endDateTime.current.style.display = "none";
         }
-        if (endTime.style.display === "none") {
-            endTime.style.display = "block";
+        if (this.endDateTime.current.style.display === "none") {
+            this.endDateTime.current.style.display = "block";
         } else {
-            endTime.style.display = "none";
+            this.endDateTime.current.style.display = "none";
         }
     }
 
     render() {
-        const {title, date, time, endDate, endTime, sport, players, venue, address, coords, description} = this.state;
+        const {title, date, time, endDate, endTime, sport, spots, venue, address, coords, description} = this.state;
         const dateTime = new Date(date + "T" + time);
 
         const endDateTime = new Date(endDate + "T" + endTime);
@@ -146,7 +149,7 @@ class CreateGameForm extends Component {
             coords: coords,
             sport: sport.toUpperCase().trim(),
             description: description,
-            players: parseInt(players),
+            spots: parseInt(spots),
             public: true
         } } : { gameInput: {
             title: title,
@@ -157,7 +160,7 @@ class CreateGameForm extends Component {
             coords: coords,
             sport: sport.toUpperCase().trim(),
             description: description,
-            players: parseInt(players),
+            spots: parseInt(spots),
             public: true
         } }
 
@@ -200,6 +203,7 @@ class CreateGameForm extends Component {
                         CreateGame()
                         .then(response => {
                             console.log(response)
+                            
                             if (response.errors) {
                                 this.setState({
                                     errors: response.errors[0].data
@@ -207,12 +211,12 @@ class CreateGameForm extends Component {
                                 return;
                             }
                             if (!this.props.id) {
-                                this.props.exitFunc(); 
                                 location.reload();
+                                this.props.exitFunc(); 
                             }
                             else {
                                 this.props.refetch(); 
-                                this.props.exitFunc();
+                                this.props.exitFunc(); 
                             }
                              
                         })
@@ -259,12 +263,12 @@ class CreateGameForm extends Component {
                             <input
                                 id="playersInput"
                                 className="input-fields"
-                                onChange={this.handleChange("players")}
+                                onChange={this.handleChange("spots")}
                                 type="number"
                                 autoComplete="off"
                                 min="1"
                                 max="32"
-                                value={players}
+                                value={spots}
                             />
                         </div>
                     </div>
@@ -273,6 +277,7 @@ class CreateGameForm extends Component {
                         <div className="form-group">
                             <label className="header">Description</label>
                             <div
+                                ref={this.descriptionInput}
                                 id="descriptionInput"
                                 className="input-fields"
                                 contentEditable="true"                  
@@ -334,7 +339,7 @@ class CreateGameForm extends Component {
                             onClick={this.toggleEndTime}
                         >+End Time</a>
 
-                        <div className="endDateTime" id="endDateTime">
+                        <div className="endDateTime" id="endDateTime" ref={this.endDateTime}>
                             <div className="form-group small-form" id="endDateForm">
                                 <label className="header">End Date</label>
                                 <input 
@@ -448,18 +453,6 @@ class CreateGameForm extends Component {
                     padding-left: 5px;
                     padding-right: 5px;
                 }
-
-                // textarea {
-                //     width: 80%;
-                //     height: auto;
-                //     border: none;
-                //     resize: none;
-                //     outline: none;
-                //     border-radius: 5px;
-                //     padding: 0.5em;
-                //     white-space: pre-wrap;
-                //     //overflow: auto;
-                // }
 
                 #descriptionInput {
                     outline: none;

@@ -1,7 +1,8 @@
-import React from 'react';
 import dateTool from '../../lib/dateTool';
 
-const GameInfo = ({ game, isHost, toggleEditing }) => {
+function GameInfo(props) {
+
+  const { game, isHost, toggleEditing } = props;
 
   let image;
   if (game.sport === 'TENNIS') {

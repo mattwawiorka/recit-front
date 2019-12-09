@@ -6,7 +6,7 @@ import Filtering from '../../components/Filtering/Filtering';
 import { withApollo } from '../../lib/apollo';
 import withAuth from '../../lib/withAuth';
 
-const GamePage = props => {
+function GamePage(props) {
   const router = useRouter();
   const { game } = router.query;
 

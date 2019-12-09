@@ -56,7 +56,6 @@ class Comment extends Component {
         } 
         
         if (e.target.value === this.props.comment.content) {
-            console.log('this hitting?')
             this.setState({
                 showSave: false
             })

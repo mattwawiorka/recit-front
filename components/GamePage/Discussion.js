@@ -46,6 +46,9 @@ class Discussion extends Component {
             comment: "",
             commentBoxRows: 2
         };
+
+        this.postCommentButton = React.createRef();
+        this.commentBox = React.createRef();
     }
 
     handleChange = (input) => (e) => {
@@ -55,7 +58,7 @@ class Discussion extends Component {
 
         // Adjust size of post box based on input, and decide whether to show post button
         if (e.target.value !== "") {
-            document.getElementById("postCommentButton").style.visibility = "visible";
+            this.postCommentButton.current.style.visibility = "visible";
             const rowHeight = 24;
             const currentRows = Math.ceil(e.target.scrollHeight / rowHeight);
             if (currentRows > 2) {
@@ -64,7 +67,7 @@ class Discussion extends Component {
                 })
             }
         } else {
-            document.getElementById("postCommentButton").style.visibility = "hidden";
+            this.postCommentButton.current.style.visibility = "hidden";
             this.setState({
                 commentBoxRows: 2
             })
@@ -73,7 +76,7 @@ class Discussion extends Component {
 
     componentDidMount() {
         // Make sure post button is originally hidden
-        document.getElementById("postCommentButton").style.visibility = "hidden";
+        this.postCommentButton.current.style.visibility = "hidden";
     }
 
     render() {
@@ -97,14 +100,14 @@ class Discussion extends Component {
                             id="commentForm" 
                             onSubmit={e => {
                                 e.preventDefault();
-                                document.getElementById('commentBox').value='';
+                                this.commentBox.current.value='';
                                 CreateComment()
                                 .then(response => {
                                     console.log(response)
                                     if (response.errors) {
                                         console.log(response.errors)
                                     }
-                                    document.getElementById("postCommentButton").style.visibility = "hidden";
+                                    this.postCommentButton.current.style.visibility = "hidden";
                                     this.setState({
                                         commentBoxRows: 2
                                     })
@@ -112,13 +115,14 @@ class Discussion extends Component {
                         }}>
                             <textarea
                                 id='commentBox'
+                                ref={this.commentBox}
                                 onChange={this.handleChange("comment")} 
                                 type="text" 
                                 placeholder="Add a comment..."
                                 rows={this.state.commentBoxRows}
                                 autoComplete="off"
                             />
-                            <input id="postCommentButton" className="post-button" type="submit" value="Post" />
+                            <input id="postCommentButton" className="post-button" type="submit" value="Post" ref={this.postCommentButton}/>
                         </form>
                         )}
                     </Mutation>

@@ -1,8 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import GameSource from './GameSource';
 
-// GET classnames package
-
 function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
     const [sport, setSport] = useState("All");
@@ -10,7 +8,6 @@ function SortingFiltering(props) {
     const [bounds, setBounds] = useState([])
 
     const setMapBounds = useCallback((mapBounds) => {
-        console.log('update bounds state change')
         setBounds(mapBounds)
     })
 

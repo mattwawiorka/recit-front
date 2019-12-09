@@ -23,7 +23,7 @@ const GET_USER = gql`
   }
   `;
 
-const ProfilePage = (props) => {
+function ProfilePage(props) {
 
     const router = useRouter();
 

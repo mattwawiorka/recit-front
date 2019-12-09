@@ -48,7 +48,7 @@ const Host = (props) => {
   }
 }
 
-const Spots = (props) => {
+function Spots(props) {
   const { spots } = props;
   let result;
   if (spots === 0) {

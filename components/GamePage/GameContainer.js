@@ -18,7 +18,10 @@ const GET_GAME = gql`
         address
         sport
         description
-        players
+        spots
+        location {
+          coordinates
+        }
     }
 
     host(gameId: $gameId)
@@ -69,9 +72,10 @@ class GameContainer extends Component {
                 endDate={endD.getFullYear().toString() + '-' + ((endD.getMonth() + 1) < 10 ? '0' + (endD.getMonth() + 1).toString() : (endD.getMonth() + 1).toString()) + '-' +  (endD.getDate() < 10 ? '0' + endD.getDate().toString() : endD.getDate().toString())}
                 endTime={endTime}
                 sport={data.game.sport}
-                players={data.game.players}
+                spots={data.game.spots}
                 venue={data.game.venue}
                 address={data.game.address}
+                coords={data.game.location.coordinates}
                 description={data.game.description}
                 exitFunc={this.toggleEditing}
                 refetch={refetch}
@@ -81,7 +85,7 @@ class GameContainer extends Component {
             </div>
             
             <div className="players">
-              <PlayerList gameId={this.props.gameId} playerSpots={data.game.players} currentUser={this.props.currentUser} />
+              <PlayerList gameId={this.props.gameId} playerSpots={data.game.spots} currentUser={this.props.currentUser} />
             </div>
             
             <div className="discussion">

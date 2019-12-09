@@ -17,6 +17,8 @@ query Games($cursor: String, $sport: String, $startDate: String, $currentLoc: [F
         location {
           coordinates
         }
+        spots
+        players
       }
       cursor
       distance
@@ -64,7 +66,7 @@ function GameSource(props) {
   if (loading) return <Loading />
   if (error) return <p>Error</p>
 
-  console.log('got data', data)
+  console.log(data)
 
   return (
     <>
@@ -79,7 +81,6 @@ function GameSource(props) {
         fetchMore({
           variables: {cursor: data.games.pageInfo.endCursor},
           updateQuery: (prev, { fetchMoreResult }) => {
-            console.log('fetch more', fetchMoreResult)
             if (fetchMoreResult.games.edges.length === 0) return prev;
             const newGameFeed = Object.assign({}, prev, { games: {
               edges: [...prev.games.edges, ...fetchMoreResult.games.edges], 

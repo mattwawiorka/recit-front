@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import Script from 'react-load-script';
 import API from '../../api.json';
 
-const PlaceSearch = (props) => {
+function PlaceSearch(props) {
 
     const searchBar = useRef();
 

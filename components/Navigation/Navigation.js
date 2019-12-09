@@ -2,24 +2,26 @@ import React, { Component } from 'react';
 import Link from 'next/link';
 import withAuth from '../../lib/withAuth';
 
-let loggedIn, user;
-
 class Navigation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            loading: true
+            loading: true,
+            loggedIn: this.props.auth.loggedIn(),
+            user: this.props.auth.getUser()
         };
+
         this.dropdown = React.createRef();
         this.button = React.createRef();
+        
+
     }
 
     componentDidMount() {
         this.setState({
             loading: false
         })
-        loggedIn = this.props.auth.loggedIn();
-        user = this.props.auth.getUser();
+
         this.menu();
     }
 
@@ -133,7 +135,7 @@ class Navigation extends Component {
             );
         }
 
-        if (loggedIn) {
+        if (this.state.loggedIn) {
             return(
                 <div>
                     <nav>
@@ -148,7 +150,7 @@ class Navigation extends Component {
                                 <Link href="/About">
                                     <a>About</a>
                                 </Link>
-                                <Link href='/Profile/[user]' as={`/Profile/${user}`}>
+                                <Link href='/Profile/[user]' as={`/Profile/${this.state.user}`}>
                                     <a>My Profile</a>
                                 </Link>
                                 <a 
@@ -162,7 +164,7 @@ class Navigation extends Component {
                             <Link href="/About">
                                 <a>About</a>
                             </Link>
-                            <Link href='/Profile/[user]' as={`/Profile/${user}`}>
+                            <Link href='/Profile/[user]' as={`/Profile/${this.state.user}`}>
                                 <a>My Profile</a>
                             </Link>
                             <a 
