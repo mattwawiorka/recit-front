@@ -2,7 +2,6 @@ import Router, { useRouter } from 'next/router';
 import Layout from '../../components/Layout/Layout'
 import GameContainer from '../../components/GamePage/GameContainer';
 import Announcements from '../../components/Announcements/Announcements';
-import Filtering from '../../components/Filtering/Filtering';
 import { withApollo } from '../../lib/apollo';
 import withAuth from '../../lib/withAuth';
 
@@ -15,7 +14,7 @@ function GamePage(props) {
       <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
         <Announcements />
         <GameContainer gameId={game} currentUser={props.auth.getUser()} />
-        <Filtering />
+        <br />
       </Layout>
     );
   } else {

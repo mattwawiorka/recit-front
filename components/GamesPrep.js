@@ -22,6 +22,7 @@ function GamesPrep(props) {
     const thisWeekGames = [];
     const nextWeekGames = [];
     const laterGames = [];
+    const gamesBySpots = [];
 
     const markers = [];
 
@@ -136,21 +137,27 @@ function GamesPrep(props) {
                 `}</style>
             </React.Fragment>
         }
-        if (parseInt(game.node.dateTime) < dateTool.getTomorrow().valueOf()) {
-            todayGames.push(row);
-        } 
-        else if (parseInt(game.node.dateTime) < dateTool.getDayAfterTomorrow().valueOf()) {
-            tomorrowGames.push(row);
+
+        if (props.sortOrder === "DATE") {
+            if (parseInt(game.node.dateTime) < dateTool.getTomorrow().valueOf()) {
+                todayGames.push(row);
+            } 
+            else if (parseInt(game.node.dateTime) < dateTool.getDayAfterTomorrow().valueOf()) {
+                tomorrowGames.push(row);
+            }
+            else if (parseInt(game.node.dateTime) < dateTool.getEndOfWeek().valueOf()) {
+                thisWeekGames.push(row);
+            }
+            else if (parseInt(game.node.dateTime) < dateTool.getEndOfNextWeek().valueOf()) {
+                nextWeekGames.push(row);
+            }
+            else {
+                laterGames.push(row);
+            }
+        } else {
+            gamesBySpots.push(row);
         }
-        else if (parseInt(game.node.dateTime) < dateTool.getEndOfWeek().valueOf()) {
-            thisWeekGames.push(row);
-        }
-        else if (parseInt(game.node.dateTime) < dateTool.getEndOfNextWeek().valueOf()) {
-            nextWeekGames.push(row);
-        }
-        else {
-            laterGames.push(row);
-        }
+        
     });
 
     return (
@@ -167,6 +174,8 @@ function GamesPrep(props) {
                 thisWeekGames={thisWeekGames}
                 nextWeekGames={nextWeekGames}
                 laterGames={laterGames}
+                sortOrder={props.sortOrder}
+                gamesBySpots={gamesBySpots}
                 scroll={scroll}
                 scrollTo={scrollHeight}
             />

@@ -3,9 +3,10 @@ import GameSource from './GameSource';
 
 function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
-    const [sport, setSport] = useState("All");
-    const [startDate, setStartDate] = useState("All");
+    const [sport, setSport] = useState("ALL");
+    const [startDate, setStartDate] = useState("ALL");
     const [bounds, setBounds] = useState([])
+    const [sortOrder, setSortOrder] = useState("DATE")
 
     const setMapBounds = useCallback((mapBounds) => {
         setBounds(mapBounds)
@@ -21,6 +22,7 @@ function SortingFiltering(props) {
                     currentLoc={props.currentLoc} 
                     getMapBounds={setMapBounds}
                     bounds={bounds}
+                    sortOrder={sortOrder}
                 />
 
                 <aside className='side-panel'>
@@ -31,46 +33,55 @@ function SortingFiltering(props) {
                     {props.showPanel ?
                     <form className='sorting-filtering'>
                         <div className="form-group">
-                            <h2>Filter</h2>
-                            <label className="header">Sport</label>
+                            <label className="header">Filter by Sport</label>
                             <select 
                                 onChange={e => setSport(e.target.value)} 
                                 className="input-fields"
                                 value={sport}
                             >
-                                <option value="All">All</option>
-                                <option value="Tennis">Tennis</option>
-                                <option value="Basketball" >Basketball</option>
-                                <option value="Football">Football</option>
-                                <option value="Volleyball" >Volleyball</option>
-                                <option value="Softball">Softball</option>
-                                <option value="Baseball">Baseball</option>
-                                <option value="Field Hockey">Field Hockey</option>
-                                <option value="Table Tennis">Table Tennis</option>
-                                <option value="Soccer">Soccer</option>
-                                <option value="Badminton">Badminton</option>
-                                <option value="Golf">Golf</option>
-                                <option value="Disc Golf">Disc Golf</option>
+                                <option value="ALL">All</option>
+                                <option value="TENNIS">Tennis</option>
+                                <option value="BASKETBALL" >Basketball</option>
+                                <option value="FOOTBALL">Football</option>
+                                <option value="VOLLEYBALL" >Volleyball</option>
+                                <option value="SOFTBALL">Softball</option>
+                                <option value="BASEBALL">Baseball</option>
+                                <option value="FIELD HOCKEY">Field Hockey</option>
+                                <option value="TABLE TENNIS">Table Tennis</option>
+                                <option value="SOCCER">Soccer</option>
+                                <option value="BADMINTON">Badminton</option>
+                                <option value="GOLF">Golf</option>
+                                <option value="DISC GOLF">Disc Golf</option>
                             </select>
                         </div>
 
                         <div className="form-group">
-                            <label className="header">Start Date</label>
+                            <label className="header">Filter by Start Date</label>
                             <select 
                                 onChange={e => setStartDate(e.target.value)} 
                                 className="input-fields"
                                 value={startDate}
                             >
-                                <option value="All">All</option>
-                                <option value="Today" >Today</option>
-                                <option value="Tomorrow">Tomorrow</option>
-                                <option value="LaterThisWeek">Later This Week</option>
-                                <option value="NextWeek">Next Week</option>
-                                <option value="Later">Later</option>
+                                <option value="ALL">All</option>
+                                <option value="TODAY" >Today</option>
+                                <option value="TOMORROW">Tomorrow</option>
+                                <option value="LATERTHISWEEK">Later This Week</option>
+                                <option value="NEXTWEEK">Next Week</option>
+                                <option value="LATER">Later</option>
                             </select>
                         </div>
 
-                        <h2>Sort</h2>
+                        <div className="form-group">
+                            <label className="header">Sort Order</label>
+                            <select 
+                                onChange={e => setSortOrder(e.target.value)} 
+                                className="input-fields"
+                                value={sortOrder}
+                            >
+                                <option value="DATE">Date</option>
+                                <option value="SPOTS" >Open Spots</option>
+                            </select>
+                        </div>
                         
                     </form>
                     :

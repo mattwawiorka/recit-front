@@ -19,6 +19,45 @@ function GameList(props) {
         list.current.scrollTo(0, props.scrollTo - 100)
   }, [props.scrollTo])
 
+  if (props.sortOrder === "SPOTS") {
+    return (
+      <React.Fragment>
+        <div className="list-container" ref={list}>
+          <h3 id="upcomingGames">Upcoming Games</h3>
+          {loginWarning}
+          {props.gamesBySpots}
+        </div>
+          
+        <style jsx>{`
+          .list-container {
+            display: block;
+            width: 50%;
+            height: min-content;
+            max-height: 80vh;
+            text-align: center;
+            background-color: white;
+            border-radius: 15px;
+            margin-left: 1em;
+            overflow: auto;
+          }
+    
+          #upcomingGames {
+            margin: auto;
+            border-bottom-style: groove;
+            width: 50%;
+            color: #111;
+          }
+    
+          // @media only screen and (max-width: 700px) {
+          //   .container {
+          //       grid-template-columns: .25fr 1fr .25fr;
+          //   }
+          // }
+        `}</style>
+      </React.Fragment>
+    ); 
+  }
+
   let today, tomorrow, thisWeek, nextWeek, later;
   const chronStyle = 
   <style jsx="true">{`

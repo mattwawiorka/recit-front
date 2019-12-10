@@ -104,10 +104,16 @@ class CreateGameForm extends Component {
     };
 
     handleGooglePlace = (place) => {
-        this.setState({
-            address: place.formatted_address,
-            coords: [place.geometry.location.lat(), place.geometry.location.lng()]
-        })
+        if (place.formatted_address) {
+            this.setState({
+                address: place.formatted_address,
+                coords: [place.geometry.location.lat(), place.geometry.location.lng()]
+            })
+        } else {
+            this.setState({
+                errors: [{message: "Please select a valid address"}],
+            })
+        }
     }
 
     toggleEndTime = () => {
@@ -126,7 +132,7 @@ class CreateGameForm extends Component {
     }
 
     render() {
-        const {title, date, time, endDate, endTime, sport, spots, venue, address, coords, description} = this.state;
+        const { title, date, time, endDate, endTime, sport, spots, venue, address, coords, description } = this.state;
         const dateTime = new Date(date + "T" + time);
 
         const endDateTime = new Date(endDate + "T" + endTime);
@@ -197,6 +203,9 @@ class CreateGameForm extends Component {
                 >
                 { CreateGame => (
                 <form 
+                    onKeyDown={(e) => {
+                        if (e.keyCode == 13) e.preventDefault();
+                    }}
                     className="gameForm"
                     onSubmit={ e => {
                         e.preventDefault();
