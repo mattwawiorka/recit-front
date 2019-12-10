@@ -21,17 +21,20 @@ function GameMarker(props) {
             <>
                 <Link href='/Game/[game]' as={`/Game/${id}`} >
                     <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={props.clearHovered}>
-                        <img src={image} alt={sport}
-                            style={{ width: '100%', height: '100%', borderRadius: '10px'}}
-                        />
+                        <img src={image} alt={sport} className="image"/>
                     </div>
                 </Link>
     
                 <style jsx>{`
                     .marker {
-                        width: 2.5em;
-                        height: 2.5em;
+                        width: 4em;
+                        height: 4em;
                         background: none;
+                    }
+
+                    .image {
+                        width: 100%;
+                        height: 100%;
                     }
 
                     .hovered {

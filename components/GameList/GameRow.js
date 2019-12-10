@@ -38,12 +38,11 @@ function GameRow(props) {
   <style jsx="true">{`
     .game-row {
       display: flex;
-      width: 100%;
+      justify-content: space-between;
       min-height: 4em;
-      height: auto;
+      max-height: 6em;
       padding: 0.5em;
-      overflow-x: hidden;
-      border-radius: 3px;
+      overflow: hidden;
     }
 
     .hovered {
@@ -54,54 +53,84 @@ function GameRow(props) {
     }
 
     .sport {
-      flex: 0.75;
-      padding: 0.5em;
-      font-size: 0.65em;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: justify; 
+      margin-left: 1em;
+      width: 2.5em;
+      height: 2.5em;
     }
 
     .sportImage {
-      display: block;
-      margin-top: 2px;
-      margin-left: auto;
-      margin-right: auto;
+      width: 2.5em;
+      height: 2.5em;
     }
 
     .dateTime {
-      flex: 1;
-      padding: 0.5em;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: justify; 
+      width: 7em;
+      height: 100%;
+      padding-left: 1em;
       text-align: center;
       color: #616770;
-      font-size: 0.75em;
+      font-size: 0.65em;
     }
 
     .title {
-      flex: 2;
-      padding: 0.5em;
-      text-align: center;
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 1em;
+      text-align: center; 
+      width: 9em;
+      height: 100%;
+      color: var(--darkmatter);
     }
 
     .venue {
-      flex: 1;
-      display: flex;
-      padding: 0.5em;
-      text-align: center;
-      justify-content: center;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: left; 
+      width: 8em;
+      height: 100%;
+      padding-left: 1em;
+      color: #616770;
+      font-size: 0.65em;
     }
 
     .spots {
-      padding: 0.5em;
-      text-align: center;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: justify; 
+      width: 5em;
+      height: 100%;
+      padding-left: 1em;
+      margin-right: 1em;
       color: #616770;
       font-size: 0.75em;
+      font-weight: bold;
     }
 
     @media only screen and (max-width: 1000px) {
-      .container {
-          //grid-template-columns: 10vw 10vw 10vw 10vw;
-          grid-auto-rows: 5em;
-          font-size: 0.8em;
-          //transform: scale(0.8);
+      .spots {
+        display: none;
       }
+    }
+
+    @media only screen and (max-width: 700px) {
+      .dateTime {
+        display: none;
+      }
+
+      .venue {
+        display: none;
+      }
+
+      .spots {
+        display: none;
+      }
+      
     }
     `}</style>
 
@@ -109,11 +138,10 @@ function GameRow(props) {
     return (
       <React.Fragment>
         <Link href='/Game/[game]' as={`/Game/${game.id}`} >
-          <li className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
+          <div className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
             <div className="sport">
-              <h3 style={{ textAlign: 'center' }} >{game.sport}</h3>
-              <img src={image} alt={game.sport} className="sportImage"
-                style={{ width: '40%', height: '40%', borderRadius: '10px'}}/>
+              {/* <h3 style={{ textAlign: 'center' }} >{game.sport}</h3> */}
+              <img src={image} alt={game.sport} className="sportImage"/>
             </div>
             <div className="dateTime">
               <h3>{dateFormat}</h3>
@@ -121,13 +149,13 @@ function GameRow(props) {
             <div className="title">
               <h3>{game.title}</h3>
             </div>
-            <div className="venue">
+            {/* <div className="venue">
               <h3>{game.venue}</h3> 
-            </div>
+            </div> */}
             <div className="spots">
               <h3>{game.players + " / " + game.spots}</h3>
             </div>
-          </li>
+          </div>
         </Link>
   
         {style}
@@ -138,9 +166,8 @@ function GameRow(props) {
       <React.Fragment>
           <li className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
             <div className="sport">
-              <h3 style={{ textAlign: 'center' }} >{game.sport}</h3>
-              <img src={image} alt={game.sport} className="sportImage"
-                style={{ width: '40%', height: '40%', borderRadius: '10px'}}/>
+              {/* <h3 style={{ textAlign: 'center' }} >{game.sport}</h3> */}
+              <img src={image} alt={game.sport} className="sportImage"/>
             </div>
             <div className="dateTime">
               <h3>{dateFormat}</h3>
@@ -148,9 +175,9 @@ function GameRow(props) {
             <div className="title">
               <h3>{game.title}</h3>
             </div>
-            <div className="venue">
+            {/* <div className="venue">
               <h3>{game.venue}</h3> 
-            </div>
+            </div> */}
             <div className="spots">
               <h3>{game.players + " / " + game.spots}</h3> 
             </div>

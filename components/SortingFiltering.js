@@ -5,6 +5,7 @@ function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
     const [sport, setSport] = useState("ALL");
     const [startDate, setStartDate] = useState("ALL");
+    const [openSpots, setOpenSpots] = useState("1")
     const [bounds, setBounds] = useState([])
     const [sortOrder, setSortOrder] = useState("DATE")
 
@@ -19,6 +20,7 @@ function SortingFiltering(props) {
                     loggedIn={props.loggedIn} 
                     sport={sport} 
                     startDate={startDate} 
+                    openSpots={openSpots}
                     currentLoc={props.currentLoc} 
                     getMapBounds={setMapBounds}
                     bounds={bounds}
@@ -33,7 +35,7 @@ function SortingFiltering(props) {
                     {props.showPanel ?
                     <form className='sorting-filtering'>
                         <div className="form-group">
-                            <label className="header">Filter by Sport</label>
+                            <label className="header">Sport</label>
                             <select 
                                 onChange={e => setSport(e.target.value)} 
                                 className="input-fields"
@@ -56,7 +58,7 @@ function SortingFiltering(props) {
                         </div>
 
                         <div className="form-group">
-                            <label className="header">Filter by Start Date</label>
+                            <label className="header">Starting Date</label>
                             <select 
                                 onChange={e => setStartDate(e.target.value)} 
                                 className="input-fields"
@@ -68,6 +70,21 @@ function SortingFiltering(props) {
                                 <option value="LATERTHISWEEK">Later This Week</option>
                                 <option value="NEXTWEEK">Next Week</option>
                                 <option value="LATER">Later</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="header">Open Spots</label>
+                            <select 
+                                onChange={e => setOpenSpots(e.target.value)} 
+                                className="input-fields"
+                                value={openSpots}
+                            >
+                                <option value={1}>1+</option>
+                                <option value={2}>2+</option>
+                                <option value={3}>3+</option>
+                                <option value={4}>4+</option>
+                                <option value={0}>Show Full Games</option>
                             </select>
                         </div>
 

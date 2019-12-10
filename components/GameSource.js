@@ -5,8 +5,8 @@ import GamesPrep from './GamesPrep';
 import Loading from './Loading/Loading';
 
 const GET_GAMES = gql`
-query Games($cursor: String, $sport: String, $startDate: String, $currentLoc: [Float], $bounds: [Float], $sortOrder: String) {
-  games(cursor: $cursor, sport: $sport, startDate: $startDate, currentLoc: $currentLoc, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
+query Games($cursor: String, $sport: String, $startDate: String, $openSpots: String, $currentLoc: [Float], $bounds: [Float], $sortOrder: String) {
+  games(cursor: $cursor, sport: $sport, startDate: $startDate, openSpots: $openSpots, currentLoc: $currentLoc, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -57,6 +57,7 @@ function GameSource(props) {
     currentLoc: props.currentLoc,
     sport: props.sport,
     startDate: props.startDate,
+    openSpots: props.openSpots,
     bounds: props.bounds,
     sortOrder: props.sortOrder
   };
@@ -64,7 +65,7 @@ function GameSource(props) {
   useEffect(() => {
     console.log('use effect')
     refetch();
-  }, [props.sport, props.startDate, props.bounds, props.sortOrder])
+  }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: "false"});
   if (loading) return <Loading />

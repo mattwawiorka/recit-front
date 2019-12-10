@@ -86,8 +86,8 @@ function GameInfo(props) {
       .image {
         width: 100%; 
         height: 100%; 
-        max-height: 3em;
-        max-width: 3em; 
+        max-height: 7.5em;
+        max-width: 7.5em; 
         border-radius: 10px;
       }
 
