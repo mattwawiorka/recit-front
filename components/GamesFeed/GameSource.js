@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import GamesPrep from './GamesPrep';
-import Loading from './Loading/Loading';
+import Loading from '../Loading/Loading';
 
 const GET_GAMES = gql`
 query Games($cursor: String, $sport: String, $startDate: String, $openSpots: String, $currentLoc: [Float], $bounds: [Float], $sortOrder: String) {
@@ -50,8 +50,6 @@ const GAME_ADDED = gql`
 `;
 
 function GameSource(props) {
-
-  console.log(props)
   
   let variables = {
     currentLoc: props.currentLoc,
@@ -63,7 +61,6 @@ function GameSource(props) {
   };
 
   useEffect(() => {
-    console.log('use effect')
     refetch();
   }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 

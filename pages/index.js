@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SortingFiltering from '../components/SortingFiltering';
+import SortingFiltering from '../components/GamesFeed/SortingFiltering';
 import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
 import Announcements from '../components/Announcements/Announcements';

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import GameRow from './GameList/GameRow';
-import GameMarker from './GoogleMaps/GameMarker';
-import dateTool from '../lib/dateTool';
-import GamesList from './GameList/GameList';
-import MapContainer from './GoogleMaps/MapContainer';
+import GameRow from '../GameList/GameRow';
+import GameMarker from '../GoogleMaps/GameMarker';
+import dateTool from '../../lib/dateTool';
+import GamesList from '../GameList/GameList';
+import MapContainer from '../GoogleMaps/MapContainer';
 
 function GamesPrep(props) {
 
@@ -55,7 +55,7 @@ function GamesPrep(props) {
         setScrollHeight(height)
     })
     
-    games.forEach((game, index) => {
+    games.map((game, index) => {
         let image;
 
         if (game.node.sport === 'TENNIS') {
@@ -74,8 +74,7 @@ function GamesPrep(props) {
         let marker = 
             <GameMarker
                 key={game.node.id}
-                id={game.node.id}
-                sport={game.node.sport}
+                game={game.node}
                 lat={game.node.location.coordinates[0]}
                 lng={game.node.location.coordinates[1]}
                 image={image}
