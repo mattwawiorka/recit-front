@@ -31,6 +31,20 @@ export default function Meta() {
                     font-family: "IBM Plex Sans", Verdana, Geneva, Tahoma, sans-serif;
                 }
 
+                button {
+                    text-align: center;
+                    background-color: var(--darkermatter);
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+
+                button:hover {
+                    background-color: var(--darkmatter);
+                }
+
                 a {
                     text-decoration: none;
                     color: black;

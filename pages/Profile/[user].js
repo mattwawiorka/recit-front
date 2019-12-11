@@ -49,7 +49,7 @@ function ProfilePage(props) {
     }
     
     return (
-        <Layout main={true} >
+        <Layout main={false} >
             <MyGames />
             {profile} 
             <FriendsList />

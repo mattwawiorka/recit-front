@@ -76,12 +76,12 @@ class Index extends Component {
                 >
                     <Announcements />
                     <div style={{ width: '100%', height: 'auto', paddingTop: '1.2em', paddingLeft: '1.2em', marginBottom: '5em' }}>
-                            <SortingFiltering 
-                                loggedIn={this.state.loggedIn} 
-                                showPanel={this.state.sortingFiltering} 
-                                toggleSortingFiltering={this.toggleSortingFiltering} 
-                                currentLoc={this.state.currentLoc} 
-                            />
+                        <SortingFiltering 
+                            loggedIn={this.state.loggedIn} 
+                            showPanel={this.state.sortingFiltering} 
+                            toggleSortingFiltering={this.toggleSortingFiltering} 
+                            currentLoc={this.state.currentLoc} 
+                        />
                     </div>
                 </Layout>
             );

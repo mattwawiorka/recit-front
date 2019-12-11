@@ -2,7 +2,7 @@ import dateTool from '../../lib/dateTool';
 
 function GameInfo(props) {
 
-  const { game, isHost, toggleEditing } = props;
+  const { game, isHost, toggleEditing, cancelGame } = props;
 
   let image;
   if (game.sport === 'TENNIS') {
@@ -33,9 +33,11 @@ function GameInfo(props) {
         </div>
       </div>
 
-      <div className="section actions">
-        {isHost ? <button onClick={toggleEditing} id="editButton">Edit</button> : null}
+      {isHost ? <div className="section actions">
+        <button onClick={toggleEditing} className="btn">Edit</button>
+        <button onClick={cancelGame} className="btn">Cancel</button>
       </div>
+      : null}
 
       <div className="section description">
         <p>{game.description}</p>
@@ -76,6 +78,7 @@ function GameInfo(props) {
         margin: auto;
         margin-top: 2em;
         padding: 1em;
+        padding-top: 0.5em;
         border-radius: 15px;
         // overflow: hidden;
       }
@@ -89,8 +92,8 @@ function GameInfo(props) {
       .image {
         width: 100%; 
         height: 100%; 
-        height: 4.5em;
-        width: 4.5em; 
+        height: 4em;
+        width: 4em; 
         border-radius: 10px;
       }
 
@@ -128,17 +131,26 @@ function GameInfo(props) {
         font-weight: bold;
       }
 
-      #editButton {
+      .actions {
+        padding-top: 0em;
+        margin-bottom: 1em;
+      }
+
+      .btn {
         width: 20%;
         height: 2em;
+        margin-right: 2em;
         text-align: center;
         background-color: var(--darkermatter);
         color: white;
-        padding: 7px 20px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         font-weight: bold;
+      }
+
+      .btn:hover {
+        background-color: var(--darkmatter);
       }
 
       .description {
@@ -152,6 +164,7 @@ function GameInfo(props) {
         font-size: 0.9em;
         color: #4b4f56;
         line-height: 15px;
+        margin-bottom: 1em;
       }
 
       .icon {

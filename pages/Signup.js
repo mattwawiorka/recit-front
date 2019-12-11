@@ -91,9 +91,13 @@ class Signup extends Component {
                                         })
                                         return;
                                     }
-                                    // Router.push('/Login');
                                     cookie.set('token', response.data.login.token, { expires: 1 })
-                                    Router.push('/');
+                                    console.log(Router.query)
+                                    if (Router.query.invited) {
+                                        Router.push('/Game/[game]', `/Game/${Router.query.game}`);
+                                    } else {
+                                        Router.push('/');
+                                    } 
                                 })
                                 .catch(error => {
                                     console.log(error)

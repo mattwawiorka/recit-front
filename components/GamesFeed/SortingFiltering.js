@@ -5,7 +5,7 @@ function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
     const [sport, setSport] = useState("ALL");
     const [startDate, setStartDate] = useState("ALL");
-    const [openSpots, setOpenSpots] = useState("1")
+    const [openSpots, setOpenSpots] = useState("0")
     const [bounds, setBounds] = useState([])
     const [sortOrder, setSortOrder] = useState("DATE")
 
@@ -80,11 +80,11 @@ function SortingFiltering(props) {
                                 className="input-fields"
                                 value={openSpots}
                             >
+                                <option value={0}>Show Full Games</option>
                                 <option value={1}>1+</option>
                                 <option value={2}>2+</option>
                                 <option value={3}>3+</option>
                                 <option value={4}>4+</option>
-                                <option value={0}>Show Full Games</option>
                             </select>
                         </div>
 

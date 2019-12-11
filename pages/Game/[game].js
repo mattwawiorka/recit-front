@@ -9,7 +9,7 @@ function GamePage(props) {
   const router = useRouter();
   const { game } = router.query;
 
-  if (props.auth.loggedIn()) {
+  // if (props.auth.loggedIn()) {
     return (
       <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
         <Announcements />
@@ -17,10 +17,10 @@ function GamePage(props) {
         <br />
       </Layout>
     );
-  } else {
-    if (typeof window !== 'undefined') router.push('/')
-    return null
-  }
+  // } else {
+  //   if (typeof window !== 'undefined') router.push('/')
+  //   return null
+  // }
   
 }
 
