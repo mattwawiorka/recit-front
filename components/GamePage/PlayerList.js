@@ -94,10 +94,8 @@ function PlayerList(props) {
       }
     `}</style>
 
-  if (props.isHost || (openSpots == 0 & !playerFound)) {
-    joinButton = null;
-  }
-  else if (playerFound) {
+  
+  if (playerFound && !props.isHost) {
     joinButton = 
     <React.Fragment> 
       <button 
@@ -112,7 +110,7 @@ function PlayerList(props) {
       {btnStyle}
     </React.Fragment>
   } 
-  else if (!props.invited) {
+  else if (props.currentUser && openSpots > 0 && !props.isHost) {
     joinButton = 
     <React.Fragment> 
       <button 
@@ -127,7 +125,7 @@ function PlayerList(props) {
       {btnStyle}
     </React.Fragment>
   }
-  else {
+  else if (props.invited) {
     joinButton = 
     <React.Fragment> 
       <Link href={`/Signup?invited=true&game=${props.gameId}`}>
@@ -135,6 +133,9 @@ function PlayerList(props) {
       </Link>
       {btnStyle}
     </React.Fragment>
+  }
+  else {
+    joinButton = null;
   }
 
   if (!props.invited) {

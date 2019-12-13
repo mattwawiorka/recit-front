@@ -1,0 +1,107 @@
+[
+    {
+        "elementType": "geometry.stroke",
+        "stylers": [
+        {
+            "weight": 3
+        }
+        ]
+    },
+    {
+        "elementType": "labels.icon",
+        "stylers": [
+        {
+            "visibility": "off"
+        }
+        ]
+    },
+    {
+        "elementType": "labels.text",
+        "stylers": [
+        {
+            "color": "#34495e"
+        },
+        {
+            "saturation": 5
+        },
+        {
+            "lightness": -20
+        },
+        {
+            "weight": 0.5
+        }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry.fill",
+        "stylers": [
+        {
+            "color": "#2ecc71"
+        },
+        {
+            "lightness": 60
+        }
+        ]
+    },
+    {
+        "featureType": "poi.business",
+        "elementType": "labels.icon",
+        "stylers": [
+        {
+            "visibility": "off"
+        }
+        ]
+    },
+    {
+        "featureType": "poi.business",
+        "elementType": "labels.text",
+        "stylers": [
+        {
+            "visibility": "off"
+        }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry.fill",
+        "stylers": [
+        {
+            "color": "#2ecc71"
+        }
+        ]
+    },
+    {
+        "featureType": "poi.school",
+        "elementType": "geometry.fill",
+        "stylers": [
+        {
+            "color": "#2ecc71"
+        }
+        ]
+    },
+    {
+        "featureType": "poi.sports_complex",
+        "elementType": "geometry.fill",
+        "stylers": [
+        {
+            "color": "#2ecc71"
+        }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry.fill",
+        "stylers": [
+        {
+            "saturation": 85
+        },
+        {
+            "lightness": -15
+        },
+        {
+            "weight": 5.5
+        }
+        ]
+    }
+]

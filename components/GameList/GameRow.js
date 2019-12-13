@@ -21,7 +21,7 @@ function GameRow(props) {
   const row = useRef(null);
 
   const getHovered = useCallback(() => {
-    onMouseEnter(game.id)
+    onMouseEnter(game.id, false)
   })
 
   useEffect(() => {

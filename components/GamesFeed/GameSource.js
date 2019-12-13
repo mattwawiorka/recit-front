@@ -68,8 +68,6 @@ function GameSource(props) {
   if (loading) return <Loading />
   if (error) return <p>Error</p>
 
-  console.log(data)
-
   return (
     <>
     {typeof props.loggedIn !== 'undefined' ?
@@ -77,6 +75,8 @@ function GameSource(props) {
       loggedIn={props.loggedIn} 
       currentLoc={props.currentLoc}
       getMapBounds={props.getMapBounds}
+      bounds={props.bounds}
+      zoom={props.zoom}
       games={data.games.edges || []} 
       hasMore={data.games.pageInfo.hasNextPage}
       sortOrder={props.sortOrder}

@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import GameRow from '../GameList/GameRow';
 import GameMarker from '../GoogleMaps/GameMarker';
+import GameCluster from '../GoogleMaps/GameCluster';
 import dateTool from '../../lib/dateTool';
 import GamesList from '../GameList/GameList';
 import MapContainer from '../GoogleMaps/MapContainer';
+import supercluster from 'points-cluster';
 
 function GamesPrep(props) {
-
+    let marker, image;
     const [games, setGames] = useState(props.games || [])
     const [hovered, setHovered] = useState(null);
     const [scroll, setScroll] = useState(false);
@@ -54,9 +56,60 @@ function GamesPrep(props) {
     const scrollList = useCallback((height) => {
         setScrollHeight(height)
     })
-    
+
+    // Get clusters
+    const markersData = [];
+    games.map(g => {
+        markersData.push({
+            id: g.node.id,
+            sport: g.node.sport,
+            lat: g.node.location.coordinates[0],
+            lng: g.node.location.coordinates[1]
+        })
+    });
+    let clusters = supercluster(markersData, {
+        minZoom: 0,
+        maxZoom: 18,
+        radius: 30,
+    });
+    clusters = clusters({
+        bounds: { nw: { lat: props.bounds[0], lng: props.bounds[3] }, se: { lat: props.bounds[2], lng:props.bounds[1] } },
+        zoom: props.zoom
+    });
+
+    // Set map markers
+    clusters.map(cluster => {
+        if (cluster.numPoints === 1){
+            marker = 
+                <GameMarker
+                    key={cluster.points[0].id}
+                    id={cluster.points[0].id}
+                    lat={cluster.wy}
+                    lng={cluster.wx}
+                    sport={cluster.points[0].sport}
+                    onMouseEnter={getHovered}
+                    hovered={hovered === cluster.points[0].id}
+                    clearHovered={clearHovered}
+                    loggedIn={props.loggedIn}
+                />
+        }
+        else {
+            marker =
+                <GameCluster
+                    key={cluster.points[0].id}
+                    games={cluster.points}
+                    lat={cluster.wy}
+                    lng={cluster.wx}
+                    hovered={cluster.points.some(p => p.id === hovered)}
+                    clearHovered={clearHovered}
+                />
+        }
+        
+        markers.push(marker);
+    })
+
+    // Set game rows
     games.map((game, index) => {
-        let image;
 
         if (game.node.sport === 'TENNIS') {
             image = "/tennis-ball.svg";
@@ -70,21 +123,6 @@ function GamesPrep(props) {
         else {
             image = "rec-it.png";
         }
-
-        let marker = 
-            <GameMarker
-                key={game.node.id}
-                game={game.node}
-                lat={game.node.location.coordinates[0]}
-                lng={game.node.location.coordinates[1]}
-                image={image}
-                onMouseEnter={getHovered}
-                hovered={hovered === game.node.id}
-                clearHovered={clearHovered}
-                loggedIn={props.loggedIn}
-            />
-
-        markers.push(marker)
 
         let row;
         if (games.length === index + 1) {
@@ -179,8 +217,7 @@ function GamesPrep(props) {
                 scrollTo={scrollHeight}
             />
         </>
-    )
-
+    );
 }
 
 export default GamesPrep;

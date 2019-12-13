@@ -188,7 +188,7 @@ class CreateGameForm extends Component {
                 <option value="Disc Golf" />
             </datalist>
 
-            <div className={this.props.id ? "container update" : "container create"}>
+            <div className={this.props.id ? "create-game-container update" : "create-game-container create"}>
 
                 <span 
                     className="alert"
@@ -380,7 +380,7 @@ class CreateGameForm extends Component {
 
             </div>
             <style jsx>{`
-                .container {
+                .create-game-container {
                     display: block;
                     flex-direction: column;
                     align-content: center;

@@ -4,11 +4,24 @@ import classNames from 'classnames';
 import Link from 'next/link';
 
 function GameMarker(props) {
+    let image;
+    const { id, sport, loggedIn, hovered, clearHovered, onMouseEnter } = props;
 
-    const { game, image, loggedIn, hovered, clearHovered, onMouseEnter } = props;
+    if (sport === 'TENNIS') {
+        image = "/tennis-ball.svg";
+    } 
+    else if (sport === 'BASKETBALL') {
+        image = "/basketball.svg";
+    }
+    else if (sport === 'FOOTBALL') {
+        image = "/american-football.svg";
+    } 
+    else {
+        image = "rec-it.png";
+    }
 
     const getHovered = useCallback(() => {
-        onMouseEnter(game.id, true)
+        onMouseEnter(id, true)
     })
 
     let markerClass = classNames({
@@ -19,9 +32,9 @@ function GameMarker(props) {
     if (loggedIn) {
         return (
             <>
-                <Link href='/Game/[game]' as={`/Game/${game.id}`} >
+                <Link href='/Game/[game]' as={`/Game/${id}`} >
                     <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered}>
-                        <img src={image} alt={game.sport} className="image"/>
+                        <img src={image} alt={sport} className="icon"/>
                     </div>
                 </Link>
     
@@ -32,9 +45,9 @@ function GameMarker(props) {
                         background: none;
                     }
 
-                    .image {
-                        width: 100%;
-                        height: 100%;
+                    .icon {
+                        width: 4em;
+                        height: 4em;
                     }
 
                     .hovered {
@@ -49,9 +62,7 @@ function GameMarker(props) {
         return (
             <>
                 <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered}>
-                    <img src={image} alt={game.sport}
-                        style={{ width: '100%', height: '100%', borderRadius: '10px'}}
-                    />
+                    <img src={image} alt={sport} />
                 </div>
     
                 <style jsx>{`
@@ -73,4 +84,4 @@ function GameMarker(props) {
     
 }
 
-export default GameMarker
+export default GameMarker;

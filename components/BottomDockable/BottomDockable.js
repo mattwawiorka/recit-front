@@ -36,31 +36,22 @@ function BottomDockable(props) {
                 </strong>
             </span>
 
-            <button onClick={action} className="createGameButton">
+            <button onClick={action} className="bottom-button">
                 <h1>{option}</h1>
             </button>
 
             <style jsx>{`
-                .createGameButton {
+                .bottom-button {
                     position: fixed;
                     bottom: 0;
                     left: 30vw;
                     right: 30vw;
                     width: 40vw;
                     height: 4.5em;
-                    background-color: var(--darkermatter);
-                    color: white;
-                    text-align: center;
                     border-top-left-radius: 110px; 
                     border-top-right-radius: 110px;
                     border-bottom: 0;
-                    border-style: none;
-                    cursor: pointer;
                     outline: none;
-                }
-
-                .createGameButton:hover {
-                    background-color: var(--darkmatter);
                 }
 
                 #loginWarning {

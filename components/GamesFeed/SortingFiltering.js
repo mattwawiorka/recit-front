@@ -5,12 +5,14 @@ function SortingFiltering(props) {
     // const loggedIn = useContext(AuthContext)
     const [sport, setSport] = useState("ALL");
     const [startDate, setStartDate] = useState("ALL");
-    const [openSpots, setOpenSpots] = useState("0")
-    const [bounds, setBounds] = useState([])
-    const [sortOrder, setSortOrder] = useState("DATE")
+    const [openSpots, setOpenSpots] = useState("0");
+    const [bounds, setBounds] = useState([]);
+    const [zoom, setZoom] = useState(12);
+    const [sortOrder, setSortOrder] = useState("DATE");
 
-    const setMapBounds = useCallback((mapBounds) => {
-        setBounds(mapBounds)
+    const setMapBounds = useCallback((mapBounds, mapZoom) => {
+        setBounds(mapBounds);
+        if (mapZoom) setZoom(mapZoom);
     })
 
     return (
@@ -24,6 +26,7 @@ function SortingFiltering(props) {
                     currentLoc={props.currentLoc} 
                     getMapBounds={setMapBounds}
                     bounds={bounds}
+                    zoom={zoom}
                     sortOrder={sortOrder}
                 />
 
