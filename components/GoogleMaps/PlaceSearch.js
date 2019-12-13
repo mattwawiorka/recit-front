@@ -14,7 +14,7 @@ function PlaceSearch(props) {
 
         const autoComplete = new google.maps.places.Autocomplete(searchBar.current, options);
 
-        autoComplete.setFields(['formatted_address', 'geometry', 'place_id']);
+        autoComplete.setFields(['formatted_address', 'geometry', 'name']);
 
         autoComplete.addListener('place_changed', () => {
             props.onChangeFunc(autoComplete.getPlace())

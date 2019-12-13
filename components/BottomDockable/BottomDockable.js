@@ -44,8 +44,8 @@ function BottomDockable(props) {
                 .bottom-button {
                     position: fixed;
                     bottom: 0;
-                    left: 35vw;
-                    right: 30vw;
+                    left: 50%;
+                    transform: translate(-50%);
                     width: 40vw;
                     height: 4.5em;
                     border-top-left-radius: 110px; 

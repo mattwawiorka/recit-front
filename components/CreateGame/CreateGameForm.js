@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import PlaceSearch from '../GoogleMaps/PlaceSearch';
+import classNames from 'classnames';
 
 const CREATE_GAME = gql`
     mutation CreateGame($gameInput: gameInput) {
@@ -27,6 +28,7 @@ class CreateGameForm extends Component {
         this.state = { 
             id: this.props.id || "",
             title: this.props.title || "",
+            isPublic: this.props.isPublic === false ? false : true,
             date: this.props.date || "",
             time: this.props.time || "",
             endDate: this.props.endDate || "",
@@ -107,7 +109,8 @@ class CreateGameForm extends Component {
         if (place.formatted_address) {
             this.setState({
                 address: place.formatted_address,
-                coords: [place.geometry.location.lat(), place.geometry.location.lng()]
+                coords: [place.geometry.location.lat(), place.geometry.location.lng()],
+                venue: place.name
             })
         } else {
             this.setState({
@@ -132,7 +135,7 @@ class CreateGameForm extends Component {
     }
 
     render() {
-        const { title, date, time, endDate, endTime, sport, spots, venue, address, coords, description } = this.state;
+        const { title, isPublic, date, time, endDate, endTime, sport, spots, venue, address, coords, description } = this.state;
         const dateTime = new Date(date + "T" + time);
 
         const endDateTime = new Date(endDate + "T" + endTime);
@@ -140,7 +143,7 @@ class CreateGameForm extends Component {
         const errors = [];
         this.state.errors.forEach( error => {
             errors.push(
-            <li key={error.message}>
+            <li key={error.message} className="error">
                 {error.message}
             </li>
             );
@@ -156,7 +159,7 @@ class CreateGameForm extends Component {
             sport: sport.toUpperCase().trim(),
             description: description,
             spots: parseInt(spots),
-            public: true
+            public: isPublic
         } } : { gameInput: {
             title: title,
             dateTime: dateTime,
@@ -167,8 +170,20 @@ class CreateGameForm extends Component {
             sport: sport.toUpperCase().trim(),
             description: description,
             spots: parseInt(spots),
-            public: true
+            public: isPublic
         } }
+
+        const publicBtnClass = classNames({
+            "btn-public": true,
+            "private": !this.state.isPublic
+        })
+
+        const containerClass = classNames({
+            "create-game-container": true,
+            "create": typeof this.props.id === 'undefined',
+            "update": !(typeof this.props.id === 'undefined')
+        })
+
 
         return (
             <React.Fragment>
@@ -188,7 +203,7 @@ class CreateGameForm extends Component {
                 <option value="Disc Golf" />
             </datalist>
 
-            <div className={this.props.id ? "create-game-container update" : "create-game-container create"}>
+            <div className={containerClass}>
 
                 <span 
                     className="alert"
@@ -237,17 +252,23 @@ class CreateGameForm extends Component {
                     <div className="section" id="titleSportForm">
                         <div className="form-group">
                             <label id="title" className="header">Title</label>
-                            <button onClick={this.props.exitFunc} id="exitButton" type="button">X</button>
+                            <button onClick={this.props.exitFunc} className="exit-btn" type="button">X</button>
                             <input
-                                id="titleInput" 
                                 onChange={this.handleChange("title")} 
                                 type="text" 
-                                className="input-fields"
+                                className="input-fields title-input"
                                 value={title}
                                 minLength="4"
                                 placeholder="Give your sporting event a unique title"
                                 autoComplete="off" 
                             />
+                            <button 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.setState({ isPublic: !this.state.isPublic });
+                                }} 
+                                className={publicBtnClass}
+                            >{this.state.isPublic ? "Public" : "Private"}</button>
                         </div>
                         
                     </div>
@@ -297,19 +318,7 @@ class CreateGameForm extends Component {
                     </div>
 
                     <div className="section" id="locationForm">
-                        <div className="form-group split-form" id="venueForm">
-                            <label className="header">Venue</label>
-                            <input 
-                                id="venueInput"
-                                onChange={this.handleChange("venue")} 
-                                type="text" 
-                                className="input-fields" 
-                                value={venue}
-                                placeholder="What is this venue commonly known as"
-                                autoComplete="off"
-                            />
-                        </div>
-                        <div className="form-group split-form" id="addressForm">
+                        <div className="form-group" id="addressForm">
                             <label className="header">Address</label>
                             <PlaceSearch
                                 className="input-fields"
@@ -343,10 +352,10 @@ class CreateGameForm extends Component {
                         </div>
 
                         <a 
-                            id="toggleEndTime"
+                            className="toggle-endtime"
                             href="#" 
                             onClick={this.toggleEndTime}
-                        >+End Time</a>
+                        >+</a>
 
                         <div className="endDateTime" id="endDateTime" ref={this.endDateTime}>
                             <div className="form-group small-form" id="endDateForm">
@@ -381,21 +390,31 @@ class CreateGameForm extends Component {
             </div>
             <style jsx>{`
                 .create-game-container {
-                    position: absolute;
-                    top: 15%;
-                    left: 30%;
                     z-index: 11;
-                    display: block;
+                    display: inline-block;
                     height: auto;
                     max-height: 75vh;
-                    width: auto;
-                    max-width: 50vw;
                     background-color: white;
                     border-radius: 10px;
                     padding: 10px;
                     animation-duration: 1.5s;
                     animation-name: fadein;
                     overflow: auto;
+                }
+
+                .create {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 40vw;
+                    max-width: 50vw;
+                }
+
+                .update {
+                    display: block;
+                    margin-top: 2em;
+                    width: 40vw;
                 }
 
                 @keyframes fadein {
@@ -408,19 +427,11 @@ class CreateGameForm extends Component {
                     }
                 }
 
-                .update {
-                    width: 85%;
-                }
-
-                .create {
-                    width: 70%;
-                }
-
                 .gameForm {
                     width: 100%;
                     height: 100%;
                     padding: 10px
-                    display: block;
+                    display: inline-block;
                 }
 
                 .section {
@@ -431,6 +442,7 @@ class CreateGameForm extends Component {
                 .header {
                     display: block;
                     color: #4b4f56;
+                    // color: var(--darkmatter);
                     padding-left: 5px;
                     font-weight: 500;
                     font-weight: bold;
@@ -441,7 +453,7 @@ class CreateGameForm extends Component {
                     width: 95%;
                 }
 
-                #exitButton {
+                .exit-btn {
                     background: none;
                     border: none;
                     text-align: center;
@@ -457,7 +469,7 @@ class CreateGameForm extends Component {
                 }
 
                 .input-fields {
-                    display: block;
+                    display: inline-block;
                     margin : 0 auto;
                     width: 100%;
                     padding: 12px 20px;
@@ -467,8 +479,19 @@ class CreateGameForm extends Component {
                     box-sizing: border-box;
                 }
 
-                #titleInput {
-                    max-width: 33vw;
+                .title-input {
+                    max-width: 60%;
+                }
+
+                .btn-public {
+                    margin-left: 15%;
+                    height: 2.5em;
+                    width: 6vw;
+                }
+
+                .private {
+                    color: var(--darkermatter);
+                    background-color: var(--greyapple);
                 }
 
                 .split-form {
@@ -489,11 +512,15 @@ class CreateGameForm extends Component {
                     padding-right: 5px;
                 }
 
-                #toggleEndTime {
+                .toggle-endtime {
                     display: inline-block;
-                    font-size: 0.85em;
+                    font-weight: bold;
                     color: var(--greenapple);
                     margin-left: 15px;
+                }
+
+                .toggle-endtime:after {
+                    content: "End Time";
                 }
 
                 #endDateTime {
@@ -518,6 +545,10 @@ class CreateGameForm extends Component {
                     background-color: var(--darkmatter);
                 }
 
+                .error {
+                    text-align: center;
+                }
+
                 // .alert {
                 //     color: black;
                 //     margin-bottom: 15px;
@@ -528,11 +559,16 @@ class CreateGameForm extends Component {
                     font-style: italic;
                 }
 
-                // @media only screen and (max-width: 700px) {
-                //     .container {
-                //         //grid-template-columns: .25fr 1fr .25fr;
-                //     }
-                // }
+                @media only screen and (max-width: 1000px) {
+                    .toggle-endtime:after {  
+                        content: "";
+                    }
+
+                    .toggle-endtime {
+                        font-size: 1.5em;
+                        text-align: center;
+                    }
+                }
             `}</style>
             </React.Fragment>
         );

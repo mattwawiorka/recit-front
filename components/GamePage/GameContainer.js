@@ -14,6 +14,7 @@ const GET_GAME = gql`
     game(id: $id) {
         id
         title
+        public
         dateTime
         endDateTime
         venue
@@ -70,6 +71,7 @@ function GameContainer(props) {
         <CreateGameForm 
           id={props.gameId}
           title={data.game.title}
+          isPublic={data.game.public}
           date={d.getFullYear().toString() + '-' + ((d.getMonth() + 1) < 10 ? '0' + (d.getMonth() + 1).toString() : (d.getMonth() + 1).toString()) + '-' +  (d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate().toString())}
           time={time}
           endDate={endD.getFullYear().toString() + '-' + ((endD.getMonth() + 1) < 10 ? '0' + (endD.getMonth() + 1).toString() : (endD.getMonth() + 1).toString()) + '-' +  (endD.getDate() < 10 ? '0' + endD.getDate().toString() : endD.getDate().toString())}

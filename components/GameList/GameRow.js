@@ -137,10 +137,9 @@ function GameRow(props) {
   if (loggedIn) {
     return (
       <React.Fragment>
-        <Link href='/Game/[game]' as={`/Game/${game.id}`} >
+        <Link href='/Game/[game]' as={`/Game/${game.id}`} shallow={true} >
           <div className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
             <div className="sport">
-              {/* <h3 style={{ textAlign: 'center' }} >{game.sport}</h3> */}
               <img src={image} alt={game.sport} className="sportImage"/>
             </div>
             <div className="dateTime">

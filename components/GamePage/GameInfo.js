@@ -15,7 +15,7 @@ function GameInfo(props) {
     image = "/american-football.svg";
   } 
   else {
-    image = "rec-it.png";
+    image = "/rec-it.png";
   }
 
   return (

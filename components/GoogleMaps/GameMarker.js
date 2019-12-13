@@ -33,7 +33,7 @@ function GameMarker(props) {
         return (
             <>
                 <Link href='/Game/[game]' as={`/Game/${id}`} >
-                    <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered}>
+                    <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} shallow="true" >
                         <img src={image} alt={sport} className="icon"/>
                     </div>
                 </Link>

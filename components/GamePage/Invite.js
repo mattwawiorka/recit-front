@@ -16,20 +16,33 @@ function Invite(props) {
 
             <style jsx>{`
                 .invite-container {
-                    position: fixed;
-                    top: 20%;
-                    left: 30%;
-                    display: block;
-                    background-color: var(--greenapple); /* Orange */
-                    height: 20em;
-                    width: 20em;
-                    color: white;
-                    margin: auto;
-                    margin-top: 2em;
-                    padding: 1em;
-                    padding-top: 0.5em;
-                    border-radius: 15px;
+                    position: absolute;
+                    top: 25%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
                     z-index: 11;
+                    display: block;
+                    height: 20vh;
+                    max-height: 75vh;
+                    width: 25vw;
+                    max-width: 50vw;
+                    color: white;
+                    background-color: var(--greenapple);
+                    border-radius: 10px;
+                    padding: 10px;
+                    animation-duration: 1.5s;
+                    animation-name: fadein;
+                    overflow: auto;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
                 }
 
                 .heading {
