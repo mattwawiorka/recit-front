@@ -44,7 +44,7 @@ function BottomDockable(props) {
                 .bottom-button {
                     position: fixed;
                     bottom: 0;
-                    left: 30vw;
+                    left: 35vw;
                     right: 30vw;
                     width: 40vw;
                     height: 4.5em;
@@ -52,6 +52,7 @@ function BottomDockable(props) {
                     border-top-right-radius: 110px;
                     border-bottom: 0;
                     outline: none;
+                    z-index: 11;
                 }
 
                 #loginWarning {

@@ -19,19 +19,16 @@ class Index extends Component {
             loggedIn: this.props.auth.loggedIn(),
             currentLoc: [],
             createGame: false,
-            sortingFiltering: false,
         };
     }
 
     componentDidMount() {
-
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({
                 currentLoc: [position.coords.latitude, position.coords.longitude],
                 loading: false
             })
         })
-
     }
 
     toggleCreateGame = () => {
@@ -43,39 +40,45 @@ class Index extends Component {
     render() {  
         if (this.state.loading) return <Loading />
 
-        if (this.state.createGame) {
-            return (
-                <Layout 
-                    main={true} 
-                    showGamesButton={true} 
-                    startGame={false} 
-                    submitGame={true} 
-                    clickEvent={this.toggleCreateGame} 
-                >
-                    <Announcements />
-                    <CreateGameForm 
-                        exitFunc={this.toggleCreateGame}
-                    />
-                    <br />
-                </Layout>
-            );
-        } else {
-            return (
-                <Layout 
-                    main={true} 
-                    showGamesButton={true} 
-                    startGame={true} 
-                    submitGame={false} 
-                    clickEvent={this.toggleCreateGame} 
-                >
-                    <Announcements />
+        return (
+            <>
+            {this.state.createGame ? <div className="overlay"></div> : null}
+            <Layout 
+                main={true} 
+                showGamesButton={true} 
+                startGame={!this.state.createGame} 
+                clickEvent={this.toggleCreateGame} 
+            >
+                <Announcements />
+                <>
+                    {this.state.createGame ? 
+                        <CreateGameForm 
+                            exitFunc={this.toggleCreateGame}
+                        />
+                    :
+                    null 
+                    }
                     <SortingFiltering 
                         loggedIn={this.state.loggedIn}  
-                        currentLoc={this.state.currentLoc} 
+                        currentLoc={this.state.currentLoc}
+                        faded={this.state.createGame}
                     />
-                </Layout>
-            );
-        } 
+                </>
+            </Layout>
+
+            <style jsx>{`
+                .overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    background-color: rgba(0,0,0,0.5);
+                    z-index: 10;
+                }
+            `}</style>
+            </>
+        );   
     }
 }
 

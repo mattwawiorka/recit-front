@@ -381,16 +381,31 @@ class CreateGameForm extends Component {
             </div>
             <style jsx>{`
                 .create-game-container {
+                    position: absolute;
+                    top: 15%;
+                    left: 30%;
+                    z-index: 11;
                     display: block;
-                    flex-direction: column;
-                    align-content: center;
-                    align-items: center;
-                    justify-content: center;
-                    justify-items: center;
+                    height: auto;
+                    max-height: 75vh;
+                    width: auto;
+                    max-width: 50vw;
                     background-color: white;
                     border-radius: 10px;
-                    margin: 1.5em;
                     padding: 10px;
+                    animation-duration: 1.5s;
+                    animation-name: fadein;
+                    overflow: auto;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
                 }
 
                 .update {

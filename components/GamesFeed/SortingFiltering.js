@@ -133,7 +133,7 @@ function SortingFiltering(props) {
 
                 .sort-toggle-button {
                     position: absolute;
-                    top: 50%;
+                    top: 35%;
                     right: 0%;
                     height: 15em;
                     background-color: var(--greenapple);
