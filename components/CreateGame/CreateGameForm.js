@@ -203,9 +203,9 @@ class CreateGameForm extends Component {
                 >
                 { CreateGame => (
                 <form 
-                    onKeyDown={(e) => {
-                        if (e.keyCode == 13) e.preventDefault();
-                    }}
+                    // onKeyDown={(e) => {
+                    //     if (e.keyCode == 13) e.preventDefault();
+                    // }}
                     className="gameForm"
                     onSubmit={ e => {
                         e.preventDefault();

@@ -40,12 +40,6 @@ class Index extends Component {
         })
     }
 
-    toggleSortingFiltering = () => {
-        this.setState({
-            sortingFiltering: !this.state.sortingFiltering
-        })
-    }
-
     render() {  
         if (this.state.loading) return <Loading />
 
@@ -75,14 +69,10 @@ class Index extends Component {
                     clickEvent={this.toggleCreateGame} 
                 >
                     <Announcements />
-                    <div style={{ width: '100%', height: 'auto', paddingTop: '1.2em', paddingLeft: '1.2em', marginBottom: '5em' }}>
-                        <SortingFiltering 
-                            loggedIn={this.state.loggedIn} 
-                            showPanel={this.state.sortingFiltering} 
-                            toggleSortingFiltering={this.toggleSortingFiltering} 
-                            currentLoc={this.state.currentLoc} 
-                        />
-                    </div>
+                    <SortingFiltering 
+                        loggedIn={this.state.loggedIn}  
+                        currentLoc={this.state.currentLoc} 
+                    />
                 </Layout>
             );
         } 

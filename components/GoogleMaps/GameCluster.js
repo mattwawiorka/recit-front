@@ -88,7 +88,7 @@ function GameCluster(props) {
                     font-weight: bold;
                     color: var(--darkmatter);
                     font-size: 2em;
-                    line-height: normal;
+                    letter-spacing: -2px;
                     vertical-align: middle;
                     margin-top: 20%;
                 }

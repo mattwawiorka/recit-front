@@ -39,6 +39,7 @@ export default function Meta() {
                     border-radius: 4px;
                     cursor: pointer;
                     font-weight: bold;
+                    overflow: hidden;
                 }
 
                 button:hover {
@@ -71,7 +72,7 @@ export default function Meta() {
                 
                 /* Handle */
                 ::-webkit-scrollbar-thumb {
-                    background: var(--darkermatter); 
+                    background: var(--darkmatter); 
                     border-radius: 10px;
                 }
 

@@ -132,8 +132,9 @@ function GameInfo(props) {
       }
 
       .actions {
+        position: relative;
+        top: -1.5em;
         padding-top: 0em;
-        margin-bottom: 1em;
       }
 
       .btn {
@@ -156,8 +157,9 @@ function GameInfo(props) {
       .description {
         width: 100%;
         padding: 0.5em;
-        padding-left: 20%;
-        //text-align: center;
+        padding-left: 10%;
+        padding-left: 10%;
+        text-align: justify;
         word-wrap: break-word;
         white-space: pre-wrap;
         font-weight: 600;
