@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import dateTool from '../../lib/dateTool';
-import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 
@@ -22,175 +22,196 @@ const UPDATE_COMMENT = gql`
     }
 `;
 
-class Comment extends Component {
-    constructor(props) {
-        // props
-        super(props)
-        // state
-        this.state = {
-            content: this.props.comment.content,
-            textAreaRows: this.props.comment.content.split("\n").length,
-            showSave: false
-        };
-    }
+function Comment(props) {
+    const { comment, isOwner, refetch } = props;
 
-    componentDidMount() {
-        this.props.refetch();
-    }
+    const [content, setContent] = useState(comment.content);
+    const [showActions, setShowActions] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [showSave, setShowSave] = useState(false);
 
-    handleChange = (input) => (e) => {
-        this.setState({ 
-            [input]: e.target.value
-         });
-        
-        if (e.target.value !== this.state.content) {
-            // This isn't perfect, rows not increasing at correct pace
-            const rowHeight = 24;
-            const currentRows = Math.ceil(e.target.scrollHeight / rowHeight);
+    const [updateComment] = useMutation(UPDATE_COMMENT, { variables: { id: comment.id, content: content } });
+    const [deleteComment] = useMutation(DELETE_COMMENT, { variables: { id: comment.id } });
 
-            this.setState({
-                textAreaRows: currentRows,
-                showSave: true
-            })
-            
+    const commentInput = useRef();
+
+    useEffect(() => {
+        refetch();
+        if (commentInput.current) {
+            commentInput.current.innerText = content;
+            if (isOwner) {
+                commentInput.current.addEventListener("input", e => {
+                    setContent(e.target.innerText);
+                    setShowSave(e.target.innerText !== comment.content)
+                })
+            } 
         } 
-        
-        if (e.target.value === this.props.comment.content) {
-            this.setState({
-                showSave: false
-            })
-        }
-    };
+    }, [props])
 
-    render() {
-        const { comment } = this.props;
-        return (
-            <React.Fragment key={comment.id}>
-                
-                <div className="comment">
-                    <div className="heading">
+    return (
+        <React.Fragment key={comment.id}>
+            <div className="comment">
+                <div className="heading">
+                    <div className="info">
                         <div className="userName">
                             <Link href='/Profile/[user]' as={`/Profile/${comment.user}`}>
                                 <a>{comment.userName}</a>
                             </Link>
-                        </div>
-                         
-                        {this.props.currentUser ? 
-                            <Mutation
-                                mutation={DELETE_COMMENT}
-                                variables={{ id: comment.id }}
-                            >{deleteComment =>
-                            <strong onClick={e => this.props.handleUpdate(deleteComment,e)} id="editButton">...</strong> 
-                            }
-                            </Mutation>
-                            : 
-                            null}  
-                        
+                        </div> 
                         <div className="dateTime">
                             {dateTool.getDateTime(parseInt(comment.dateTime))}
                         </div>
                     </div>
-                    <div className="body">
-                        {this.props.currentUser ? 
-                            <Mutation
-                                mutation={UPDATE_COMMENT}
-                                variables={{ id: comment.id, content: this.state.content }}
-                            >{updateComment => (
-                                <form
-                                onSubmit={e => {
-                                    this.setState({
-                                        showSave: false
-                                    })
-                                    this.props.handleUpdate(updateComment,e)
-                                }}>
-                                <textarea 
-                                    id="status" 
-                                    onChange={this.handleChange("content")} 
-                                    rows={this.state.textAreaRows}
-                                    value={this.state.content}
-                                    autoComplete="off"
-                                />   
-                                {this.state.showSave ? <input className="saveEditButton" type="submit" value="Save" /> : null}
-                                </form>
-                            )
-                            }
-                            </Mutation>
-                            : 
-                            comment.content} 
+
+                    <div className="actions">
+                        {isOwner ? 
+                        <strong 
+                            onClick={() => {
+                                setShowActions(!showActions);
+                                if (editMode) setEditMode(false);
+                            }} 
+                            className="toggle"
+                        >...</strong> 
+                        : 
+                        null} 
+
+                        {showActions ?
+                        <div className="action-btns">
+                            <button onClick={() => setEditMode(true)} className="btn">Edit</button>
+                            <button onClick={deleteComment} className="btn">Delete</button>
+                        </div>
+                        :
+                        null}
                     </div>
                 </div>
 
                 
-                <style jsx>{`
-                    .comment {
-                        display: block;
-                        max-width: 100%;
-                        height: auto;
-                        margin-top: 1em;
-                        background-color: white;
-                        color: black;
-                        border-radius: 5px;
-                        border-bottom-style: groove;
-                        padding: 0.5em;
-                        white-space: pre-wrap;
-                    }
 
-                    .heading {
-                        width: 100%;
-                        display: inline-block;
-                    }
+                <div className="body">
+                    {isOwner ? 
+                    <>
+                        <div
+                            ref={commentInput}
+                            className="input-fields"
+                            contentEditable={editMode}                  
+                            autoComplete="off"
+                        >
+                        </div>  
+                        {showSave ? 
+                            <button 
+                                onClick={() => {
+                                    updateComment();
+                                    setShowSave(false); 
+                                    setEditMode(false);
+                                    setShowActions(false);
+                                }} 
+                                className="btn save-edit"
+                            >Save</button> 
+                        : null}
+                    </>
+                    : 
+                    comment.content} 
+                </div>
+            </div>
 
-                    .userName {
-                        display: inline-block;
-                        width: 80%;
-                        font-weight: bold;
-                    }
+            
+            <style jsx>{`
+                .comment {
+                    display: block;
+                    max-width: 100%;
+                    height: auto;
+                    margin-top: 1em;
+                    background-color: white;
+                    color: black;
+                    border-radius: 5px;
+                    border-bottom-style: groove;
+                    padding: 0.5em;
+                    white-space: pre-wrap;
+                    animation-duration: .75s;
+                    animation-name: fadein;
+                }
 
-                    #editButton {
-                        width: 20%;
-                        text-align: center;
-                        padding-left: 12%;
-                        cursor: pointer;
-                    }
+                .heading {
+                    width: 100%;
+                    display: inline-block;
+                }
 
-                    .dateTime {
-                        color: #616770;
-                        font-size: 0.8em;
-                    }
+                .info {
+                    display: inline-block;
+                    width: 80%;
+                }
 
-                    .body {
-                        max-width: 100%;
-                        word-wrap: break-word;
-                        padding: 0.5em;
-                    }
+                .userName {
+                    display: block;
+                    font-weight: bold;
+                }
 
-                    textarea {
-                        display: inline-block;
-                        width: 80%;
-                        border: none;
-                        resize: none;
-                        outline: none;
-                        overflow: hidden;
-                        font-size: 1em;
-                        font-family: "IBM Plex Sans",Verdana,Geneva,Tahoma,sans-serif;
-                    }
+                .dateTime {
+                    display: block;
+                    color: #616770;
+                    font-size: 0.8em;
+                }
 
-                    .saveEditButton {
-                        display: inline-block;
-                        width: 20%;
-                        height: 40%;
-                        background-color: var(--darkermatter);
-                        color: white;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        font-weight: bold;
-                        text-align: center;
+                .actions {
+                    display: inline-block;
+                    width: 20%;
+                    height: 100%;
+                    text-align: right;
+                    vertical-align: top;
+                }
+
+                .toggle {
+                    height: 100%;
+                    vertical-align: top;
+                    cursor: pointer;
+                    margin-right: 1em;
+                }
+
+                .action-btns {
+                    display: inline-block;
+                    animation-duration: .75s;
+                    animation-name: fadein;
+                }
+
+                .btn {
+                    margin-right: 1em;
+                    margin-top: 0;
+                    width: 4em;
+                    height: 1.5em;
+                    vertical-align: top;
+                }
+
+                .body {
+                    max-width: 100%;
+                    word-wrap: break-word;
+                    padding: 0.5em;
+                }
+
+                .input-fields {
+                    outline: none;
+                }
+
+                .save-edit {
+                    display: inline-block;
+                    width: 4em;
+                    height: 1.5em;
+                    margin-top: 1em;
+                    animation-duration: .75s;
+                    animation-name: fadein;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
                     }
-                `}</style>
-            </React.Fragment>  
-        );
-    }
+                    }
+            `}</style>
+        </React.Fragment>  
+    );
 }
 
 export default Comment;

@@ -2,7 +2,7 @@ import dateTool from '../../lib/dateTool';
 
 function GameInfo(props) {
 
-  const { game, isHost, toggleEditing, cancelGame } = props;
+  const { game, isHost, toggleEditing, cancelMode, toggleCancel, cancelGame } = props;
 
   let image;
   if (game.sport === 'TENNIS') {
@@ -19,9 +19,8 @@ function GameInfo(props) {
   }
 
   return (
-    
     <React.Fragment>
-    <div className="container">
+    <div className="game-info-container">
       <div className="section heading">
         <div className="titleSport">
           <h2 style={{ textAlign: 'left' }}>{game.title}</h2>
@@ -33,21 +32,32 @@ function GameInfo(props) {
         </div>
       </div>
 
-      {isHost ? <div className="section actions">
-        <button onClick={toggleEditing} className="btn">Edit</button>
-        <button onClick={cancelGame} className="btn">Cancel</button>
+      <div className="section actions">
+        {isHost ?
+          <>
+            <button onClick={toggleEditing} className="btn">Edit</button>
+            <button onClick={toggleCancel} className="btn">Cancel</button>
+          </>
+        : null}
       </div>
-      : null}
 
+      {cancelMode ? 
+        <div className="cancel-box">
+          <h3 className="heading" style={{ textAlign: 'center' }}>Are you sure you want to cancel your game?</h3>
+          <div style={{ textAlign: 'center', position: 'relative' }}>
+            <button onClick={cancelGame} className="btn cancel-btn">Yes</button>
+            <div className="cancel-btn" style={{ width: '1em'}}/>
+            <button onClick={toggleCancel} className="btn cancel-btn">No</button>
+          </div>
+        </div>
+      : null}
+      
       <div className="section description">
         <p>{game.description}</p>
       </div>
 
       <div className="section">
-        <div className="icon-section">
-          <img src="/time-icon.svg" alt="Time" className="icon"
-             />
-        </div>
+        <img src="/time-icon.svg" alt="Time" className="icon icon-section"/>
         <div className="dateTime">
           <p>{dateTool.getDateTime(parseInt(game.dateTime), true, true)} 
             - {dateTool.getTime((parseInt(game.endDateTime)))}</p>
@@ -55,9 +65,7 @@ function GameInfo(props) {
       </div>
 
       <div className="section">
-        <div className="icon-section">
-          <img src="/pin.svg" alt="Location" className="icon"  />
-        </div>
+        <img src="/pin.svg" alt="Location" className="icon icon-section"  />
         <div className="location">
           <h3>{game.venue}</h3>
           <a 
@@ -69,7 +77,7 @@ function GameInfo(props) {
     </div>
 
     <style jsx>{`
-      .container {
+      .game-info-container {
         display: block;
         background-color: var(--greenapple); /* Orange */
         height: auto;
@@ -92,9 +100,8 @@ function GameInfo(props) {
       .image {
         width: 100%; 
         height: 100%; 
-        height: 4em;
-        width: 4em; 
-        border-radius: 10px;
+        max-height: 4em;
+        max-width: 4em; 
       }
 
       .heading {
@@ -138,16 +145,9 @@ function GameInfo(props) {
       }
 
       .btn {
-        width: 20%;
+        width: 5em;
         height: 2em;
         margin-right: 2em;
-        text-align: center;
-        background-color: var(--darkermatter);
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
       }
 
       .btn:hover {
@@ -164,42 +164,75 @@ function GameInfo(props) {
         white-space: pre-wrap;
         font-weight: 600;
         font-size: 0.9em;
-        color: #4b4f56;
+        // color: #4b4f56;
+        color: var(--darkermatter);
         line-height: 15px;
         margin-bottom: 1em;
       }
 
       .icon {
-        width: 80%;
-        height: 80%; 
+        width: 2.5em;
+        height: 2.5em; 
         borderRadius: 10px;
-        max-height: 2em;
-        max-width: 2em;
+        max-height: 3em;
+        max-width: 3em;
       }
 
       .icon-section {
         display: inline-block;
-        width: 15%;
-        height: 100%;
         padding-left: 10px;
       }
 
       .dateTime {
         display: inline-block;
-        width: 85%;
+        vertical-align: 75%;
         height: 100%;
-        padding-left: 10px;
+        padding-left: 15px;
+        font-weight: bold;
       }
 
       .location {
         display: inline-block;
-        width: 85%;
         height: 100%;
-        padding-left: 10px;
+        padding-left: 15px;
+        font-weight: bold;
       }
 
-      a {
+      .location>a {
         color: white;
+      }
+
+      .cancel-box {
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 11;
+        display: block;
+        height: min-content;
+        width: min-content;
+        min-width: 20em;
+        color: white;
+        background-color: var(--greenapple);
+        border-radius: 10px;
+        padding: 10px;
+        animation-duration: 1.5s;
+        animation-name: fadein;
+      }
+
+      .cancel-btn {
+        margin: 1em auto;
+        display: inline-block;
+      }
+
+      @keyframes fadein {
+        from {
+            opacity: 0;
+        } 
+        
+        to {
+            opacity: 1;
+        }
       }
 
       @media only screen and (max-width: 700px) {

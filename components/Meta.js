@@ -42,6 +42,17 @@ export default function Meta() {
                     overflow: hidden;
                 }
 
+                .btn {
+                    text-align: center;
+                    background-color: var(--darkermatter);
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    overflow: hidden;
+                }
+
                 button:hover {
                     background-color: var(--darkmatter);
                 }

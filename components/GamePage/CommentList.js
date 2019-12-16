@@ -28,7 +28,7 @@ class CommentList extends Component {
         if (this.props.comments) {    
             this.props.comments.forEach((comment) => {
                 rows.push(
-                    <Comment comment={comment} currentUser={this.props.currentUser === comment.user} key={comment.id} refetch={this.props.refetch} handleUpdate={this.handleUpdate} />
+                    <Comment comment={comment} isOwner={this.props.currentUser === comment.user} key={comment.id} refetch={this.props.refetch} handleUpdate={this.handleUpdate} />
                 );
             });
         }

@@ -75,6 +75,18 @@ class Index extends Component {
                     width: 100%;
                     background-color: rgba(0,0,0,0.5);
                     z-index: 10;
+                    animation-duration: .75s;
+                    animation-name: fadein;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
                 }
             `}</style>
             </>

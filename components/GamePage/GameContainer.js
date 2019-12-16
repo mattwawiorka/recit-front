@@ -41,8 +41,8 @@ function GameContainer(props) {
 
   const [editMode, setEditMode] = useState(false);
   const [inviteMode, setInviteMode] = useState(false);
+  const [cancelMode, setCancelMode] = useState(false);
   
-  // const fromInvite = Router.query.invite;
   const router = useRouter();
   const { invited } = router.query;
 
@@ -64,7 +64,7 @@ function GameContainer(props) {
 
   return (
     <React.Fragment>
-    {inviteMode ? <div className="overlay"></div> : null}
+    {(inviteMode || cancelMode) ? <div className="overlay"></div> : null}
     <div className="container">
       <div className="gameInfo">
         {editMode ? 
@@ -90,6 +90,8 @@ function GameContainer(props) {
           game={data.game} 
           isHost={data.host === props.currentUser} 
           toggleEditing={() => setEditMode(true)} 
+          toggleCancel={() => setCancelMode(!cancelMode)}
+          cancelMode={cancelMode}
           cancelGame={() => {
             cancelGame()
             .then(response => {
@@ -134,6 +136,8 @@ function GameContainer(props) {
         grid-template-areas:
           "gameInfo players"
           "discussion discussion";
+        animation-duration: .75s;
+        animation-name: fadein;
       }
 
       .overlay {
@@ -144,6 +148,8 @@ function GameContainer(props) {
         width: 100%;
         background-color: rgba(0,0,0,0.5);
         z-index: 10;
+        animation-duration: .75s;
+        animation-name: fadein;
       }
 
       .gameInfo {
@@ -164,6 +170,16 @@ function GameContainer(props) {
         width: 100%;
         height: 100%;
         grid-area: discussion;
+      }
+
+      @keyframes fadein {
+        from {
+            opacity: 0;
+        } 
+        
+        to {
+            opacity: 1;
+        }
       }
 
     `}</style>

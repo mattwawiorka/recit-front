@@ -11,7 +11,7 @@ function GamePage(props) {
 
   // if (props.auth.loggedIn()) {
     return (
-      <Layout main={true} showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
+      <Layout main={false} showGamesButton={true} startGame={false} submitGame={true} clickEvent={handleViewGames}>
         <Announcements />
         <GameContainer gameId={game} currentUser={props.auth.getUser()} />
         <br />
