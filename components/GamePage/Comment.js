@@ -85,8 +85,6 @@ function Comment(props) {
                     </div>
                 </div>
 
-                
-
                 <div className="body">
                     {isOwner ? 
                     <>
@@ -138,7 +136,6 @@ function Comment(props) {
 
                 .info {
                     display: inline-block;
-                    width: 80%;
                 }
 
                 .userName {
@@ -154,7 +151,7 @@ function Comment(props) {
 
                 .actions {
                     display: inline-block;
-                    width: 20%;
+                    float: right;
                     height: 100%;
                     text-align: right;
                     vertical-align: top;
