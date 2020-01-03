@@ -65,14 +65,17 @@ function GameInfo(props) {
       </div>
 
       <div className="section">
-        <img src="/pin.svg" alt="Location" className="icon icon-section"  />
-        <div className="location">
-          <h3>{game.venue}</h3>
-          <a 
-            target="_blank"
-            href={`https://www.google.com/maps/dir/?api=1&destination=${game.address}`}
-          >{game.address}</a>
-        </div>
+        <a 
+          target="_blank"
+          href={`https://www.google.com/maps/dir/?api=1&destination=${game.address}`}
+          className="directions"
+        >
+          <img src="/pin.svg" alt="Location" className="icon icon-section"  />
+          <div className="location">
+            <h3>{game.venue}</h3>
+            <h3>{game.address}</h3>
+          </div>
+        </a>
       </div>
     </div>
 
@@ -199,6 +202,10 @@ function GameInfo(props) {
       }
 
       .location>a {
+        color: white;
+      }
+
+      .directions {
         color: white;
       }
 
