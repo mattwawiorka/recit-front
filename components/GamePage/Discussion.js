@@ -90,7 +90,7 @@ const COMMENT_DELETED = gql`
 
 function Discussion(props) {
     
-    const { data, loading, error, subscribeToMore } = useQuery(GET_COMMENTS, { variables: { gameId: props.gameId }, ssr: false });
+    const { data, loading, error, fetchMore, subscribeToMore } = useQuery(GET_COMMENTS, { variables: { gameId: props.gameId }, ssr: true });
     const [createComment] = useMutation(CREATE_COMMENT);
     const [updateComment] = useMutation(UPDATE_COMMENT);
     const [deleteComment] = useMutation(
@@ -123,12 +123,31 @@ function Discussion(props) {
                     comments={data.messages.edges}
                     updateComment={updateComment} 
                     deleteComment={deleteComment}
+                    hasMore={data.messages.pageInfo.hasNextPage}
+                    loadMore={() => 
+                        fetchMore({
+                          variables: {cursor: data.messages.pageInfo.endCursor},
+                          updateQuery: (prev, { fetchMoreResult }) => {
+                            if (fetchMoreResult.messages.edges.length === 0) return prev;
+                            const newMessageFeed = Object.assign({}, prev, { messages: {
+                              edges: [...prev.messages.edges, ...fetchMoreResult.messages.edges], 
+                              pageInfo: {
+                                endCursor: fetchMoreResult.messages.pageInfo.endCursor,
+                                hasNextPage: fetchMoreResult.messages.pageInfo.hasNextPage,
+                                __typename: "PageInfo"
+                              }, 
+                              __typename: "MessageFeed"
+                            }
+                            });
+                            return newMessageFeed
+                          }
+                        })
+                      }
                     subscribeToMore={() => {
                         subscribeToMore({
                             document: COMMENT_ADDED,
                             variables: {gameId: props.gameId},
                             updateQuery: (prev, { subscriptionData }) => {
-                                console.log(subscriptionData)
                                 if (!subscriptionData.data.messageAdded) return prev;
                                 const newComment = subscriptionData.data.messageAdded;
                                 const newComments = Object.assign({}, prev, { messages: {

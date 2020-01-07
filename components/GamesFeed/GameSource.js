@@ -51,6 +51,12 @@ const GAME_ADDED = gql`
   }
 `;
 
+const GAME_DELETED = gql`
+  subscription onGameDeleted($loadedGames: [ID]) {
+    gameDeleted(loadedGames: $loadedGames) 
+  }
+`;
+
 function GameSource(props) {
   
   let variables = {
@@ -68,12 +74,9 @@ function GameSource(props) {
     }
   }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 
-  const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: "false"});
+  const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: true});
   if (loading) return <Loading />
   if (error) return <p>Error</p>
-
-  console.log(props.currentLoc)
-  console.log(props.bounds)
 
   return (
     <>
@@ -106,7 +109,7 @@ function GameSource(props) {
           }
         })
       }
-      subscribeToGames={() => 
+      subscribeToGames={() => {
         subscribeToMore({
           document: GAME_ADDED,
           variables: { 
@@ -115,10 +118,8 @@ function GameSource(props) {
             bounds: props.bounds
           },
           updateQuery: (prev, { subscriptionData }) => {
-            console.log(prev)
-            console.log(subscriptionData)
             if (!subscriptionData.data.gameAdded) return prev;
-            if (subscriptionData.data.gameAdded.cursor > prev.games.pageInfo.endCursor) return prev
+            // if (subscriptionData.data.gameAdded.cursor > prev.games.pageInfo.endCursor) return prev
             const gameExists = prev.games.edges.filter(edge => {
               return edge.node.id === subscriptionData.data.gameAdded.node.id;
             }).length > 0;
@@ -145,13 +146,36 @@ function GameSource(props) {
             });
             return newGameFeed;
           }
+        });
+        subscribeToMore({
+          document: GAME_DELETED,
+          variables: {
+            loadedGames: data.games.edges.map(g => g.node.id)
+          },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData.data.gameDeleted) return prev;
+            const newGameFeed = Object.assign({}, prev, { games: {
+              edges: prev.games.edges.filter((value) => {
+                return value.node.id !== subscriptionData.data.gameDeleted
+              }), 
+              pageInfo: {
+                endCursor: prev.games.pageInfo.endCursor,
+                hasNextPage: prev.games.pageInfo.hasNextPage,
+                __typename: "PageInfo"
+              }, 
+              __typename: "GameFeed"
+            }
+            });
+            return newGameFeed;
+          }
         })
+        }
       }
-      /> 
-      :
-      <Loading/>
-      }
-      </>
+    /> 
+    :
+    <Loading/>
+    }
+    </>
   )
 }
 

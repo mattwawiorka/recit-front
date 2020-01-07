@@ -19,6 +19,7 @@ function GamesPrep(props) {
     }, [props.games])
 
     useEffect(() => {
+        console.log('GamesPrep subscribe to games')
         props.subscribeToGames();
     }, [])
 

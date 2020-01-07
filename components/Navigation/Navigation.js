@@ -8,13 +8,12 @@ class Navigation extends Component {
         this.state = {
             loading: true,
             loggedIn: this.props.auth.loggedIn(),
-            user: this.props.auth.getUser()
+            user: this.props.auth.getUser(),
+            userName: this.props.auth.getUserName()
         };
 
         this.dropdown = React.createRef();
         this.button = React.createRef();
-        
-
     }
 
     componentDidMount() {
@@ -23,6 +22,8 @@ class Navigation extends Component {
         })
 
         this.menu();
+
+        console.log(this.state.userName)
     }
 
     menu = () => {
@@ -147,11 +148,12 @@ class Navigation extends Component {
                                 </div>
                             </Link>
                             <div className="links">
-                                <Link href="/About">
+                                {/* <Link href="/About">
                                     <a>About</a>
-                                </Link>
+                                </Link> */}
+                                <a>Inbox</a>
                                 <Link href='/Profile/[user]' as={`/Profile/${this.state.user}`}>
-                                    <a>My Profile</a>
+                                    <a>{this.state.userName}</a>
                                 </Link>
                                 <a 
                                     href="/" 
@@ -161,11 +163,12 @@ class Navigation extends Component {
                             <i className="material-icons menu" onClick={() => this.menu()} ref={this.button}>menu</i>
                         </div>
                         <div className="dropdown" ref={this.dropdown}>
-                            <Link href="/About">
+                            {/* <Link href="/About">
                                 <a>About</a>
-                            </Link>
+                            </Link> */}
+                            <a>Inbox</a>
                             <Link href='/Profile/[user]' as={`/Profile/${this.state.user}`}>
-                                <a>My Profile</a>
+                                <a>{this.state.userName}</a>
                             </Link>
                             <a 
                                 href="/" 
