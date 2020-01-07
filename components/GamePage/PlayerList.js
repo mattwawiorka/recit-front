@@ -153,7 +153,7 @@ function PlayerList(props) {
     <React.Fragment>
       <div className="container">
         <div className='host'>  
-          <h3>Hosted by {host.name}</h3>
+          <h3>{host ? "Hosted by " + host.name : null}</h3>
         </div>
         <div className="players">
           <h3 style={{ textDecoration: 'underline' }}>Players</h3>

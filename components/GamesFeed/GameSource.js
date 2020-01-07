@@ -32,8 +32,8 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
 `;
 
 const GAME_ADDED = gql`
-  subscription {
-    gameAdded {
+  subscription onGameAdded($cursor: String, $numGames: Int, $bounds: [Float]) {
+    gameAdded(cursor: $cursor, numGames: $numGames, bounds: $bounds) {
       cursor
       node {
         id
@@ -44,6 +44,8 @@ const GAME_ADDED = gql`
         location {
           coordinates
         }
+        spots
+        players
       }
     }
   }
@@ -61,12 +63,17 @@ function GameSource(props) {
   };
 
   useEffect(() => {
-    refetch();
+    if (props.bounds) {
+      refetch();
+    }
   }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: "false"});
   if (loading) return <Loading />
   if (error) return <p>Error</p>
+
+  console.log(props.currentLoc)
+  console.log(props.bounds)
 
   return (
     <>
@@ -99,15 +106,21 @@ function GameSource(props) {
           }
         })
       }
-      refetch={refetch}
       subscribeToGames={() => 
         subscribeToMore({
           document: GAME_ADDED,
+          variables: { 
+            cursor: data.games.pageInfo.endCursor, 
+            numGames: data.games.edges.length, 
+            bounds: props.bounds
+          },
           updateQuery: (prev, { subscriptionData }) => {
+            console.log(prev)
+            console.log(subscriptionData)
             if (!subscriptionData.data.gameAdded) return prev;
             if (subscriptionData.data.gameAdded.cursor > prev.games.pageInfo.endCursor) return prev
             const gameExists = prev.games.edges.filter(edge => {
-              return edge.node.id === subscriptionData.data.gameAdded.id;
+              return edge.node.id === subscriptionData.data.gameAdded.node.id;
             }).length > 0;
             if (gameExists) return;
             let newGames = [subscriptionData.data.gameAdded, ...prev.games.edges];

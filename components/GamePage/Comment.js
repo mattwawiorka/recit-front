@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import dateTool from '../../lib/dateTool';
 import Link from 'next/link';
+import classNames from 'classnames'
 
 function Comment(props) {
     const { comment, isOwner } = props;
@@ -11,6 +12,11 @@ function Comment(props) {
     const [showSave, setShowSave] = useState(false);
 
     const commentInput = useRef();
+
+    let bodyClass = classNames({
+        'input-fields': true,
+        'edit-mode': editMode
+    })
 
     return (
         <React.Fragment key={comment.id}>
@@ -49,7 +55,7 @@ function Comment(props) {
 
                         {showActions ?
                         <div className="action-btns">
-                            <button onClick={() => setEditMode(true)} className="btn">Edit</button>
+                            <button onClick={() => setEditMode(!editMode)} className="btn">Edit</button>
                             <button onClick={() => props.deleteComment({ variables: { id: comment.id } })} className="btn">Delete</button>
                         </div>
                         :
@@ -60,12 +66,12 @@ function Comment(props) {
                 <div className="body">
                     <div
                         ref={commentInput}
-                        className="input-fields"
+                        className={bodyClass}
                         contentEditable={editMode}
                         suppressContentEditableWarning={true}
                         onInput={e => {
                             setContent(e.target.innerText);
-                            setShowSave(e.target.innerText !== comment.content);
+                            setShowSave(e.target.innerText !== comment.content && e.target.innerText !== "");
                         }}              
                         autoComplete="off"
                     >
@@ -183,6 +189,11 @@ function Comment(props) {
 
                 .input-fields {
                     outline: none;
+                }
+
+                .edit-mode {
+                    border: 1.5px solid var(--greenapple);
+                    border-radius: 5px;
                 }
 
                 .save-edit {

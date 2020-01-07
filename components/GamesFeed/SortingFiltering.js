@@ -3,12 +3,20 @@ import GameSource from './GameSource';
 import classNames from 'classnames';
 
 function SortingFiltering(props) {
+
+    const initialBounds = [
+        props.currentLoc[0] + 0.08812489109,
+        props.currentLoc[1] + 0.1095172763,
+        props.currentLoc[0] - 0.08827372991,
+        props.currentLoc[1] - 0.1095172763
+    ];
+
     // const loggedIn = useContext(AuthContext)
     const [showPanel, setShowPanel] = useState();
     const [sport, setSport] = useState("ALL");
     const [startDate, setStartDate] = useState("ALL");
     const [openSpots, setOpenSpots] = useState("0");
-    const [bounds, setBounds] = useState([]);
+    const [bounds, setBounds] = useState(initialBounds);
     const [zoom, setZoom] = useState(12);
     const [sortOrder, setSortOrder] = useState("DATE");
 

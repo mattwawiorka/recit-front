@@ -38,7 +38,7 @@ class CreateGameForm extends Component {
             venue: this.props.venue || "",
             address: this.props.address || "",
             coords: this.props.coords || [],
-            description: this.props.description || "Let's Play!",
+            description: this.props.description || "",
             errors: [{message: ""}],
             loading: true
         }
@@ -310,7 +310,8 @@ class CreateGameForm extends Component {
                                 ref={this.descriptionInput}
                                 id="descriptionInput"
                                 className="input-fields"
-                                contentEditable="true"                  
+                                contentEditable="true" 
+                                placeholder="Let's play!"                 
                                 autoComplete="off"
                             >
                             </div>
@@ -503,6 +504,13 @@ class CreateGameForm extends Component {
 
                 #descriptionInput {
                     outline: none;
+                }
+
+                .input-fields[placeholder]:empty:before {
+                    content: attr(placeholder);
+                    cursor: text;
+                    color: #555; 
+                    font-style: italic;
                 }
 
                 .small-form {

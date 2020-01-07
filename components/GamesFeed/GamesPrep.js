@@ -15,9 +15,12 @@ function GamesPrep(props) {
     const [scrollHeight, setScrollHeight] = useState(null);
 
     useEffect(() => {
-        props.subscribeToGames();
         setGames(props.games)
     }, [props.games])
+
+    useEffect(() => {
+        props.subscribeToGames();
+    }, [])
 
     const todayGames = [];
     const tomorrowGames = [];
