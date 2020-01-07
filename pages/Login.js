@@ -68,7 +68,7 @@ class Login extends Component {
                                         })
                                         return;
                                     }
-                                    cookie.set('token', response.data.login.token)
+                                    cookie.set('token', response.data.login.token, { expires: 365 });
                                     Router.push('/');
                                 })
                                 .catch(error => {

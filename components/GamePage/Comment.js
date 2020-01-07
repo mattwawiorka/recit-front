@@ -1,52 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState, useRef } from 'react';
 import dateTool from '../../lib/dateTool';
-import gql from 'graphql-tag';
 import Link from 'next/link';
 
-const DELETE_COMMENT = gql`
-    mutation DeleteComment($id: ID!) {
-        deleteComment(id: $id) {
-            id
-            user
-        }
-    }
-`;
-
-const UPDATE_COMMENT = gql`
-    mutation UpdateComment($id: ID!, $content: String!) {
-        updateComment(id: $id, content: $content) {
-            id
-            user
-        }
-    }
-`;
-
 function Comment(props) {
-    const { comment, isOwner, refetch } = props;
+    const { comment, isOwner } = props;
 
     const [content, setContent] = useState(comment.content);
     const [showActions, setShowActions] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [showSave, setShowSave] = useState(false);
 
-    const [updateComment] = useMutation(UPDATE_COMMENT, { variables: { id: comment.id, content: content } });
-    const [deleteComment] = useMutation(DELETE_COMMENT, { variables: { id: comment.id } });
-
     const commentInput = useRef();
-
-    useEffect(() => {
-        refetch();
-        if (commentInput.current) {
-            commentInput.current.innerText = content;
-            if (isOwner) {
-                commentInput.current.addEventListener("input", e => {
-                    setContent(e.target.innerText);
-                    setShowSave(e.target.innerText !== comment.content)
-                })
-            } 
-        } 
-    }, [props])
 
     return (
         <React.Fragment key={comment.id}>
@@ -63,7 +27,7 @@ function Comment(props) {
                         </div>
                         <div className="userName">
                             <Link href='/Profile/[user]' as={`/Profile/${comment.user}`}>
-                                <a>{comment.userName}</a>
+                                <a>{comment.author}</a>
                             </Link>
                         </div> 
                         <div className="dateTime">
@@ -86,7 +50,7 @@ function Comment(props) {
                         {showActions ?
                         <div className="action-btns">
                             <button onClick={() => setEditMode(true)} className="btn">Edit</button>
-                            <button onClick={deleteComment} className="btn">Delete</button>
+                            <button onClick={() => props.deleteComment({ variables: { id: comment.id } })} className="btn">Delete</button>
                         </div>
                         :
                         null}
@@ -97,7 +61,12 @@ function Comment(props) {
                     <div
                         ref={commentInput}
                         className="input-fields"
-                        contentEditable={editMode}                  
+                        contentEditable={editMode}
+                        suppressContentEditableWarning={true}
+                        onInput={e => {
+                            setContent(e.target.innerText);
+                            setShowSave(e.target.innerText !== comment.content);
+                        }}              
                         autoComplete="off"
                     >
                         {comment.content}
@@ -105,7 +74,10 @@ function Comment(props) {
                     {showSave ? 
                         <button 
                             onClick={() => {
-                                updateComment();
+                                props.updateComment({ variables: { id: comment.id, content: content } })
+                                .then(response => {
+                                    console.log(response)
+                                })
                                 setShowSave(false); 
                                 setEditMode(false);
                                 setShowActions(false);

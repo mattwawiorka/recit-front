@@ -62,7 +62,7 @@ function GameMarker(props) {
         return (
             <>
                 <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered}>
-                    <img src={image} alt={sport} />
+                    <img src={image} alt={sport} className="icon" />
                 </div>
     
                 <style jsx>{`
@@ -70,6 +70,11 @@ function GameMarker(props) {
                         width: 2.5em;
                         height: 2.5em;
                         background: none;
+                    }
+
+                    .icon {
+                        width: 4em;
+                        height: 4em;
                     }
 
                     .hovered {

@@ -14,21 +14,18 @@ class CommentList extends Component {
         this.props.subscribeToMore();
     }
 
-    handleUpdate = (mutation, e) => {
-        e.preventDefault();
-        mutation()
-        .then (result => {
-            this.props.refetch();
-        })
-    }
-
     render() {
         const rows = []
 
         if (this.props.comments) {    
             this.props.comments.forEach((comment) => {
                 rows.push(
-                    <Comment comment={comment} isOwner={this.props.currentUser === comment.user} key={comment.id} refetch={this.props.refetch} handleUpdate={this.handleUpdate} />
+                    <Comment 
+                        key={comment.node.id} comment={comment.node}
+                        updateComment={this.props.updateComment} 
+                        deleteComment={this.props.deleteComment}  
+                        isOwner={this.props.currentUser === comment.node.user} 
+                    />
                 );
             });
         }

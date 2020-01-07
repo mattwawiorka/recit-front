@@ -27,7 +27,7 @@ function GameInfo(props) {
           <div id="customBorder"></div>
           <h4 style={{ display: 'inline-block', width: '50%',  }}>{game.sport}</h4>
         </div>
-        <div className="sportImage">
+        <div className="sport-image">
           <img src={image} alt={game.sport} className="image" />
         </div>
       </div>
@@ -118,8 +118,9 @@ function GameInfo(props) {
         margin-right: 10px;
       }
 
-      .sportImage {
+      .sport-image {
         flex: 1;
+        float: right;
         width: 100%;
         height: 100%;
       }

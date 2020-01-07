@@ -17,7 +17,6 @@ function SortingFiltering(props) {
         if (mapZoom) setZoom(mapZoom);
     })
 
-    console.log(showPanel)
     const panelClass = classNames({
         'aside': true,
         'aside-in': showPanel === true,
