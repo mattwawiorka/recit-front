@@ -28,6 +28,19 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
       hasNextPage
     }
   }
+
+  userGames {
+    edges {
+        node {
+          id
+          title
+          sport
+          dateTime
+        }
+        role
+    }
+    activeCount
+  }
 }
 `;
 
@@ -88,6 +101,7 @@ function GameSource(props) {
       bounds={props.bounds}
       zoom={props.zoom}
       games={data.games.edges || []} 
+      myGames={data.userGames.edges || []}
       hasMore={data.games.pageInfo.hasNextPage}
       sortOrder={props.sortOrder}
       loadMore={() => 

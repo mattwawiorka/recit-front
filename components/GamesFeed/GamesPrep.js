@@ -6,6 +6,7 @@ import dateTool from '../../lib/dateTool';
 import GamesList from '../GameList/GameList';
 import MapContainer from '../GoogleMaps/MapContainer';
 import supercluster from 'points-cluster';
+import MyGames from '../GameList/MyGames';
 
 function GamesPrep(props) {
     let marker, image;
@@ -19,7 +20,6 @@ function GamesPrep(props) {
     }, [props.games])
 
     useEffect(() => {
-        console.log('GamesPrep subscribe to games')
         props.subscribeToGames();
     }, [])
 
@@ -29,6 +29,7 @@ function GamesPrep(props) {
     const nextWeekGames = [];
     const laterGames = [];
     const gamesBySpots = [];
+    const myGames = [];
 
     const markers = [];
 
@@ -81,7 +82,7 @@ function GamesPrep(props) {
         zoom: props.zoom
     });
 
-    // Set map markers
+    // Set data map markers
     clusters.map(cluster => {
         if (cluster.numPoints === 1){
             marker = 
@@ -112,7 +113,7 @@ function GamesPrep(props) {
         markers.push(marker);
     })
 
-    // Set game rows
+    // Set data for games list
     games.map((game, index) => {
 
         if (game.node.sport === 'TENNIS') {
@@ -201,6 +202,61 @@ function GamesPrep(props) {
         
     });
 
+    // Set data for my games
+    const sortedMyGames = props.myGames.sort( (a,b) => {
+        let comparison;
+        if (parseInt(a.node.dateTime) > parseInt(b.node.dateTime)) {
+            comparison = 1;
+        } else {
+            comparison = -1;
+        }
+        return comparison;
+    })
+
+    sortedMyGames.map(game => {
+        let row;
+
+        if (game.node.sport === 'TENNIS') {
+            image = "/tennis-ball.svg";
+        } 
+        else if (game.node.sport === 'BASKETBALL') {
+            image = "/basketball.svg";
+        }
+        else if (game.node.sport === 'FOOTBALL') {
+            image = "/american-football.svg";
+        } 
+        else {
+            image = "rec-it.png";
+        }
+
+        row = 
+            <React.Fragment key={game.node.id}>
+                <GameRow 
+                    game={game.node}
+                    image={image}
+                    loggedIn={props.loggedIn} 
+                    onMouseEnter={getHovered}
+                    hovered={hovered === game.node.id}
+                    clearHovered={clearHovered}
+                    getScrollHeight={scrollList}
+                    role={game.role}
+                />
+                    
+                <div id="customBorder"></div>
+
+                <style jsx>{`
+                #customBorder {
+                    border-bottom-style: groove;
+                    border-width: thin;
+                    width: 85%;
+                    margin: 0 auto;
+                }
+                `}</style>
+            </React.Fragment>
+
+        myGames.push(row);
+    })
+
     return (
         <>
             <MapContainer 
@@ -208,18 +264,23 @@ function GamesPrep(props) {
                 markers={markers}
                 getMapBounds={props.getMapBounds}
             />
-            <GamesList 
-                loggedIn={props.loggedIn}
-                todayGames={todayGames}
-                tomorrowGames={tomorrowGames}
-                thisWeekGames={thisWeekGames}
-                nextWeekGames={nextWeekGames}
-                laterGames={laterGames}
-                sortOrder={props.sortOrder}
-                gamesBySpots={gamesBySpots}
-                scroll={scroll}
-                scrollTo={scrollHeight}
-            />
+            <div style={{ width: "40%", maxHeight: "80vh", overflow: "auto"}}>
+                <MyGames 
+                    myGames={myGames}
+                />  
+                <GamesList 
+                    loggedIn={props.loggedIn}
+                    todayGames={todayGames}
+                    tomorrowGames={tomorrowGames}
+                    thisWeekGames={thisWeekGames}
+                    nextWeekGames={nextWeekGames}
+                    laterGames={laterGames}
+                    sortOrder={props.sortOrder}
+                    gamesBySpots={gamesBySpots}
+                    scroll={scroll}
+                    scrollTo={scrollHeight}
+                />
+            </div>
         </>
     );
 }

@@ -4,8 +4,8 @@ import dateTool from '../../lib/dateTool';
 import classNames from 'classnames';
 
 function GameRow(props) {
-  const { game, image, loggedIn, onMouseEnter, hovered, clearHovered, getScrollHeight } = props;
-  let dateFormat;
+  const { game, image, loggedIn, onMouseEnter, hovered, clearHovered, getScrollHeight, role } = props;
+  let dateFormat, involvement;
 
   if (parseInt(game.dateTime) < dateTool.getEndOfWeek().valueOf()) {
     dateFormat = dateTool.getDateTime(parseInt(game.dateTime), false, true);
@@ -28,6 +28,16 @@ function GameRow(props) {
     let scrollHeight = hovered ? (row.current.offsetTop - row.current.clientHeight) : null
     if (scrollHeight !== null) getScrollHeight(scrollHeight)
   }, [hovered])
+
+  if (role == 1 ) {
+    involvement = "hosting";
+  } 
+  else if (role == 2) {
+    involvement = "joined";
+  } 
+  else if (role == 3) {
+    involvement = "interested";
+  }
 
   let rowClass = classNames({
     'game-row': true,
@@ -132,7 +142,7 @@ function GameRow(props) {
       }
       
     }
-    `}</style>
+  `}</style>
 
   if (loggedIn) {
     return (
@@ -152,7 +162,7 @@ function GameRow(props) {
               <h3>{game.venue}</h3> 
             </div> */}
             <div className="spots">
-              <h3>{game.players + " / " + game.spots}</h3>
+              <h3>{role ? involvement : game.players + " / " + game.spots}</h3>
             </div>
           </div>
         </Link>

@@ -52,7 +52,6 @@ function SortingFiltering(props) {
                     sortOrder={sortOrder}
                 />
             </div>
-
                 
             <button onClick={() => setShowPanel(!showPanel)} className={btnClass}>
                 <h1 style={{ writingMode: "vertical-rl" }}>+</h1>
@@ -187,7 +186,6 @@ function SortingFiltering(props) {
                     animation-duration: 1.5s;
                     animation-name: slideout;
                 }
-
 
                 @keyframes slide-left {
                     from {

@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+import MyGames from './MyGames';
 
 let loginWarning;
 
 function GameList(props) {
-  
+
   if (!props.loggedIn) {
     loginWarning = <strong id="listLoginWarning">Log in to open games and see details</strong>
   }
@@ -174,42 +175,42 @@ function GameList(props) {
 
   return (
     <React.Fragment>
-    <div className="list-container" ref={list}>
-      <h3 id="upcomingGames">Upcoming Games</h3>
-      {loginWarning}
-      {today}
-      {tomorrow}
-      {thisWeek}
-      {nextWeek}
-      {later}
-    </div>
-      
-    <style jsx>{`
-      .list-container {
-        display: block;
-        width: 40%;
-        height: min-content;
-        max-height: 80vh;
-        text-align: center;
-        background-color: white;
-        border-radius: 15px;
-        margin-left: 1em;
-        overflow: auto;
-      }
+      <div className="list-container" ref={list}>
+        <h3 className="list-title">Games in Your Area</h3>
+        {loginWarning}
+        {today}
+        {tomorrow}
+        {thisWeek}
+        {nextWeek}
+        {later}
+      </div>
+        
+      <style jsx>{`
+        .list-container {
+          display: block;
+          width: 95%;
+          height: min-content;
+          max-height: 80vh;
+          text-align: center;
+          background-color: white;
+          border-radius: 15px;
+          margin-left: 1em;
+          overflow: auto;
+        }
 
-      #upcomingGames {
-        margin: auto;
-        border-bottom-style: groove;
-        width: 50%;
-        color: #111;
-      }
+        .list-title {
+          margin: auto;
+          border-bottom-style: groove;
+          width: 50%;
+          color: #111;
+        }
 
-      // @media only screen and (max-width: 700px) {
-      //   .container {
-      //       grid-template-columns: .25fr 1fr .25fr;
-      //   }
-      // }
-    `}</style>
+        // @media only screen and (max-width: 700px) {
+        //   .container {
+        //       grid-template-columns: .25fr 1fr .25fr;
+        //   }
+        // }
+      `}</style>
     </React.Fragment>
   ); 
 }

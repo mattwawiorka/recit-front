@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import PlaceSearch from '../GoogleMaps/PlaceSearch';
 import classNames from 'classnames';
+import dateTool from '../../lib/dateTool';
 
 const CREATE_GAME = gql`
     mutation CreateGame($gameInput: gameInput) {
@@ -53,20 +54,13 @@ class CreateGameForm extends Component {
         })
 
         if (!this.props.id) {
-            const d = new Date();
-            const startDate = d.toISOString().split("T")[0];
-            d.setHours(d.getHours() + 2);
-            let startTime;
-            if ((Math.ceil(d.getMinutes()/10)*10) > 59) {
-                d.setHours(d.getHours() + 1);
-                startTime = d.getHours().toString() + ":" + "00"
-            } else {
-                startTime = d.getHours().toString() + ":" + (Math.ceil(d.getMinutes()/10)*10).toString();
-            }
+            const defaultStart = dateTool.generateStartTime();
+
             this.setState({
-                date: startDate,
-                time: startTime,
-                endDate: startDate
+                date: defaultStart[0],
+                time: defaultStart[1],
+                endDate: defaultStart[0],
+                endTime: defaultStart[2]
             })
         }
 
@@ -137,15 +131,23 @@ class CreateGameForm extends Component {
     render() {
         const { title, isPublic, date, time, endDate, endTime, sport, spots, venue, address, coords, description } = this.state;
         const dateTime = new Date(date + "T" + time);
+        let needsInput, invalidAddress, invalidSpots, invalidDescrip, invalidDate, invalidEnd;
+        needsInput = invalidAddress = invalidSpots = invalidDescrip = invalidDate = invalidEnd = false;
 
         const endDateTime = new Date(endDate + "T" + endTime);
 
         const errors = [];
-        this.state.errors.forEach( error => {
+        this.state.errors.map( error => {
+            if (!needsInput) needsInput = error.field === "all";
+            if (!invalidAddress) invalidAddress = error.field === "address";
+            if (!invalidSpots) invalidSpots = error.field === "spots";
+            if (!invalidDescrip) invalidDescrip = error.field === "description";
+            if (!invalidDate) invalidDate = error.field === "date";
+            if (!invalidEnd) invalidEnd = error.field === "endDate";
             errors.push(
-            <li key={error.message} className="error">
-                {error.message}
-            </li>
+                <li key={error.message} className="error">
+                    {error.message}
+                </li>
             );
         })
 
@@ -184,6 +186,40 @@ class CreateGameForm extends Component {
             "update": !(typeof this.props.id === 'undefined')
         })
 
+        const titleClass = classNames({
+            "input-fields": true,
+            "title-input": true,
+            "needs-input": needsInput && this.state.title == ""
+        })
+        const sportClass = classNames({
+            "input-fields": true,
+            "needs-input": needsInput && this.state.sport == ""
+        })
+
+        const playersClass = classNames({
+            "input-fields": true,
+            "needs-input": needsInput && this.state.spots == "" || invalidSpots
+        })
+
+        const descriptionClass = classNames({
+            "input-fields": true,
+            "needs-input": needsInput && this.state.description == "" || invalidDescrip
+        })
+
+        const dateClass = classNames({
+            "input-fields": true,
+            "needs-input": needsInput && this.state.date == "" || invalidDate
+        })
+
+        const endClass = classNames({
+            "input-fields": true,
+            "needs-input": invalidEnd
+        })
+
+        const timeClass = classNames({
+            "input-fields": true,
+            "needs-input": needsInput && this.state.time == ""
+        })
 
         return (
             <React.Fragment>
@@ -226,8 +262,6 @@ class CreateGameForm extends Component {
                         e.preventDefault();
                         CreateGame()
                         .then(response => {
-                            console.log(response)
-                            
                             if (response.errors) {
                                 this.setState({
                                     errors: response.errors[0].data
@@ -249,6 +283,9 @@ class CreateGameForm extends Component {
                         });
                     }}
                 >
+                    {/* Prevent implicit submission of the form */}
+                    <button type="submit" disabled style={{display: "none"}} aria-hidden="true"></button>
+                   
                     <div className="section" id="titleSportForm">
                         <div className="form-group">
                             <label id="title" className="header">Title</label>
@@ -256,13 +293,14 @@ class CreateGameForm extends Component {
                             <input
                                 onChange={this.handleChange("title")} 
                                 type="text" 
-                                className="input-fields title-input"
+                                className={titleClass}
                                 value={title}
                                 minLength="4"
                                 placeholder="Give your sporting event a unique title"
                                 autoComplete="off" 
                             />
                             <button 
+                                type="button"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     this.setState({ isPublic: !this.state.isPublic });
@@ -277,12 +315,11 @@ class CreateGameForm extends Component {
                         <div className="form-group split-form">
                             <label className="header">Sport</label>
                             <input 
-                                id="sportInput"
                                 onChange={this.handleChange("sport")} 
                                 list="sports"
                                 type="text" 
                                 autoCapitalize="word"
-                                className="input-fields"
+                                className={sportClass}
                                 value={sport} 
                                 placeholder="Pick a sport from the list or specify your own"
                                 autoComplete="off"
@@ -291,8 +328,7 @@ class CreateGameForm extends Component {
                         <div className="form-group split-form">
                             <label className="header">No. Players</label>
                             <input
-                                id="playersInput"
-                                className="input-fields"
+                                className={playersClass}
                                 onChange={this.handleChange("spots")}
                                 type="number"
                                 autoComplete="off"
@@ -308,8 +344,7 @@ class CreateGameForm extends Component {
                             <label className="header">Description</label>
                             <div
                                 ref={this.descriptionInput}
-                                id="descriptionInput"
-                                className="input-fields"
+                                className={descriptionClass}
                                 contentEditable="true" 
                                 placeholder="Let's play!"                 
                                 autoComplete="off"
@@ -322,9 +357,9 @@ class CreateGameForm extends Component {
                         <div className="form-group" id="addressForm">
                             <label className="header">Address</label>
                             <PlaceSearch
-                                className="input-fields"
                                 onChangeFunc={this.handleGooglePlace}
                                 prevPlace={this.props.address}
+                                needsInput={needsInput && this.state.address == "" || invalidAddress}
                             />
                         </div>
                     </div>
@@ -333,20 +368,18 @@ class CreateGameForm extends Component {
                         <label className="header" id="dateTimeLabel">Date/Time</label>
                         <div className="form-group small-form" id="startDateForm">
                             <input 
-                                id="startDateInput"
                                 onChange={this.handleChange("date")} 
                                 type="date" 
-                                className="input-fields"
+                                className={dateClass}
                                 value={date} 
                                 autoComplete="off"
                             />
                         </div>
                         <div className="form-group small-form" id="stateTimeForm">
                             <input 
-                                id="startTimeInput"
                                 onChange={this.handleChange("time")} 
                                 type="time" 
-                                className="input-fields"
+                                className={timeClass}
                                 value={time} 
                                 autoComplete="off"
                             />
@@ -365,7 +398,7 @@ class CreateGameForm extends Component {
                                     id="endDateInput"
                                     onChange={this.handleChange("endDate")} 
                                     type="date" 
-                                    className="input-fields"
+                                    className={endClass}
                                     value={endDate} 
                                 />
                             </div>
@@ -375,7 +408,7 @@ class CreateGameForm extends Component {
                                     id="endTimeInput"
                                     onChange={this.handleChange("endTime")} 
                                     type="time" 
-                                    className="input-fields"
+                                    className={endClass}
                                     value={endTime} 
                                 />
                             </div>
@@ -478,6 +511,12 @@ class CreateGameForm extends Component {
                     border: 1px solid #ccc;
                     border-radius: 4px;
                     box-sizing: border-box;
+                    outline: none;
+                }
+
+                .needs-input {
+                    outline: solid;
+                    outline-color: var(--greenapple);
                 }
 
                 .title-input {
@@ -500,10 +539,6 @@ class CreateGameForm extends Component {
                     display: inline-block;
                     padding-left: 5px;
                     padding-right: 5px;
-                }
-
-                #descriptionInput {
-                    outline: none;
                 }
 
                 .input-fields[placeholder]:empty:before {

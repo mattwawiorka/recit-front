@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import Script from 'react-load-script';
 import API from '../../api.json';
+import classNames from 'classnames';
 
 function PlaceSearch(props) {
 
@@ -22,14 +23,18 @@ function PlaceSearch(props) {
 
     }, [props])
 
+    const addressInput = classNames({
+        "input-fields": true,
+        "needs-input": props.needsInput
+    })
+
 
     return (
         <>
         <input 
             ref={searchBar}
-            id="addressInput"
             type="text" 
-            className="input-fields"
+            className={addressInput}
             placeholder={props.prevPlace}
         />
         <Script url={`https://maps.googleapis.com/maps/api/js?key=${API.key}&libraries=places`}
@@ -46,6 +51,12 @@ function PlaceSearch(props) {
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 box-sizing: border-box;
+                outline: none;
+            }
+
+            .needs-input {
+                outline: solid;
+                outline-color: var(--greenapple);
             }
 
             ::-webkit-input-placeholder {

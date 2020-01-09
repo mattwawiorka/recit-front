@@ -59,8 +59,7 @@ function GameInfo(props) {
       <div className="section">
         <img src="/time-icon.svg" alt="Time" className="icon icon-section"/>
         <div className="dateTime">
-          <p>{dateTool.getDateTime(parseInt(game.dateTime), true, true)} 
-            - {dateTool.getTime((parseInt(game.endDateTime)))}</p>
+          <p>{dateTool.getDateTime(parseInt(game.dateTime), true, true) + " - " + dateTool.getTime((parseInt(game.endDateTime)))}</p>
          </div>
       </div>
 
