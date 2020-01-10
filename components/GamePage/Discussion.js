@@ -14,7 +14,7 @@ const GET_COMMENTS = gql`
                     author
                     userId
                     content
-                    dateTime
+                    updatedAt
                 }
                 cursor
                 isOwner
@@ -51,6 +51,12 @@ const DELETE_COMMENT = gql`
     }
 `;
 
+// const INVITE = gql`
+//     mutation Invite($conversationId: ID!, $userId: ID!, $gameId: ID!) {
+//         addToConversation(conversationId: $conversationId, userId: $userId, gameId: $gameId)
+//     }
+// `;
+
 const COMMENT_ADDED = gql`
     subscription onCommentAdded($conversationId: ID!) {
         messageAdded(conversationId: $conversationId) {
@@ -58,7 +64,7 @@ const COMMENT_ADDED = gql`
                 id
                 author
                 content
-                dateTime 
+                updatedAt 
                 userId 
             }
             cursor

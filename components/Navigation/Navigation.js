@@ -23,7 +23,6 @@ class Navigation extends Component {
 
         this.menu();
 
-        console.log(this.state.userName)
     }
 
     menu = () => {
@@ -151,7 +150,9 @@ class Navigation extends Component {
                                 {/* <Link href="/About">
                                     <a>About</a>
                                 </Link> */}
-                                <a>Inbox</a>
+                                <Link href='/Inbox'>
+                                    <a>Inbox</a>
+                                </Link>
                                 <Link href='/Profile/[user]' as={`/Profile/${this.state.user}`}>
                                     <a>{this.state.userName}</a>
                                 </Link>
@@ -166,7 +167,9 @@ class Navigation extends Component {
                             {/* <Link href="/About">
                                 <a>About</a>
                             </Link> */}
-                            <a>Inbox</a>
+                            <Link href='/Inbox'>
+                                <a>Inbox</a>
+                            </Link>
                             <Link href='/Profile/[user]' as={`/Profile/${this.state.user}`}>
                                 <a>{this.state.userName}</a>
                             </Link>

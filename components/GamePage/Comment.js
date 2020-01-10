@@ -37,7 +37,7 @@ function Comment(props) {
                             </Link>
                         </div> 
                         <div className="dateTime">
-                            {dateTool.getDateTime(parseInt(comment.dateTime))}
+                            {dateTool.getDateTime(parseInt(comment.updatedAt))}
                         </div>
                     </div>
 
