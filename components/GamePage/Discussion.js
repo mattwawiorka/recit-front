@@ -6,13 +6,13 @@ import InputBox from './InputBox';
 
 
 const GET_COMMENTS = gql`
-    query Comments($gameId: ID!, $cursor: String) {
-        messages(gameId: $gameId, cursor: $cursor) {
+    query Comments($conversationId: ID!, $cursor: String) {
+        messages(conversationId: $conversationId, cursor: $cursor) {
             edges {
                 node {
                     id
                     author
-                    user
+                    userId
                     content
                     dateTime
                 }
@@ -52,14 +52,14 @@ const DELETE_COMMENT = gql`
 `;
 
 const COMMENT_ADDED = gql`
-    subscription onCommentAdded($gameId: ID!) {
-        messageAdded(gameId: $gameId) {
+    subscription onCommentAdded($conversationId: ID!) {
+        messageAdded(conversationId: $conversationId) {
             node {
                 id
                 author
                 content
                 dateTime 
-                user 
+                userId 
             }
             cursor
             isOwner
@@ -68,8 +68,8 @@ const COMMENT_ADDED = gql`
 `;
 
 const COMMENT_UPDATED = gql`
-    subscription onCommentUpdated($gameId: ID!) {
-        messageUpdated(gameId: $gameId) {
+    subscription onCommentUpdated($conversationId: ID!) {
+        messageUpdated(conversationId: $conversationId) {
             node {
                 id
                 content
@@ -79,8 +79,8 @@ const COMMENT_UPDATED = gql`
 `;
 
 const COMMENT_DELETED = gql`
-    subscription onCommentDeleted($gameId: ID!) {
-        messageDeleted(gameId: $gameId) {
+    subscription onCommentDeleted($conversationId: ID!) {
+        messageDeleted(conversationId: $conversationId) {
             node {
                 id
             }
@@ -90,14 +90,14 @@ const COMMENT_DELETED = gql`
 
 function Discussion(props) {
     
-    const { data, loading, error, fetchMore, subscribeToMore } = useQuery(GET_COMMENTS, { variables: { gameId: props.gameId }, ssr: true });
+    const { data, loading, error, fetchMore, subscribeToMore } = useQuery(GET_COMMENTS, { variables: { conversationId: props.conversationId }, ssr: true });
     const [createComment] = useMutation(CREATE_COMMENT);
     const [updateComment] = useMutation(UPDATE_COMMENT);
     const [deleteComment] = useMutation(
         DELETE_COMMENT,
         {
             update(cache, { data: { deleteMessage } }) {
-                const { messages } = cache.readQuery({ query: GET_COMMENTS, variables: { gameId: props.gameId } });
+                const { messages } = cache.readQuery({ query: GET_COMMENTS, variables: { conversationId: props.conversationId } });
                 const newEdges = messages.edges.filter((value) => {
                     return value.node.id !== deleteMessage.id
                 });
@@ -112,12 +112,14 @@ function Discussion(props) {
     if (loading) return <Loading />
     if (error) return <h4>ERROR!!!</h4>
 
+    console.log(data)
+
     return (
         <React.Fragment>
             <div className="discussion-container">
                 <h3 className="title">Discussion</h3>
 
-                <InputBox gameId={props.gameId} createComment={createComment} currentUser={props.currentUser} />
+                <InputBox conversationId={props.conversationId} createComment={createComment} currentUser={props.currentUser} />
 
                 <CommentList 
                     comments={data.messages.edges}
@@ -146,7 +148,7 @@ function Discussion(props) {
                     subscribeToMore={() => {
                         subscribeToMore({
                             document: COMMENT_ADDED,
-                            variables: {gameId: props.gameId},
+                            variables: {conversationId: props.conversationId},
                             updateQuery: (prev, { subscriptionData }) => {
                                 if (!subscriptionData.data.messageAdded) return prev;
                                 const newComment = subscriptionData.data.messageAdded;
@@ -165,7 +167,7 @@ function Discussion(props) {
                         });
                         subscribeToMore({
                             document: COMMENT_UPDATED,
-                            variables: {gameId: props.gameId},
+                            variables: {conversationId: props.conversationId},
                             updateQuery: (prev, { subscriptionData }) => {
                                 if (!subscriptionData.data.messageAdded) return prev;
                                 const newComments = Object.assign({}, prev, { messages: {
@@ -183,7 +185,7 @@ function Discussion(props) {
                         });
                         subscribeToMore({
                             document: COMMENT_DELETED,
-                            variables: {gameId: props.gameId},
+                            variables: {conversationId: props.conversationId},
                             updateQuery: (prev, { subscriptionData }) => {
                                 if (!subscriptionData.data.messageDeleted) return prev;
                                 const newComments = Object.assign({}, prev, { messages: {
@@ -203,7 +205,7 @@ function Discussion(props) {
                         });
                     }} 
                     currentUser={props.currentUser} 
-                    gameId={props.gameId} 
+                 conversationId={props.conversationId} 
                 />
             </div>
 

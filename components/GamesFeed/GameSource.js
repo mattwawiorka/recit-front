@@ -5,8 +5,8 @@ import GamesPrep from './GamesPrep';
 import Loading from '../Loading/Loading';
 
 const GET_GAMES = gql`
-query Games($cursor: String, $sport: String, $startDate: String, $openSpots: String, $currentLoc: [Float], $bounds: [Float], $sortOrder: String) {
-  games(cursor: $cursor, sport: $sport, startDate: $startDate, openSpots: $openSpots, currentLoc: $currentLoc, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
+query Games($cursor: String, $sport: String, $startDate: String, $openSpots: String, $bounds: [Float], $sortOrder: String) {
+  games(cursor: $cursor, sport: $sport, startDate: $startDate, openSpots: $openSpots, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -21,7 +21,6 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
         players
       }
       cursor
-      distance
     }
     pageInfo {     
       endCursor
@@ -73,7 +72,6 @@ const GAME_DELETED = gql`
 function GameSource(props) {
   
   let variables = {
-    currentLoc: props.currentLoc,
     sport: props.sport,
     startDate: props.startDate,
     openSpots: props.openSpots,
@@ -89,7 +87,10 @@ function GameSource(props) {
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: true});
   if (loading) return <Loading />
-  if (error) return <p>Error</p>
+  if (error) {
+    console.log(error)
+    return <p>Error</p>
+  }
 
   return (
     <>

@@ -265,9 +265,12 @@ function GamesPrep(props) {
                 getMapBounds={props.getMapBounds}
             />
             <div style={{ width: "40%", maxHeight: "80vh", overflow: "auto"}}>
+                {myGames.length > 0 && props.loggedIn ?
                 <MyGames 
                     myGames={myGames}
                 />  
+                :
+                null}
                 <GamesList 
                     loggedIn={props.loggedIn}
                     todayGames={todayGames}

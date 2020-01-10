@@ -12,7 +12,7 @@ const LOGIN = gql`
         login(name: $name, password: $password) 
         {
             token
-            userId
+
         }
     }
     `;

@@ -25,6 +25,7 @@ const GET_GAME = gql`
         location {
           coordinates
         }
+        conversationId
     }
 
     host(gameId: $gameId)
@@ -55,6 +56,8 @@ function GameContainer(props) {
   const [cancelGame] = useMutation(CANCEL_GAME, { variables: { gameId: props.gameId } });
   if (loading) return <Loading></Loading>
   if (error) return <h4>ERROR!!!</h4>
+
+  console.log(data)
 
   const d = new Date(parseInt(data.game.dateTime))
   const endD = new Date(parseInt(data.game.endDateTime))
@@ -111,7 +114,8 @@ function GameContainer(props) {
       
       <div className="players">
         <PlayerList 
-          gameId={props.gameId} 
+          gameId={props.gameId}
+          conversationId={data.game.conversationId} 
           spots={data.game.spots} 
           currentUser={props.currentUser} 
           isHost={data.host === props.currentUser} 
@@ -121,7 +125,7 @@ function GameContainer(props) {
       </div>
       
       <div className="discussion">
-        <Discussion gameId={props.gameId} currentUser={props.currentUser}/>
+        <Discussion conversationId={data.game.conversationId} currentUser={props.currentUser}/>
       </div>
     </div>
 

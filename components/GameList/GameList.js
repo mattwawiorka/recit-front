@@ -6,7 +6,7 @@ let loginWarning;
 function GameList(props) {
 
   if (!props.loggedIn) {
-    loginWarning = <strong id="listLoginWarning">Log in to open games and see details</strong>
+    loginWarning = <strong id="listLoginWarning">Log in to open games</strong>
   }
   else {
     loginWarning = null;

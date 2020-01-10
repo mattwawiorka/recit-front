@@ -46,7 +46,7 @@ function InputBox(props) {
                                 props.createComment({ variables: 
                                     { messageInput: 
                                         {
-                                            gameId: props.gameId,
+                                            conversationId: props.conversationId,
                                             content: content.trim()
                                         } 
                                     }

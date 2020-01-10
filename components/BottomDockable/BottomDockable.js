@@ -1,14 +1,22 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import withAuth from '../../lib/withAuth';
+import classNames from 'classnames';
 
 function BottomDockable(props) {
 
     const loginWarning = useRef();
 
+    const [showWarning, setShowWarning] = useState(false)
+
     const showLoginWarning = () => {
-        loginWarning.current.id = "loginWarningShow";
-        setTimeout(() => loginWarning.current.id = "loginWarning", 3000)
+        setShowWarning(true);
+        setTimeout(() => setShowWarning(false), 3000);
     }
+
+    const warningClass = classNames({
+        "login-warning": true,
+        "login-warning-show": showWarning 
+    })
 
     let option;
     if (props.startGame) {
@@ -30,7 +38,7 @@ function BottomDockable(props) {
     if (props.show) {
         return (
             <React.Fragment>
-            <span id='loginWarning' ref={loginWarning}>
+            <span className={warningClass} ref={loginWarning}>
                 <strong>
                     You must be logged in to start a new game
                 </strong>
@@ -55,7 +63,7 @@ function BottomDockable(props) {
                     z-index: 11;
                 }
 
-                #loginWarning {
+                .login-warning {
                     visibility: hidden;
                     position: fixed;
                     bottom: 10vh;
@@ -69,18 +77,8 @@ function BottomDockable(props) {
                     padding: 16px;
                 }
 
-                #loginWarningShow {
+                .login-warning-show {
                     visibility: visible;
-                    position: fixed;
-                    bottom: 10vh;
-                    left: 30vw;
-                    right: 30vw;
-                    width: 40vw;
-                    background-color: #333;
-                    color: #fff;
-                    text-align: center; 
-                    border-radius: 2px; 
-                    padding: 16px;
                     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
                     animation: fadein 0.5s, fadeout 0.5s 2.5s;
                 }

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 function MyGames(props) {
     const [showList, setShowList] = useState();
 
+    const moreGames = props.myGames.length > 1;
+
     return (
         <React.Fragment>
             <div className="list-container" >
-                <h3 className="list-title">You have {props.myGames.length} upcoming games!</h3>
+                <h3 className="list-title">{"You have " + props.myGames.length + " upcoming game" + (moreGames ? "s!" : "!")}</h3>
                 
                 {props.myGames[0]}
 
@@ -16,13 +18,16 @@ function MyGames(props) {
                 
             </div>
 
+            {moreGames ?
             <button 
                 className="btn-expand-list"
                 onClick={() => setShowList(!showList)} 
             >
                 {showList ? "Less" : "Show More"}
             </button>
-            
+            :
+            <br />}
+
             <style jsx>{`
             .list-container {
                 display: block;

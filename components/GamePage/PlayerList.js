@@ -14,18 +14,16 @@ const GET_PLAYERS = gql`
   `;
 
 const JOIN_GAME = gql`
-  mutation JoinGame($gameId: ID!) {
-    joinGame(gameId: $gameId) {
+  mutation JoinGame($gameId: ID!, $conversationId: ID!) {
+    joinGame(gameId: $gameId, conversationId: $conversationId) {
       id
     }
   }
   `;
 
 const LEAVE_GAME = gql`
-  mutation LeaveGame($gameId: ID!) {
-    leaveGame(gameId: $gameId) {
-      id
-    }
+  mutation LeaveGame($gameId: ID!, $conversationId: ID!) {
+    leaveGame(gameId: $gameId, conversationId: $conversationId)
   }
   `;
 
@@ -33,7 +31,8 @@ function PlayerList(props) {
   let variables, host, spots, joinButton, inviteButton;
 
   variables = { 
-    gameId: props.gameId
+    gameId: props.gameId,
+    conversationId: props.conversationId
   }
 
   const { data, loading, error, refetch } = useQuery(GET_PLAYERS, { variables: variables }); 

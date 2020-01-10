@@ -18,7 +18,6 @@ const SIGNUP = gql`
         login(name: $name, password: $password) 
         {
             token
-            userId
         }
     }
     `;
