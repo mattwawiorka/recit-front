@@ -51,11 +51,11 @@ const DELETE_COMMENT = gql`
     }
 `;
 
-// const INVITE = gql`
-//     mutation Invite($conversationId: ID!, $userId: ID!, $gameId: ID!) {
-//         addToConversation(conversationId: $conversationId, userId: $userId, gameId: $gameId)
-//     }
-// `;
+const INVITE = gql`
+    mutation Invite($conversationId: ID!, $userId: ID!, $gameId: ID!) {
+        addToConversation(conversationId: $conversationId, userId: $userId, gameId: $gameId)
+    }
+`;
 
 const COMMENT_ADDED = gql`
     subscription onCommentAdded($conversationId: ID!) {
@@ -115,17 +115,22 @@ function Discussion(props) {
             }
         }
     );
+    const [invite] = useMutation(INVITE);
     if (loading) return <Loading />
     if (error) return <h4>ERROR!!!</h4>
-
-    console.log(data)
 
     return (
         <React.Fragment>
             <div className="discussion-container">
                 <h3 className="title">Discussion</h3>
 
-                <InputBox conversationId={props.conversationId} createComment={createComment} currentUser={props.currentUser} />
+                <InputBox 
+                    conversationId={props.conversationId} 
+                    createComment={createComment} 
+                    currentUser={props.currentUser} 
+                    invite={invite}
+                    gameId={props.gameId}
+                />
 
                 <CommentList 
                     comments={data.messages.edges}

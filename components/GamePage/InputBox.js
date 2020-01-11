@@ -1,18 +1,28 @@
 import React, { useRef, useState, useCallback } from "react";
+import classNames from 'classnames';
 
 function InputBox(props) {
+
+    // const mentionPattern = /@[a-z]*\s/i;
+    const invitePattern = /@invite+/i;
 
     const commentInput = useRef();
     const commentActions = useRef();
 
     const [content, setContent] = useState(null);
     const [showActions, setShowActions] = useState(false);
+    const [invite, setInvite] = useState(false);
 
     const clearInput = useCallback( () => {
         setShowActions(false);
         if (commentInput.current) {
             commentInput.current.innerText = "";
         }
+    });
+
+    const textClass = classNames({
+        "input-fields": true,
+        "mention": invite
     });
 
     return (
@@ -27,10 +37,15 @@ function InputBox(props) {
                 
                 <div
                     ref={commentInput}
-                    className="input-fields"  
+                    className={textClass} 
                     contentEditable={true} 
                     placeholder="Add a comment..." 
                     onInput={e => {
+                        if (invitePattern.test(e.target.innerText)) {
+                            setInvite(true)
+                        } else {
+                            setInvite(false)
+                        }
                         setContent(e.target.innerText);
                         setShowActions(e.target.innerText !== "");
                     }}
@@ -43,20 +58,38 @@ function InputBox(props) {
                         className="btn-post-comment"
                         onClick={() => {
                             if (content) {
-                                props.createComment({ variables: 
-                                    { messageInput: 
+                                console.log(content.split("@invite")[1].trim())
+                                if (invite) {
+                                    props.invite({ variables:
                                         {
-                                            conversationId: props.conversationId,
-                                            content: content.trim()
-                                        } 
-                                    }
-                                })
-                                .then(response => {
-                                    if (response.errors) {
-                                        console.log(response.errors)
-                                    }
-                                    clearInput();
-                                });
+                                            conversationId: props.conversationId, 
+                                            userId: parseInt(content.split("@invite")[1].trim()), 
+                                            gameId: props.gameId
+                                        }
+                                    })
+                                    .then(response => {
+                                        console.log(response)
+                                        if (response.errors) {
+                                            console.log(response.errors)
+                                        }
+                                        clearInput();
+                                    });
+                                } else {
+                                    props.createComment({ variables: 
+                                        { messageInput: 
+                                            {
+                                                conversationId: props.conversationId,
+                                                content: content.trim()
+                                            } 
+                                        }
+                                    })
+                                    .then(response => {
+                                        if (response.errors) {
+                                            console.log(response.errors)
+                                        }
+                                        clearInput();
+                                    });
+                                }  
                             }  
                         }}
                     >Post</button>
@@ -98,6 +131,10 @@ function InputBox(props) {
                     vertical-align: top;
                     font-size: 1.2em;
                     overflow: hidden;
+                }
+
+                .mention {
+                    color: blue;
                 }
 
                 .input-fields[placeholder]:empty:before {

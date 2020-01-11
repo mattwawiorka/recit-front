@@ -125,7 +125,11 @@ function GameContainer(props) {
       </div>
       
       <div className="discussion">
-        <Discussion conversationId={data.game.conversationId} currentUser={props.currentUser}/>
+        <Discussion 
+          conversationId={data.game.conversationId} 
+          currentUser={props.currentUser}
+          gameId={props.gameId}
+        />
       </div>
     </div>
 
