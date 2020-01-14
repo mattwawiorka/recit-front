@@ -78,6 +78,7 @@ function InputBox(props) {
                                         { messageInput: 
                                             {
                                                 conversationId: props.conversationId,
+                                                gameId: props.gameId,
                                                 content: content.trim()
                                             } 
                                         }

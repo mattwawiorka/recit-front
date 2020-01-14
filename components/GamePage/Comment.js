@@ -43,7 +43,7 @@ function Comment(props) {
                     </div>
 
                     <div className="actions">
-                        {(isOwner && comment.type === 2) ? 
+                        {(isOwner && comment.type === 1) ? 
                         <strong 
                             onClick={() => {
                                 setShowActions(!showActions);

@@ -8,6 +8,7 @@ const INBOX = gql`
     query Inbox {
         inbox {
             edges {
+                conversation
                 node {
                     id
                     author
@@ -32,19 +33,18 @@ function Inbox(props) {
         return <p>Error</p>
     }
 
-    console.log(data)
     data.inbox.edges.map( thread => {
         console.log(thread)
         if (thread.node.gameId && thread.node.type === 3) {
             threads.push(
                 <Link key={thread.node.id} href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
-                    <a>{thread.node.author + " invited you to a game!"}</a>
+                    <a>{thread.node.author + " invited you to " + thread.conversation}</a>
                 </Link>
             )
         } else if (thread.node.gameId && thread.node.type === 4) {
             threads.push(
                 <Link key={thread.node.id} href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
-                    <a>{thread.node.author + " joined your game"}</a>
+                    <a>{thread.node.author + " " + thread.node.content}</a>
                 </Link>
             )
         }
