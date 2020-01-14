@@ -27,6 +27,7 @@ function CommentList(props) {
 
     if (props.comments) {    
         props.comments.forEach((comment, index) => {
+            if (comment.node.type === 4) return
             if (props.comments.length === index + 1) {
                 rows.push(
                     <React.Fragment key={comment.node.id}>
@@ -34,7 +35,7 @@ function CommentList(props) {
                             comment={comment.node}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
-                            isOwner={props.currentUser === comment.node.userId} 
+                            isOwner={props.currentUser === comment.node.userId && !props.isOver} 
                         />
                         <div ref={lastCommentRef}></div>
                     </React.Fragment>
@@ -46,7 +47,7 @@ function CommentList(props) {
                             comment={comment.node}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
-                            isOwner={props.currentUser === comment.node.userId} 
+                            isOwner={props.currentUser === comment.node.userId && !props.isOver} 
                         />
                     </React.Fragment>
                 );

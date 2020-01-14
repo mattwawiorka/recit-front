@@ -9,6 +9,7 @@ const INBOX = gql`
         inbox {
             edges {
                 node {
+                    id
                     author
                     content
                     type
@@ -34,13 +35,20 @@ function Inbox(props) {
     console.log(data)
     data.inbox.edges.map( thread => {
         console.log(thread)
-        if (thread.node.gameId) {
+        if (thread.node.gameId && thread.node.type === 3) {
             threads.push(
-                <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
+                <Link key={thread.node.id} href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
                     <a>{thread.node.author + " invited you to a game!"}</a>
                 </Link>
             )
-        } else {
+        } else if (thread.node.gameId && thread.node.type === 4) {
+            threads.push(
+                <Link key={thread.node.id} href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
+                    <a>{thread.node.author + " joined your game"}</a>
+                </Link>
+            )
+        }
+        else {
             threads.push(thread.node.content)
         }
         

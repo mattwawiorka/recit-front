@@ -9,13 +9,13 @@ import gql from 'graphql-tag';
 import cookie from 'js-cookie';
 
 const SIGNUP = gql`
-    mutation CreateUser($userInput: userInput, $name: String!, $password: String!) {
+    mutation CreateUser($userInput: userInput, $name: String!, $password: String!, $location: [Float]) {
         createUser(userInput: $userInput) 
         {
             name
         }
 
-        login(name: $name, password: $password) 
+        login(name: $name, password: $password, location: $location) 
         {
             token
         }
@@ -31,9 +31,19 @@ class Signup extends Component {
             phoneNumber: "(123)123-1234",
             age: 90,
             gender: "F",
-            errors: [{message: ""}]
+            errors: [{message: ""}],
+            location: []
         }
     }
+
+    componentDidMount() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                location: [position.coords.latitude, position.coords.longitude]
+            })
+        })
+    }
+
 
     handleChange = (input) => (e) => {
         this.setState({ 
@@ -43,7 +53,7 @@ class Signup extends Component {
     };
 
     render() {
-        const {name, password, phoneNumber, age, gender} = this.state;
+        const { name, password, phoneNumber, age, gender, location } = this.state;
         const errors = [];
         this.state.errors.forEach( error => {
             errors.push(
@@ -76,7 +86,7 @@ class Signup extends Component {
                                 phoneNumber: phoneNumber,
                                 age: parseInt(age),
                                 gender: gender
-                            }, name: name, password: password }}
+                            }, name: name, password: password, location: location }}
                         >
                             { Signup => (  
                             <form onSubmit={e => {

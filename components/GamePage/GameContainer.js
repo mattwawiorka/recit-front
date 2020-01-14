@@ -57,7 +57,7 @@ function GameContainer(props) {
   if (loading) return <Loading></Loading>
   if (error) return <h4>ERROR!!!</h4>
 
-  console.log(data)
+  const isOver = Date.now() > data.game.dateTime;
 
   const d = new Date(parseInt(data.game.dateTime))
   const endD = new Date(parseInt(data.game.endDateTime))
@@ -91,6 +91,7 @@ function GameContainer(props) {
         :
         <GameInfo 
           game={data.game} 
+          isOver={isOver}
           isHost={data.host === props.currentUser} 
           toggleEditing={() => setEditMode(true)} 
           toggleCancel={() => setCancelMode(!cancelMode)}
@@ -106,7 +107,10 @@ function GameContainer(props) {
       </div>
 
       {inviteMode ?
-      <Invite 
+      <Invite
+        gameId={props.gameId}
+        conversationId={data.game.conversationId}
+        location={data.game.location.coordinates}
         exit={() => setInviteMode(false)}
       />
       :
@@ -115,6 +119,7 @@ function GameContainer(props) {
       <div className="players">
         <PlayerList 
           gameId={props.gameId}
+          isOver={isOver}
           conversationId={data.game.conversationId} 
           spots={data.game.spots} 
           currentUser={props.currentUser} 
@@ -126,6 +131,7 @@ function GameContainer(props) {
       
       <div className="discussion">
         <Discussion 
+          isOver={isOver}
           conversationId={data.game.conversationId} 
           currentUser={props.currentUser}
           gameId={props.gameId}

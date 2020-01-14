@@ -8,11 +8,10 @@ import { Mutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 
 const LOGIN = gql`
-    mutation Login($name: String!, $password: String!) {
-        login(name: $name, password: $password) 
+    mutation Login($name: String!, $password: String!, $location: [Float]) {
+        login(name: $name, password: $password, location: $location) 
         {
             token
-
         }
     }
     `;
@@ -23,8 +22,17 @@ class Login extends Component {
         this.state = { 
             name: "",
             password: "",
-            error: ""
+            error: "",
+            location: []
         }
+    }
+
+    componentDidMount() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setState({
+                location: [position.coords.latitude, position.coords.longitude]
+            })
+        })
     }
 
     handleChange = (input) => (e) => {
@@ -35,9 +43,9 @@ class Login extends Component {
     };
 
     render() {
-        const {name, password} = this.state;
-       return (
-       <Layout main={false}>
+        const {name, password, location} = this.state;
+        return (
+        <Layout main={false}>
         <br />
         <div style={{ paddingTop: '25px' }}>
             <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
@@ -55,7 +63,7 @@ class Login extends Component {
                     <div>
                         <Mutation 
                             mutation={LOGIN}
-                            variables={{ name, password }}
+                            variables={{ name, password, location }}
                         >
                             { Login => (    
                             <form onSubmit={e => {

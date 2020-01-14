@@ -58,7 +58,6 @@ function InputBox(props) {
                         className="btn-post-comment"
                         onClick={() => {
                             if (content) {
-                                console.log(content.split("@invite")[1].trim())
                                 if (invite) {
                                     props.invite({ variables:
                                         {

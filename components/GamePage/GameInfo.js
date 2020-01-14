@@ -33,7 +33,7 @@ function GameInfo(props) {
       </div>
 
       <div className="section actions">
-        {isHost ?
+        {(isHost && !props.isOver) ?
           <>
             <button onClick={toggleEditing} className="btn">Edit</button>
             <button onClick={toggleCancel} className="btn">Cancel</button>

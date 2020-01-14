@@ -74,7 +74,10 @@ function PlayerList(props) {
     return player.id == props.currentUser;
   });
 
-  if (openSpots === 0) {
+  if (props.isOver) {
+    spots = null
+  }
+  else if (openSpots === 0) {
     spots = <h4>Game is Full</h4>
   } 
   else if (openSpots === 1) {
@@ -93,8 +96,10 @@ function PlayerList(props) {
       }
     `}</style>
 
-  
-  if (playerFound && !props.isHost) {
+  if (props.isOver) {
+    joinButton = null;
+  }
+  else if (playerFound && !props.isHost) {
     joinButton = 
     <React.Fragment> 
       <button 
@@ -137,7 +142,7 @@ function PlayerList(props) {
     joinButton = null;
   }
 
-  if (!props.invited) {
+  if (!props.invited && !props.isOver) {
     inviteButton = 
       <React.Fragment>
         <button onClick={props.toggleInvite} className="btn">Invite Players</button>

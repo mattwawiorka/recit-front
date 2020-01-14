@@ -15,6 +15,7 @@ const GET_COMMENTS = gql`
                     userId
                     content
                     updatedAt
+                    type
                 }
                 cursor
                 isOwner
@@ -66,6 +67,7 @@ const COMMENT_ADDED = gql`
                 content
                 updatedAt 
                 userId 
+                type
             }
             cursor
             isOwner
@@ -124,6 +126,7 @@ function Discussion(props) {
             <div className="discussion-container">
                 <h3 className="title">Discussion</h3>
 
+                {props.isOver ? null :
                 <InputBox 
                     conversationId={props.conversationId} 
                     createComment={createComment} 
@@ -131,8 +134,10 @@ function Discussion(props) {
                     invite={invite}
                     gameId={props.gameId}
                 />
+                }
 
                 <CommentList 
+                    isOver={props.isOver}
                     comments={data.messages.edges}
                     updateComment={updateComment} 
                     deleteComment={deleteComment}

@@ -15,7 +15,8 @@ function Comment(props) {
 
     let bodyClass = classNames({
         'input-fields': true,
-        'edit-mode': editMode
+        'edit-mode': editMode,
+        'invite-comment': comment.type === 3 || comment.type === 4
     })
 
     return (
@@ -42,7 +43,7 @@ function Comment(props) {
                     </div>
 
                     <div className="actions">
-                        {isOwner ? 
+                        {(isOwner && comment.type === 2) ? 
                         <strong 
                             onClick={() => {
                                 setShowActions(!showActions);
@@ -185,6 +186,10 @@ function Comment(props) {
                     word-wrap: break-word;
                     padding: 0.5em;
                     font-size: 1.2em;
+                }
+
+                .invite-comment {
+                    font-style: italic;
                 }
 
                 .input-fields {
