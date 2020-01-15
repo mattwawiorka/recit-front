@@ -152,7 +152,7 @@ function Invite(props) {
                     transform: translate(-50%, -50%);
                     z-index: 11;
                     display: block;
-                    min-height: 40vh;
+                    min-height: 30vh;
                     max-height: 75vh;
                     width: 35vw;
                     color: white;
@@ -174,7 +174,7 @@ function Invite(props) {
                 }
 
                 .player-select {
-                    min-height: 31vh;
+                    min-height: 21vh;
                 }
 
                 .link-invite {
@@ -213,7 +213,6 @@ function Invite(props) {
                     display: inline-block;
                     position: relative;
                     width: 50%;
-                    min-height: 32vh; 
                 }
 
                 .players-selected>h3 {

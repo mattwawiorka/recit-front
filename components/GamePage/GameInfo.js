@@ -91,6 +91,7 @@ function GameInfo(props) {
         padding-top: 0.5em;
         border-radius: 15px;
         // overflow: hidden;
+        border-bottom-style: groove;
       }
 
       .section {

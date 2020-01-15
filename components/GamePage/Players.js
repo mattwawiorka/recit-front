@@ -51,7 +51,7 @@ const PLAYER_LEFT = gql`
 `;
 
 function Players(props) {
-  let variables, spots, joinButton, inviteButton;
+  let variables, spotsMessage, joinButton, inviteButton;
 
   variables = { 
     gameId: props.gameId,
@@ -64,21 +64,19 @@ function Players(props) {
   if (loading) return <Loading />
   if (error) return <h4>ERROR!!!</h4>
 
-  console.log(data)
-
   const openSpots = props.spots - data.players.length;
 
   if (props.isOver) {
-    spots = null
+    spotsMessage = null
   }
   else if (openSpots === 0) {
-    spots = <h4>Game is Full</h4>
+    spotsMessage = <h4>Game is Full</h4>
   } 
   else if (openSpots === 1) {
-    spots = <h4>1 Spot Left</h4>
+    spotsMessage = <h4>1 Spot Left</h4>
   }
   else {
-    spots = <h4>Open Spots: {openSpots}</h4>
+    spotsMessage = <h4>Open Spots: {openSpots}</h4>
   }
 
   let playerFound = data.players.some(player => {
@@ -88,7 +86,8 @@ function Players(props) {
   const btnStyle = 
     <style jsx="true">{`
       .btn {
-        width: 100%;
+        width: 55%;
+        // width: 7em;
         height: 2em;
         margin-top: 1em;
       }
@@ -156,10 +155,12 @@ function Players(props) {
   return (
     <PlayerList 
       players={data.players}
-      spots={spots}
-      openSpots={openSpots}
+      spotsMessage={spotsMessage}
+      spots={props.spots}
+      joinGame={joinGame}
       joinButton={joinButton}
       inviteButton={inviteButton}
+      playerFound={playerFound}
       subscribeToMore={() => {
         subscribeToMore({
           document: PLAYER_JOINED,
