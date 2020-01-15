@@ -104,22 +104,24 @@ function Discussion(props) {
     const [deleteComment] = useMutation(
         DELETE_COMMENT,
         {
-            update(cache, { data: { deleteMessage } }) {
-                const { messages } = cache.readQuery({ query: GET_COMMENTS, variables: { conversationId: props.conversationId } });
-                const newEdges = messages.edges.filter((value) => {
-                    return value.node.id !== deleteMessage.id
-                });
-                messages.edges = newEdges;
-                cache.writeQuery({
-                    query: GET_COMMENTS,
-                    data: messages
-                })
-            }
+            // update(cache, { data: { deleteMessage } }) {
+            //     const { messages } = cache.readQuery({ query: GET_COMMENTS, variables: { conversationId: props.conversationId } });
+            //     const newEdges = messages.edges.filter((value) => {
+            //         return value.node.id !== deleteMessage.id
+            //     });
+            //     messages.edges = newEdges;
+            //     cache.writeQuery({
+            //         query: GET_COMMENTS,
+            //         data: messages
+            //     })
+            // }
         }
     );
     const [invite] = useMutation(INVITE);
     if (loading) return <Loading />
     if (error) return <h4>ERROR!!!</h4>
+
+    console.log(data)
 
     return (
         <React.Fragment>

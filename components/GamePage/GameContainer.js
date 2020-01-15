@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import Router, { useRouter } from 'next/router';
 import Loading from '../Loading/Loading';
 import GameInfo from './GameInfo';
-import PlayerList from './PlayerList';
+import Players from './Players';
 import Discussion from './Discussion';
 import gql from 'graphql-tag';
 import CreateGameForm from '../CreateGame/CreateGameForm';
@@ -28,7 +28,9 @@ const GET_GAME = gql`
         conversationId
     }
 
-    host(gameId: $gameId)
+    host(gameId: $gameId) {
+      userId
+    }
   }
   `;
 
@@ -92,7 +94,7 @@ function GameContainer(props) {
         <GameInfo 
           game={data.game} 
           isOver={isOver}
-          isHost={data.host === props.currentUser} 
+          isHost={data.host.userId === props.currentUser} 
           toggleEditing={() => setEditMode(true)} 
           toggleCancel={() => setCancelMode(!cancelMode)}
           cancelMode={cancelMode}
@@ -117,13 +119,13 @@ function GameContainer(props) {
       null}
       
       <div className="players">
-        <PlayerList 
+        <Players 
           gameId={props.gameId}
           isOver={isOver}
           conversationId={data.game.conversationId} 
           spots={data.game.spots} 
           currentUser={props.currentUser} 
-          isHost={data.host === props.currentUser} 
+          isHost={data.host.userId === props.currentUser} 
           toggleInvite={() => setInviteMode(true)}
           invited={invited}
         />

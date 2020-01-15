@@ -5,7 +5,6 @@ function CommentList(props) {
 
     useEffect(() => {
         props.subscribeToMore();
-        console.log('comment list mounted')
     }, [])
 
 
@@ -26,7 +25,7 @@ function CommentList(props) {
     const rows = []
 
     if (props.comments) {    
-        props.comments.forEach((comment, index) => {
+        props.comments.map((comment, index) => {
             if (comment.node.type === 4) return
             if (props.comments.length === index + 1) {
                 rows.push(
