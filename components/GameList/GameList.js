@@ -32,7 +32,7 @@ function GameList(props) {
         <style jsx>{`
           .list-container {
             display: block;
-            width: 50%;
+            width: 95%;
             height: min-content;
             max-height: 80vh;
             text-align: center;

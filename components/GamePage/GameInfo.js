@@ -23,7 +23,7 @@ function GameInfo(props) {
     <div className="game-info-container">
       <div className="section heading">
         <div className="titleSport">
-          <h2 style={{ textAlign: 'left' }}>{game.title}</h2>
+          <h2 style={{ textAlign: 'left', fontSize: "2em" }}>{game.title}</h2>
           <div id="customBorder"></div>
           <h4 style={{ display: 'inline-block', width: '50%',  }}>{game.sport}</h4>
         </div>
@@ -83,7 +83,7 @@ function GameInfo(props) {
         display: block;
         background-color: var(--greenapple); /* Orange */
         height: auto;
-        width: 85%;
+        width: 90%;
         color: white;
         margin: auto;
         margin-top: 2em;
@@ -116,6 +116,7 @@ function GameInfo(props) {
       .titleSport {
         flex: 4;
         margin-right: 10px;
+        margin-top: -0.5em;
       }
 
       .sport-image {
@@ -144,14 +145,15 @@ function GameInfo(props) {
 
       .actions {
         position: relative;
-        top: -1.5em;
+        top: -0.5em;
         padding-top: 0em;
+        vertical-align: top;
       }
 
       .btn {
         width: 5em;
         height: 2em;
-        margin-right: 2em;
+        margin: 0 2em 1em 0;
       }
 
       .btn:hover {
@@ -167,7 +169,7 @@ function GameInfo(props) {
         word-wrap: break-word;
         white-space: pre-wrap;
         font-weight: 600;
-        font-size: 0.9em;
+        font-size: 1em;
         // color: #4b4f56;
         color: var(--darkermatter);
         line-height: 15px;

@@ -12,20 +12,20 @@ import Invite from './Invite';
 const GET_GAME = gql`
   query Game($id: ID!, $gameId: ID!) {
     game(id: $id) {
-        id
-        title
-        public
-        dateTime
-        endDateTime
-        venue
-        address
-        sport
-        description
-        spots
-        location {
-          coordinates
-        }
-        conversationId
+      id
+      title
+      public
+      dateTime
+      endDateTime
+      venue
+      address
+      sport
+      description
+      spots
+      location {
+        coordinates
+      }
+      conversationId
     }
 
     host(gameId: $gameId) {
@@ -70,7 +70,7 @@ function GameContainer(props) {
   return (
     <React.Fragment>
     {(inviteMode || cancelMode) ? <div className="overlay"></div> : null}
-    <div className="container">
+    <div className="game-container">
       <div className="gameInfo">
         {editMode ? 
         <CreateGameForm 
@@ -106,6 +106,14 @@ function GameContainer(props) {
           }}
         />
         }
+        <div className="discussion">
+          <Discussion 
+            isOver={isOver}
+            conversationId={data.game.conversationId} 
+            currentUser={props.currentUser}
+            gameId={props.gameId}
+          />
+        </div>
       </div>
 
       {inviteMode ?
@@ -131,27 +139,20 @@ function GameContainer(props) {
         />
       </div>
       
-      <div className="discussion">
-        <Discussion 
-          isOver={isOver}
-          conversationId={data.game.conversationId} 
-          currentUser={props.currentUser}
-          gameId={props.gameId}
-        />
-      </div>
     </div>
 
     <style jsx>{`
-      .container {
-        display: grid;
-        max-width: 60vw;
+      .game-container {
+        // display: grid;
+        // display: flex;
+        width: 60vw;
         // max-height: 82vh;
-        justify-items: center;
-        grid-template-columns: 43vw 17vw;
-        grid-template-rows: minmax(min-content, max-content) minmax(min-content, auto);
-        grid-template-areas:
-          "gameInfo players"
-          "discussion discussion";
+        // justify-items: center;
+        // grid-template-columns: 43vw 17vw;
+        // grid-template-rows: minmax(min-content, max-content) minmax(min-content, auto);
+        // grid-template-areas:
+        //   "gameInfo players"
+        //   "discussion discussion";
         animation-duration: .75s;
         animation-name: fadein;
       }
@@ -169,13 +170,16 @@ function GameContainer(props) {
       }
 
       .gameInfo {
-        width: 100%;
+        display: inline-block;
+        vertical-align: top;
+        width: 70%;
         height: auto;
-        grid-area: gameInfo;
+        // grid-area: gameInfo;
       }
 
       .players {
-        width: 100%;
+        display: inline-block;
+        width: 30%;
         height: 100%;
         grid-area: players;
         overflow: hidden;
@@ -183,9 +187,6 @@ function GameContainer(props) {
 
       .discussion {
         margin-top: 1em;
-        width: 100%;
-        height: 100%;
-        grid-area: discussion;
       }
 
       @keyframes fadein {

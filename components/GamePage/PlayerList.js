@@ -119,7 +119,7 @@ function PlayerList(props) {
         </div>
 
         <div className="players">
-          <h3 style={{ textDecoration: 'underline' }}>Players</h3>
+          {/* <h3 style={{ textDecoration: 'underline' }}>Players</h3> */}
           {players}
         </div>
 

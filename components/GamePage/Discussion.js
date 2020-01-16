@@ -215,7 +215,7 @@ function Discussion(props) {
             <style jsx>{`
                 .discussion-container {
                     display: block;
-                    padding: 0% 10% 0% 10%;
+                    padding: 0% 5% 0% 5%;
                     margin-bottom: 4em;
                 }
 

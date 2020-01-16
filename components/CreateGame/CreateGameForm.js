@@ -254,9 +254,6 @@ class CreateGameForm extends Component {
                 >
                 { CreateGame => (
                 <form 
-                    // onKeyDown={(e) => {
-                    //     if (e.keyCode == 13) e.preventDefault();
-                    // }}
                     className="gameForm"
                     onSubmit={ e => {
                         e.preventDefault();
@@ -332,7 +329,7 @@ class CreateGameForm extends Component {
                                 onChange={this.handleChange("spots")}
                                 type="number"
                                 autoComplete="off"
-                                min="1"
+                                min={this.props.spots || 2}
                                 max="32"
                                 value={spots}
                             />
