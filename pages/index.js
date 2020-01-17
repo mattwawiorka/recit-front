@@ -17,7 +17,7 @@ class Index extends Component {
         this.state = {
             loading: true,
             loggedIn: this.props.auth.loggedIn(),
-            currentLoc: [],
+            currentLoc: [47.7169839910907, -122.32040939782564],
             createGame: false,
         };
     }
@@ -28,7 +28,7 @@ class Index extends Component {
                 currentLoc: [position.coords.latitude, position.coords.longitude],
                 loading: false
             })
-        })
+        });
     }
 
     toggleCreateGame = () => {
@@ -38,58 +38,57 @@ class Index extends Component {
     }
 
     render() {  
-        if (this.state.loading) return <Loading />
+        // if (this.state.loading) return <Loading />
 
         return (
-            <>
-            {this.state.createGame ? <div className="overlay"></div> : null}
-            <Layout 
-                main={true} 
-                showGamesButton={true} 
-                startGame={!this.state.createGame} 
-                clickEvent={this.toggleCreateGame} 
-            >
-                <Announcements />
-                <>
-                    {this.state.createGame ? 
-                        <CreateGameForm 
-                            exitFunc={this.toggleCreateGame}
+            <React.Fragment>
+                {this.state.createGame ? <div className="overlay"></div> : null}
+                <Layout 
+                    main={true} 
+                    showGamesButton={true} 
+                    startGame={!this.state.createGame} 
+                    clickEvent={this.toggleCreateGame} 
+                >
+                    <Announcements />
+                    <React.Fragment>
+                        {this.state.createGame ? 
+                            <CreateGameForm 
+                                exitFunc={this.toggleCreateGame}
+                            />
+                        :
+                        null 
+                        }
+                        <SortingFiltering 
+                            loggedIn={this.state.loggedIn}  
+                            currentLoc={this.state.currentLoc}
+                            faded={this.state.createGame}
                         />
-                    :
-                    null 
-                    }
-                    <SortingFiltering 
-                        loggedIn={this.state.loggedIn}  
-                        currentLoc={this.state.currentLoc}
-                        faded={this.state.createGame}
-                    />
-                </>
-            </Layout>
+                    </React.Fragment>
+                </Layout>
 
-            <style jsx>{`
-                .overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 100%;
-                    width: 100%;
-                    background-color: rgba(0,0,0,0.5);
-                    z-index: 10;
-                    animation-duration: .75s;
-                    animation-name: fadein;
-                }
-
-                @keyframes fadein {
-                    from {
-                        opacity: 0;
-                    } 
-                    
-                    to {
-                        opacity: 1;
+                <style jsx>{`
+                    .overlay {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                        background-color: rgba(0,0,0,0.5);
+                        z-index: 10;
+                        animation-duration: .75s;
+                        animation-name: fadein;
                     }
-                }
-            `}</style>
-            </>
+                    @keyframes fadein {
+                        from {
+                            opacity: 0;
+                        } 
+                        
+                        to {
+                            opacity: 1;
+                        }
+                    }
+                `}</style>
+            </React.Fragment>
         );   
     }
 }

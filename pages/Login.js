@@ -23,7 +23,7 @@ class Login extends Component {
             name: "",
             password: "",
             error: "",
-            location: []
+            location: [47.7169839910907, -122.32040939782564]
         }
     }
 
@@ -33,6 +33,7 @@ class Login extends Component {
                 location: [position.coords.latitude, position.coords.longitude]
             })
         })
+
     }
 
     handleChange = (input) => (e) => {

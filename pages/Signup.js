@@ -32,7 +32,7 @@ class Signup extends Component {
             age: 90,
             gender: "F",
             errors: [{message: ""}],
-            location: []
+            location: [47.7169839910907, -122.32040939782564]
         }
     }
 
@@ -42,6 +42,7 @@ class Signup extends Component {
                 location: [position.coords.latitude, position.coords.longitude]
             })
         })
+
     }
 
 
@@ -55,7 +56,7 @@ class Signup extends Component {
     render() {
         const { name, password, phoneNumber, age, gender, location } = this.state;
         const errors = [];
-        this.state.errors.forEach( error => {
+        this.state.errors.map( error => {
             errors.push(
             <li key={error.message}>
                 {error.message}
@@ -69,7 +70,7 @@ class Signup extends Component {
             <div>
                 <h1 style={{textAlign: 'center', paddingTop: '25px'}}>Signup for an Account</h1><br />
                 <div className="container">
-                    <div style={{gridColumn: '2 / 3'}}>
+                    <div style={{ gridColumn: '2 / 3' }}>
 
                         <span 
                             className="alert"
