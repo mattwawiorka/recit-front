@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import SortingFiltering from '../components/GamesFeed/SortingFiltering';
 import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
@@ -7,90 +7,73 @@ import { withApollo } from '../lib/apollo';
 import withAuth from '../lib/withAuth';
 import Loading from '../components/Loading/Loading';
 
-// const AuthContext = React.createContext(false);
+function Index(props) {
 
-class Index extends Component {
-    constructor(props) {
-        // props
-        super(props)
-        // state
-        this.state = {
-            loading: true,
-            loggedIn: this.props.auth.loggedIn(),
-            currentLoc: [47.7169839910907, -122.32040939782564],
-            createGame: false,
-        };
-    }
+    const [loading, setLoading] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(props.auth.loggedIn());
+    const [currentLoc, setCurrentLoc] = useState([47.7169839910907, -122.32040939782564]);
+    const [createGame, setCreateGame] = useState(false);
 
-    componentDidMount() {
+    useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({
-                currentLoc: [position.coords.latitude, position.coords.longitude],
-                loading: false
-            })
+            setCurrentLoc([position.coords.latitude, position.coords.longitude]);
         });
-    }
 
-    toggleCreateGame = () => {
-        this.setState({
-            createGame: !this.state.createGame
-        })
-    }
+        setLoading(false);
+    }, [])
 
-    render() {  
-        // if (this.state.loading) return <Loading />
+    if (loading) return <Loading />
 
-        return (
-            <React.Fragment>
-                {this.state.createGame ? <div className="overlay"></div> : null}
-                <Layout 
-                    main={true} 
-                    showGamesButton={true} 
-                    startGame={!this.state.createGame} 
-                    clickEvent={this.toggleCreateGame} 
-                >
-                    <Announcements />
-                    <React.Fragment>
-                        {this.state.createGame ? 
-                            <CreateGameForm 
-                                exitFunc={this.toggleCreateGame}
-                            />
-                        :
-                        null 
-                        }
-                        <SortingFiltering 
-                            loggedIn={this.state.loggedIn}  
-                            currentLoc={this.state.currentLoc}
-                            faded={this.state.createGame}
+    return (
+        <React.Fragment>
+            {createGame ? <div className="overlay"></div> : null}
+            <Layout 
+                main={true} 
+                showGamesButton={true} 
+                startGame={!createGame} 
+                clickEvent={() => setCreateGame(!createGame)} 
+            >
+                <Announcements />
+                <React.Fragment>
+                    {createGame ? 
+                        <CreateGameForm 
+                            exitFunc={() => setCreateGame(!createGame)}
                         />
-                    </React.Fragment>
-                </Layout>
+                    :
+                    null 
+                    }
+                    <SortingFiltering 
+                        loggedIn={loggedIn}  
+                        currentLoc={currentLoc}
+                        faded={createGame}
+                    />
+                </React.Fragment>
+            </Layout>
 
-                <style jsx>{`
-                    .overlay {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        height: 100%;
-                        width: 100%;
-                        background-color: rgba(0,0,0,0.5);
-                        z-index: 10;
-                        animation-duration: .75s;
-                        animation-name: fadein;
+            <style jsx>{`
+                .overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    background-color: rgba(0,0,0,0.5);
+                    z-index: 10;
+                    animation-duration: .75s;
+                    animation-name: fadein;
+                }
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
                     }
-                    @keyframes fadein {
-                        from {
-                            opacity: 0;
-                        } 
-                        
-                        to {
-                            opacity: 1;
-                        }
-                    }
-                `}</style>
-            </React.Fragment>
-        );   
-    }
+                }
+            `}</style>
+        </React.Fragment>
+    );   
 }
 
 export default withApollo(withAuth(Index));

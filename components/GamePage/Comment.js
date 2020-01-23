@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import dateTool from '../../lib/dateTool';
 import Link from 'next/link';
-import classNames from 'classnames'
+import classNames from 'classnames';
 
 function Comment(props) {
     const { comment, isOwner } = props;

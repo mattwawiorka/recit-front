@@ -26,7 +26,6 @@ function CommentList(props) {
 
     if (props.comments) {    
         props.comments.map((comment, index) => {
-            if (comment.node.type === 4) return
             if (props.comments.length === index + 1) {
                 rows.push(
                     <React.Fragment key={comment.node.id}>

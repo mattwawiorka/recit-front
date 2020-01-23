@@ -1,8 +1,9 @@
 import Header from '../Header/Header';
-import Navigation from '../Navigation/Navigation';
+import NavigationSource from '../Navigation/NotificationSource';
 import BottomDockable from '../BottomDockable/BottomDockable';
 import Meta from '../Meta';
 import classNames from 'classnames';
+import NotificationSource from '../Navigation/NotificationSource';
 
 function GamesLayout(props) {
 
@@ -17,7 +18,7 @@ function GamesLayout(props) {
         <Meta />
         <div className={containerClass}>
             <header>
-                <Navigation />
+                <NotificationSource />
             </header>
             <aside>
                 {props.children[0]}

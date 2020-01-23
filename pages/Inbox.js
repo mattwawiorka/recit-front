@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import gql from "graphql-tag";
 import { useQuery } from "react-apollo";
 import { withApollo } from '../lib/apollo';
@@ -5,6 +6,7 @@ import Loading from "../components/Loading/Loading";
 import Link from 'next/link';
 import Layout from '../components/Layout/Layout';
 import dateTool from '../lib/dateTool';
+import classNames from 'classnames';
 
 const INBOX = gql`
     query Inbox {
@@ -12,6 +14,7 @@ const INBOX = gql`
             edges {
                 conversation
                 forGame
+                isNew
                 node {
                     id
                     author
@@ -29,7 +32,17 @@ const INBOX = gql`
 function Inbox(props) {
     let threads = [];
 
-    const { data, loading, error } = useQuery(INBOX);
+    const [waiting, setWaiting] = useState(true);
+
+    const { data, loading, error, refetch } = useQuery(INBOX);
+    
+
+    useEffect(() => {
+        refetch();
+
+        setWaiting(false);
+    }, [])
+
     if (loading) return <Loading />
     if (error) {
         console.log(error)
@@ -45,6 +58,11 @@ function Inbox(props) {
                 font-size: 1.5em;
                 cursor: pointer;
                 margin-bottom: 0.5em;
+            }
+
+            .isNew {
+                background-color: orange;
+                border-radius: 5px;
             }
 
             .thread:hover {
@@ -69,16 +87,23 @@ function Inbox(props) {
                 width: 70%;
                 padding-left: 0.5em;
                 vertical-align: top;
+                overflow: hidden;
             }
         `}</style>
 
     data.inbox.edges.map( thread => {
+
+        const headingClass = classNames({
+            'thread-heading': true,
+            'isNew': thread.isNew
+        });
+
         if (thread.forGame && thread.node.type === 3) {
             threads.push(
                 <React.Fragment key={thread.node.id}>
                     <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
                         <div className="thread">
-                            <span className="thread-heading">
+                            <span className={headingClass}>
                                 <div>
                                     {thread.conversation}
                                 </div>
@@ -98,7 +123,7 @@ function Inbox(props) {
                 <React.Fragment key={thread.node.id}>
                     <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
                         <div className="thread">
-                            <span className="thread-heading">
+                            <span className={headingClass}>
                                 <div>
                                     {thread.conversation}
                                 </div>
@@ -118,7 +143,7 @@ function Inbox(props) {
                 <React.Fragment key={thread.node.id}>
                     <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
                         <div className="thread">
-                            <span className="thread-heading">
+                            <span className={headingClass}>
                                 <div>
                                     {thread.conversation}
                                 </div>
@@ -133,7 +158,9 @@ function Inbox(props) {
                 </React.Fragment>
             );
         } 
-    })
+    });
+
+    if (waiting) return <Loading />
 
     return (
         <React.Fragment>
@@ -148,7 +175,7 @@ function Inbox(props) {
 
             <style jsx>{`
                 .inbox-container {
-                    width: 70%;
+                    width: 75%;
                     margin-top: 2em;
                     transform: translate(-50%);
                     margin-left: 50%;
