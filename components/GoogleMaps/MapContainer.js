@@ -7,6 +7,8 @@ function MapContainer(props) {
 
   const handleApiLoaded = useCallback((map, maps) => {
 
+    console.log('map here')
+
     maps.event.addListener(map, 'dragend', () => {
       props.getMapBounds([
         map.getBounds().getNorthEast().lat(),

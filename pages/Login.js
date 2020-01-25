@@ -6,10 +6,11 @@ import cookie from 'js-cookie';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
+import API from '../api.json';
 
 const LOGIN = gql`
-    mutation Login($name: String!, $password: String!, $location: [Float]) {
-        login(name: $name, password: $password, location: $location) 
+    mutation Login($name: String!, $password: String!, $location: [Float], $city: String) {
+        login(name: $name, password: $password, location: $location, city: $city) 
         {
             token
         }
@@ -23,7 +24,7 @@ class Login extends Component {
             name: "",
             password: "",
             error: "",
-            location: [47.7169839910907, -122.32040939782564]
+            location: [47.716983, -122.320409]
         }
     }
 
@@ -64,25 +65,39 @@ class Login extends Component {
                     <div>
                         <Mutation 
                             mutation={LOGIN}
-                            variables={{ name, password, location }}
                         >
                             { Login => (    
                             <form onSubmit={e => {
                                 e.preventDefault();
-                                Login()
-                                .then(response => {
-                                    if (response.errors) {
-                                        this.setState({
-                                            error: response.errors[0].message
+                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.location[0]},${this.state.location[1]}&key=${API.key}`)
+                                .then((response) => {
+                                    return response.json()
+                                    .then(result => {
+                                        console.log(result.results[5].formatted_address)
+                                        Login({ variables: {
+                                            name: name,
+                                            password: password,
+                                            location: location,
+                                            city: result.results[5].formatted_address
+                                        }})
+                                        .then(response => {
+                                            if (response.errors) {
+                                                this.setState({
+                                                    error: response.errors[0].message
+                                                })
+                                                return;
+                                            }
+                                            cookie.set('token', response.data.login.token, { expires: 365 });
+                                            Router.push('/');
                                         })
-                                        return;
-                                    }
-                                    cookie.set('token', response.data.login.token, { expires: 365 });
-                                    Router.push('/');
+                                        .catch(error => {
+                                            console.log(error);
+                                        });
+                                    })
                                 })
-                                .catch(error => {
-                                    console.log(error);
-                                });
+
+                                
+                                
                             }}>
                                 <div className="form-group">
                                     <input 

@@ -66,7 +66,7 @@ class CreateGameForm extends Component {
 
         this.toggleEndTime();
 
-        this.descriptionInput.current.innerText = this.state.description
+        this.descriptionInput.current.innerText = new String(this.state.description);
 
         this.descriptionInput.current.addEventListener("input", e => {
             this.setState({

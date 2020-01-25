@@ -47,6 +47,8 @@ function NotificationSource(props) {
             loggedIn={props.auth.loggedIn()}
             user={props.auth.getUser()}
             userName={props.auth.getUserName()}
+            showLogout={props.showLogout}
+            logout={props.auth.logout}
             subscribeToNotifications={() => {
                 subscribeToMore({
                     document: NOTIFICATION_GAME,

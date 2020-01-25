@@ -18,7 +18,7 @@ function GamesLayout(props) {
         <Meta />
         <div className={containerClass}>
             <header>
-                <NotificationSource />
+                <NotificationSource showLogout={props.showLogout}/>
             </header>
             <aside>
                 {props.children[0]}

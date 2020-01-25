@@ -58,10 +58,12 @@ function Inbox(props) {
                 font-size: 1.5em;
                 cursor: pointer;
                 margin-bottom: 0.5em;
+                color: #616770;
             }
 
             .isNew {
-                background-color: orange;
+                // background-color: orange;
+                color: black;
                 border-radius: 5px;
             }
 
@@ -79,7 +81,8 @@ function Inbox(props) {
 
             .date-time {
                 color: #616770;
-                font-size: 0.8em;
+                font-size: 0.7em;
+                font-style: italic;
             }
 
             .thread-content {
@@ -93,8 +96,8 @@ function Inbox(props) {
 
     data.inbox.edges.map( thread => {
 
-        const headingClass = classNames({
-            'thread-heading': true,
+        const threadClass = classNames({
+            'thread': true,
             'isNew': thread.isNew
         });
 
@@ -102,8 +105,8 @@ function Inbox(props) {
             threads.push(
                 <React.Fragment key={thread.node.id}>
                     <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
-                        <div className="thread">
-                            <span className={headingClass}>
+                        <div className={threadClass}>
+                            <span className="thread-heading">
                                 <div>
                                     {thread.conversation}
                                 </div>
@@ -122,8 +125,8 @@ function Inbox(props) {
             threads.push(
                 <React.Fragment key={thread.node.id}>
                     <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
-                        <div className="thread">
-                            <span className={headingClass}>
+                        <div className={threadClass}>
+                            <span className="thread-heading">
                                 <div>
                                     {thread.conversation}
                                 </div>
@@ -142,8 +145,8 @@ function Inbox(props) {
             threads.push(
                 <React.Fragment key={thread.node.id}>
                     <Link href='/Game/[game]' as={`/Game/${thread.node.gameId}`} shallow={true} >
-                        <div className="thread">
-                            <span className={headingClass}>
+                        <div className={threadClass}>
+                            <span className="thread-heading">
                                 <div>
                                     {thread.conversation}
                                 </div>

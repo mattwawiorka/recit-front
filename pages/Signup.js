@@ -7,15 +7,16 @@ import { Mutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
 import cookie from 'js-cookie';
+import API from '../api.json';
 
 const SIGNUP = gql`
-    mutation CreateUser($userInput: userInput, $name: String!, $password: String!, $location: [Float]) {
+    mutation CreateUser($userInput: userInput, $name: String!, $password: String!, $location: [Float], $city: String) {
         createUser(userInput: $userInput) 
         {
             name
         }
 
-        login(name: $name, password: $password, location: $location) 
+        login(name: $name, password: $password, location: $location, city: $city) 
         {
             token
         }
@@ -29,7 +30,7 @@ class Signup extends Component {
             name: "",
             password: "",
             phoneNumber: "(123)123-1234",
-            age: 90,
+            dob: "",
             gender: "F",
             errors: [{message: ""}],
             location: [47.7169839910907, -122.32040939782564]
@@ -54,7 +55,7 @@ class Signup extends Component {
     };
 
     render() {
-        const { name, password, phoneNumber, age, gender, location } = this.state;
+        const { name, password, phoneNumber, dob, gender, location } = this.state;
         const errors = [];
         this.state.errors.map( error => {
             errors.push(
@@ -81,37 +82,43 @@ class Signup extends Component {
 
                         <Mutation 
                             mutation={SIGNUP}
-                            variables={{ userInput: {
-                                name: name,
-                                password: password,
-                                phoneNumber: phoneNumber,
-                                age: parseInt(age),
-                                gender: gender
-                            }, name: name, password: password, location: location }}
                         >
                             { Signup => (  
                             <form onSubmit={e => {
                                 e.preventDefault();
-                                Signup()
-                                .then(response => {
-                                    console.log(response)
-                                    if (response.errors) {
-                                        this.setState({
-                                            errors: response.errors[0].data
+                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.location[0]},${this.state.location[1]}&key=${API.key}`)
+                                .then((response) => {
+                                    return response.json()
+                                    .then(result => {
+                                        Signup({ variables: 
+                                            { userInput: {
+                                                name: name,
+                                                password: password,
+                                                phoneNumber: phoneNumber,
+                                                dob: dob,
+                                                gender: gender
+                                            }, name: name, password: password, location: location, city: result.results[5].formatted_address }
                                         })
-                                        return;
-                                    }
-                                    cookie.set('token', response.data.login.token, { expires: 1 })
-                                    console.log(Router.query)
-                                    if (Router.query.invited) {
-                                        Router.push('/Game/[game]', `/Game/${Router.query.game}`);
-                                    } else {
-                                        Router.push('/');
-                                    } 
+                                        .then(response => {
+                                            if (response.errors) {
+                                                this.setState({
+                                                    errors: response.errors[0].data
+                                                })
+                                                return;
+                                            }
+                                            cookie.set('token', response.data.login.token, { expires: 1 })
+                                            if (Router.query.invited) {
+                                                Router.push('/Game/[game]', `/Game/${Router.query.game}`);
+                                            } else {
+                                                Router.push('/');
+                                            } 
+                                        })
+                                        .catch(error => {
+                                            console.log(error)
+                                        });
+                                    })
                                 })
-                                .catch(error => {
-                                    console.log(error)
-                                });
+                                
                             }}>
                                 <div className="form-group">
                                     <label className="text-muted">Name</label>
@@ -145,13 +152,12 @@ class Signup extends Component {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label className="text-muted">Age</label>
+                                    <label className="text-muted">Birth Date</label>
                                     <input 
-                                        onChange={this.handleChange("age")} 
-                                        type="number" 
+                                        onChange={this.handleChange("dob")} 
+                                        type="date" 
                                         className="input-fields"
-                                        value={age} 
-                                        placeholder="Age"
+                                        value={dob} 
                                     />
                                 </div>
                                 <div className="form-group">
@@ -159,6 +165,7 @@ class Signup extends Component {
                                     <select className="input-fields" value={gender} placeholder="" onChange={this.handleChange("gender")}>
                                         <option value="M">Male</option>
                                         <option value="F">Female</option>
+                                        <option value="N">Non-binary</option>
                                     </select>
                                 </div>
                                 <input type="submit" value="Submit" />

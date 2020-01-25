@@ -91,22 +91,36 @@ function Navigation(props) {
                             </div>
                         </Link>
                         <div className="links">
-                            <Link href='/Inbox'>
+                            <Link href='/Inbox' shallow={true}>
                                 {props.unread > 0 ? <a>{"Inbox (" + props.unread + ")"}</a> : <a>Inbox</a>}
                             </Link>
+                            {props.showLogout ?
+                            <a 
+                                href="/" 
+                                onClick={props.logout}
+                            >Logout</a> 
+                            :
                             <Link href='/Profile/[user]' as={`/Profile/${props.user}`}>
                                 <a>{props.userName}</a>
                             </Link>
+                            }
                         </div>
                         <i className="material-icons menu" onClick={() => setShowDropDown(!showDropDown)} ref={button}>menu</i>
                     </div>
                     <div className={dropDownClass} ref={dropdown}>
-                        <Link href='/Inbox'>
+                        <Link href='/Inbox' shallow={true}>
                             <a>Inbox</a>
                         </Link>
+                        {props.logout ?
+                        <a 
+                            href="/" 
+                            onClick={props.logout}
+                        >Logout</a> 
+                        :
                         <Link href='/Profile/[user]' as={`/Profile/${props.user}`}>
                             <a>{props.userName}</a>
                         </Link>
+                        }
                     </div>
                 </nav>
             

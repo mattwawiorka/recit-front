@@ -1,6 +1,5 @@
 import Layout from '../../components/Layout/Layout';
 import UserProfile from '../../components/UserProfile/UserProfile';
-import MyProfile from '../../components/UserProfile/MyProfile';
 import MyGames from '../../components/UserProfile/MyGames';
 import FriendsList from '../../components/UserProfile/FriendsList';
 import { useRouter } from 'next/router';
@@ -9,6 +8,7 @@ import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo';
 import Loading from '../../components/Loading/Loading';
 import withAuth from '../../lib/withAuth';
+import dateTool from '../../lib/dateTool';
 
 const GET_USER = gql`
   query User($id: ID!) {
@@ -16,9 +16,11 @@ const GET_USER = gql`
         id
         name
         createdAt
-        age
+        dob
         gender
         status
+        profilePic
+        city
     }
   }
   `;
@@ -36,22 +38,19 @@ function ProfilePage(props) {
 
     let profile;
 
-    const { loading, error, data } = useQuery(GET_USER, {variables: {id: user}});
+    const { loading, error, data, refetch } = useQuery(GET_USER, {variables: {id: user}});
 
     if (loading) return <Loading />
     if (error) return <h1>ERROR</h1>
 
-    if (props.auth.getUser() === user) {
-        profile = <MyProfile user={data.user} userId={user} /> 
-    }
-    else {
-        profile = <UserProfile user={data.user} userId={user} />
-    }
+    const age = dateTool.getAge(data.user.dob);
+    const joinDate = new Date(parseInt(data.user.createdAt));
+    const joinString = dateTool.getMonth(joinDate.getMonth()) + " " + joinDate.getFullYear();
     
     return (
-        <Layout main={false} >
+        <Layout main={false} showLogout={props.auth.getUser() === user}>
             <MyGames />
-            {profile} 
+            <UserProfile refetch={refetch} owner={props.auth.getUser() === user} user={data.user} age={age} joinDate={joinString} userId={user} token={props.auth.getToken()} /> 
             <FriendsList />
         </Layout>
     ) 

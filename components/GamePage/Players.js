@@ -10,6 +10,7 @@ const GET_PLAYERS = gql`
       userId
       name
       role
+      profilePic
     }
   }
 `;
@@ -58,7 +59,7 @@ function Players(props) {
     conversationId: props.conversationId
   }
 
-  const { data, loading, error, subscribeToMore } = useQuery(GET_PLAYERS, { variables: variables }); 
+  const { data, loading, error, subscribeToMore, refetch } = useQuery(GET_PLAYERS, { variables: variables }); 
   const [joinGame] = useMutation(JOIN_GAME, { variables: variables });
   const [leaveGame] = useMutation(LEAVE_GAME, { variables: variables });
   if (loading) return <Loading />
@@ -104,7 +105,7 @@ function Players(props) {
         onClick={() => {
           leaveGame()
           .then(response => {
-            console.log(response)
+            refetch();
           }) 
         }} 
         className="btn"
@@ -119,7 +120,7 @@ function Players(props) {
         onClick={() => {
           joinGame()
           .then(response => {
-            console.log(response)
+            refetch();
           }) 
         }} 
         className="btn"
