@@ -27,9 +27,13 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
       hasNextPage
     }
   }
+}
+`;
 
-  userGames {
-    edges {
+const MY_GAMES = gql`
+  query MyGames($cursor: String) {
+    userGames(cursor: $cursor) {
+      edges {
         node {
           id
           title
@@ -37,10 +41,14 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
           dateTime
         }
         role
+      }
+      totalCount
+      pageInfo {     
+        endCursor
+        hasNextPage
+      }
     }
-    activeCount
   }
-}
 `;
 
 const GAME_ADDED = gql`
@@ -85,12 +93,16 @@ function GameSource(props) {
     }
   }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 
-  const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, {variables: variables, ssr: true});
+  const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, { variables: variables, ssr: true });
+  const { data: data_myGames, loading: loading_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES);
   if (loading) return <Loading />
+  if (loading_myGames) return <Loading />
   if (error) {
     console.log(error)
     return <p>Error</p>
   }
+
+  console.log(data_myGames)
 
   return (
     <>
@@ -102,7 +114,30 @@ function GameSource(props) {
       bounds={props.bounds}
       zoom={props.zoom}
       games={data.games.edges || []} 
-      myGames={data.userGames.edges || []}
+      myGames={data_myGames.userGames.edges || []}
+      activeCount={data_myGames.userGames.totalCount}
+      hasMore_myGames={data_myGames.userGames.pageInfo.hasNextPage}
+      loadMore_myGames={() =>
+        fetchMore_myGames({
+          variables: { cursor: data_myGames.userGames.pageInfo.endCursor },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            console.log(prev,fetchMoreResult)
+            if (fetchMoreResult.userGames.edges.length === 0) return prev;
+            const newMyGameFeed = Object.assign({}, prev, { userGames: {
+              edges: [...prev.userGames.edges, ...fetchMoreResult.userGames.edges], 
+              totalCount: prev.userGames.totalCount,
+              pageInfo: {
+                endCursor: fetchMoreResult.userGames.pageInfo.endCursor,
+                hasNextPage: fetchMoreResult.userGames.pageInfo.hasNextPage,
+                __typename: "PageInfo"
+              }, 
+              __typename: "GameFeed"
+            }
+            });
+            return newMyGameFeed
+          }
+        })
+      }
       hasMore={data.games.pageInfo.hasNextPage}
       sortOrder={props.sortOrder}
       loadMore={() => 

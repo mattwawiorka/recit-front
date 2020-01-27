@@ -113,6 +113,8 @@ function SortingFiltering(props) {
                         </select>
                     </div>
 
+                    
+                    {/* Disable sorting by open spots, at least for now
                     <div className="form-group">
                         <label className="header">Sort Order</label>
                         <select 
@@ -123,7 +125,8 @@ function SortingFiltering(props) {
                             <option value="DATE">Date</option>
                             <option value="SPOTS" >Open Spots</option>
                         </select>
-                    </div>
+                    </div> 
+                    */}
                     
                 </form>
             </aside>
@@ -135,6 +138,7 @@ function SortingFiltering(props) {
                     padding-right: 
                     height: auto; 
                     padding: 1.2em 1.2em 0 0.5em;
+                    overflow: hidden;
                 }
 
                 .sort-toggle-button {

@@ -268,6 +268,9 @@ function GamesPrep(props) {
                 {myGames.length > 0 && props.loggedIn ?
                 <MyGames 
                     myGames={myGames}
+                    activeCount={props.activeCount}
+                    hasMore={props.hasMore_myGames}
+                    loadMore={props.loadMore_myGames}
                 />  
                 :
                 null}

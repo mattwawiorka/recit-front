@@ -39,7 +39,6 @@ function GameList(props) {
             background-color: white;
             border-radius: 15px;
             margin-left: 1em;
-            overflow: auto;
           }
     
           #upcomingGames {
@@ -195,7 +194,7 @@ function GameList(props) {
           background-color: white;
           border-radius: 15px;
           margin-left: 1em;
-          overflow: auto;
+          // overflow: hidden;
         }
 
         .list-title {

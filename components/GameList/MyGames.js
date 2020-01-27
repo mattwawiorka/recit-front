@@ -8,14 +8,20 @@ function MyGames(props) {
     return (
         <React.Fragment>
             <div className="list-container" >
-                <h3 className="list-title">{"You have " + props.myGames.length + " upcoming game" + (moreGames ? "s!" : "!")}</h3>
+                <h3 className="list-title">{"You have " + props.activeCount + " upcoming game" + (moreGames ? "s!" : "!")}</h3>
                 
                 {props.myGames[0]}
 
                 <div className="full-list">
                     {showList ? props.myGames.slice(1) : null}
                 </div>
-                
+
+                {(showList && props.hasMore) ?
+                <button className="btn-expand-list btn-load-more" onClick={props.loadMore}>
+                    Load more
+                </button>
+                :
+                null}
             </div>
 
             {moreGames ?
@@ -39,6 +45,7 @@ function MyGames(props) {
                 border-radius: 15px;
                 margin-left: 1em;
                 overflow: auto;
+                padding-top: 0.5em;
             }
     
             .list-title {
@@ -61,6 +68,16 @@ function MyGames(props) {
                 border-bottom-right-radius: 35px;
                 cursor: pointer;
                 outline: none;
+            }
+
+            .btn-load-more {
+                transform: translate(0%);
+                margin-left: 0%;
+                margin-top: 0.5em;
+            }
+
+            .btn-expand-list:hover {
+                
             }
     
             // @media only screen and (max-width: 700px) {

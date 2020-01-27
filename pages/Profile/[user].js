@@ -1,7 +1,5 @@
 import Layout from '../../components/Layout/Layout';
 import UserProfile from '../../components/UserProfile/UserProfile';
-import MyGames from '../../components/UserProfile/MyGames';
-import FriendsList from '../../components/UserProfile/FriendsList';
 import { useRouter } from 'next/router';
 import { withApollo } from '../../lib/apollo';
 import gql from 'graphql-tag';
@@ -11,8 +9,8 @@ import withAuth from '../../lib/withAuth';
 import dateTool from '../../lib/dateTool';
 
 const GET_USER = gql`
-  query User($id: ID!) {
-    user(id: $id) {
+  query User($userId: ID!, $pastGames: Boolean) {
+    user(userId: $userId) {
         id
         name
         createdAt
@@ -22,6 +20,23 @@ const GET_USER = gql`
         profilePic
         city
     }
+
+    userGames(userId: $userId, pastGames: $pastGames) {
+        edges {
+            node {
+              id
+              title
+              sport
+              dateTime
+            }
+            cursor
+        }
+        pageInfo {     
+            endCursor
+            hasNextPage
+        }
+    }
+    
   }
   `;
 
@@ -36,12 +51,19 @@ function ProfilePage(props) {
 
     const { user } = router.query;
 
-    let profile;
-
-    const { loading, error, data, refetch } = useQuery(GET_USER, {variables: {id: user}});
+    const { loading, error, data, refetch } = useQuery(GET_USER, 
+        { variables: 
+            { 
+                userId: user,
+                pastGames: true
+            }
+        }
+    );
 
     if (loading) return <Loading />
     if (error) return <h1>ERROR</h1>
+
+    console.log(data)
 
     const age = dateTool.getAge(data.user.dob);
     const joinDate = new Date(parseInt(data.user.createdAt));
@@ -49,9 +71,16 @@ function ProfilePage(props) {
     
     return (
         <Layout main={false} showLogout={props.auth.getUser() === user}>
-            <MyGames />
-            <UserProfile refetch={refetch} owner={props.auth.getUser() === user} user={data.user} age={age} joinDate={joinString} userId={user} token={props.auth.getToken()} /> 
-            <FriendsList />
+            <br />
+            <UserProfile 
+                refetch={refetch} 
+                owner={props.auth.getUser() === user} 
+                user={data.user} age={age} 
+                joinDate={joinString} 
+                userId={user} 
+                token={props.auth.getToken()} 
+            /> 
+            <br />
         </Layout>
     ) 
 }
