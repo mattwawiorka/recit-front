@@ -94,15 +94,13 @@ function GameSource(props) {
   }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, { variables: variables, ssr: true });
-  const { data: data_myGames, loading: loading_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES);
+  const { data: data_myGames, loading: loading_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES, { skip: !props.loggedIn });
   if (loading) return <Loading />
   if (loading_myGames) return <Loading />
   if (error) {
     console.log(error)
     return <p>Error</p>
   }
-
-  console.log(data_myGames)
 
   return (
     <>
@@ -114,14 +112,13 @@ function GameSource(props) {
       bounds={props.bounds}
       zoom={props.zoom}
       games={data.games.edges || []} 
-      myGames={data_myGames.userGames.edges || []}
-      activeCount={data_myGames.userGames.totalCount}
-      hasMore_myGames={data_myGames.userGames.pageInfo.hasNextPage}
+      myGames={data_myGames ? data_myGames.userGames.edges : []}
+      activeCount={data_myGames ? data_myGames.userGames.totalCount : 0}
+      hasMore_myGames={data_myGames ? data_myGames.userGames.pageInfo.hasNextPage : false}
       loadMore_myGames={() =>
         fetchMore_myGames({
           variables: { cursor: data_myGames.userGames.pageInfo.endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
-            console.log(prev,fetchMoreResult)
             if (fetchMoreResult.userGames.edges.length === 0) return prev;
             const newMyGameFeed = Object.assign({}, prev, { userGames: {
               edges: [...prev.userGames.edges, ...fetchMoreResult.userGames.edges], 

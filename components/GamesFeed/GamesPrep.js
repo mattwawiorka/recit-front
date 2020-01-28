@@ -203,17 +203,7 @@ function GamesPrep(props) {
     });
 
     // Set data for my games
-    const sortedMyGames = props.myGames.sort( (a,b) => {
-        let comparison;
-        if (parseInt(a.node.dateTime) > parseInt(b.node.dateTime)) {
-            comparison = 1;
-        } else {
-            comparison = -1;
-        }
-        return comparison;
-    })
-
-    sortedMyGames.map(game => {
+    props.myGames.map(game => {
         let row;
 
         if (game.node.sport === 'TENNIS') {

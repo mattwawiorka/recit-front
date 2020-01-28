@@ -9,7 +9,7 @@ import withAuth from '../../lib/withAuth';
 import dateTool from '../../lib/dateTool';
 
 const GET_USER = gql`
-  query User($userId: ID!, $pastGames: Boolean) {
+  query User($userId: ID!, $cursor: String, $pastGames: Boolean) {
     user(userId: $userId) {
         id
         name
@@ -18,10 +18,13 @@ const GET_USER = gql`
         gender
         status
         profilePic
+        pic1
+        pic2
+        pic3
         city
     }
 
-    userGames(userId: $userId, pastGames: $pastGames) {
+    userGames(userId: $userId, cursor: $cursor, pastGames: $pastGames) {
         edges {
             node {
               id
@@ -31,11 +34,14 @@ const GET_USER = gql`
             }
             cursor
         }
+        totalCount
         pageInfo {     
             endCursor
             hasNextPage
         }
     }
+
+    topSport(userId: $userId)
     
   }
   `;
@@ -51,7 +57,7 @@ function ProfilePage(props) {
 
     const { user } = router.query;
 
-    const { loading, error, data, refetch } = useQuery(GET_USER, 
+    const { loading, error, data, refetch, fetchMore } = useQuery(GET_USER, 
         { variables: 
             { 
                 userId: user,
@@ -61,7 +67,10 @@ function ProfilePage(props) {
     );
 
     if (loading) return <Loading />
-    if (error) return <h1>ERROR</h1>
+    if (error) {
+        console.log(error)
+        return <h1>ERROR</h1>
+    } 
 
     console.log(data)
 
@@ -75,10 +84,35 @@ function ProfilePage(props) {
             <UserProfile 
                 refetch={refetch} 
                 owner={props.auth.getUser() === user} 
-                user={data.user} age={age} 
+                user={data.user} 
+                age={age} 
                 joinDate={joinString} 
                 userId={user} 
                 token={props.auth.getToken()} 
+                pastGames={data.userGames.edges}
+                gamesPlayed={data.userGames.totalCount || 0}
+                hasMore={data.userGames.pageInfo.hasNextPage || false}
+                topSport={data.topSport}
+                loadMore={() =>
+                    fetchMore({
+                        variables: { cursor: data.userGames.pageInfo.endCursor },
+                        updateQuery: (prev, { fetchMoreResult }) => {
+                          if (fetchMoreResult.userGames.edges.length === 0) return prev;
+                          const newMyGameFeed = Object.assign({}, prev, { userGames: {
+                            edges: [...prev.userGames.edges, ...fetchMoreResult.userGames.edges], 
+                            totalCount: prev.userGames.totalCount,
+                            pageInfo: {
+                              endCursor: fetchMoreResult.userGames.pageInfo.endCursor,
+                              hasNextPage: fetchMoreResult.userGames.pageInfo.hasNextPage,
+                              __typename: "PageInfo"
+                            }, 
+                            __typename: "GameFeed"
+                          }
+                          });
+                          return newMyGameFeed
+                        }
+                    })
+                }
             /> 
             <br />
         </Layout>

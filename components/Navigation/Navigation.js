@@ -23,7 +23,8 @@ function Navigation(props) {
     const style = <style jsx="true">{`
         nav {
             display: grid;
-            grid-template-rows: minmax(min-content, 10vh) min-content;
+            padding-top: 0.5em;
+            // grid-template-rows: minmax(min-content, 10vh) min-content;
         }
         nav .content {
             display: grid;
@@ -38,7 +39,7 @@ function Navigation(props) {
         }
         .links > a {
             color: white;
-            font-size: 2em;
+            font-size: 1.5em;
             font-weight: bold;
             text-align: center;
         }
@@ -87,7 +88,7 @@ function Navigation(props) {
                         <Link href="/">
                             <div className="nav-title">
                                 <img src="/rec-it.png" alt="Recit"
-                                style={{ width: '64px', height: '64px', borderRadius: '10px'}}/>
+                                style={{ width: '48px', height: '48px', borderRadius: '10px'}}/>
                             </div>
                         </Link>
                         <div className="links">

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo';
+import dateTool from '../../lib/dateTool';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($id: ID!, $userInput: userInput) {
@@ -12,6 +13,7 @@ const UPDATE_USER = gql`
 `;
 
 function UserProfile(props) {
+    let pastGames = [], image;
 
     const [editMode, setEditMode] = useState(false);
     const [name, setName] = useState();
@@ -19,10 +21,19 @@ function UserProfile(props) {
     const [gender, setGender] = useState();
     const [status, setStatus] = useState(props.user.status);
     const [picMode, setPicMode] = useState(false);
-    const [newPic, setNewPic] = useState(null);
-    const [picPreview, setPicPreview] = useState(null);
+    // Store new pic file and new pic object url for preview for each of the 4 pics
+    const [newProfile, setNewProfile] = useState(null);
+    const [profilePreview, setProfilePreview] = useState(null);
+    const [newPic1, setNewPic1] = useState(null);
+    const [pic1Preview, setPic1Preview] = useState(null);
+    const [newPic2, setNewPic2] = useState(null);
+    const [pic2Preview, setPic2Preview] = useState(null);
+    const [newPic3, setNewPic3] = useState(null);
+    const [pic3Preview, setPic3Preview] = useState(null);
+    // Which pic is being viewed in the pic viewer
+    const [viewerPic, setViewerPic] = useState(null);
+    const [viewing, setViewing] = useState(null);
 
-    const statusInput = useRef();
     const overlay = useRef();
 
     const [updateProfile] = useMutation(UPDATE_USER);
@@ -43,7 +54,7 @@ function UserProfile(props) {
         }
         
         // list allow mime type
-        const types = ['image/png', 'image/jpeg', 'image/gif']
+        const types = ['image/png', 'image/jpeg', 'image/jpg']
 
         // compare file type find doesn't matach
         if (types.every(type => files[0].type !== type)) {
@@ -58,15 +69,81 @@ function UserProfile(props) {
         }
 
         return true;
-    }, [])
+    }, []);
+
+    props.pastGames.map( (game, index) => {
+        let row;
+
+        if (game.node.sport === 'TENNIS') {
+            image = "/tennis-ball.svg";
+        } 
+        else if (game.node.sport === 'BASKETBALL') {
+            image = "/basketball.svg";
+        }
+        else if (game.node.sport === 'FOOTBALL') {
+            image = "/american-football.svg";
+        } 
+        else {
+            image = "/rec-it.png";
+        }
+
+        row = 
+            <React.Fragment key={game.node.id}>
+                <div className="past-game" ref={(index + 1 === props.pastGames.length) ? lastGameRef : null}>
+                    <img className="sport-image" src={image} />
+                    <div className="game-title">{game.node.title}</div>
+                    <div className="game-date">{dateTool.getMonthYear(game.node.dateTime)}</div>
+                </div>
+
+                <style jsx="true">{`
+                    .past-game {
+                        display: block;
+                        width: 100%;
+                        color: white;
+                        font-weight: bold;
+                        display: flex;
+                        justify-content: space-between;
+                        min-height: 4em;
+                        max-height: 6em;
+                        padding: 0.5em;
+                        overflow: hidden;
+                        font-style: italic;
+                    }
+
+                    .sport-image {
+                        display: inline-block;
+                        width: 2.5em;
+                        height: 2.5em;
+                    }
+
+                    .game-title {
+                        display: inline-block;
+                    }
+
+                    .game-date {
+                        display: inline-block;
+                    }
+                `}</style>
+            </React.Fragment>
+
+        pastGames.push(row)
+    });
+
+    const observer = useRef();
+    const lastGameRef = useCallback(node => {
+        if (observer.current) observer.current.disconnect()
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {    
+                observer.current.disconnect();
+                if (props.hasMore) {
+                    props.loadMore();
+                } 
+            }
+        })
+        if (node) observer.current.observe(node)
+    },[props.pastGames, props.hasMore])
 
     useEffect(() => {
-        statusInput.current.innerText = new String(status);
-        statusInput.current.addEventListener("input", e => {
-            console.log(e.target.innerText)
-            setStatus(e.target.innerText);
-        })
-
         if (overlay.current) {
             overlay.current.addEventListener("click", e => {
                 setPicMode(false)
@@ -81,9 +158,13 @@ function UserProfile(props) {
                 <section className="user-main">
                     <article className="profile-pic"> 
                         <img 
-                            src={picPreview ? picPreview : 'http://localhost:8080/images/' + props.user.profilePic}
+                            src={profilePreview ? profilePreview : 'http://localhost:8080/images/' + props.user.profilePic}
                             className="image-round"
-                            onClick={() => setPicMode(true)}
+                            onClick={() => {
+                                setViewerPic(profilePreview ? profilePreview : 'http://localhost:8080/images/' + props.user.profilePic);
+                                setViewing('profile');
+                                setPicMode(true);
+                            }}
                         />
                     </article>
 
@@ -91,9 +172,9 @@ function UserProfile(props) {
                     <div className="pic-viewer" >
                         <label htmlFor="profile-upload" className="btn-pic-upload">
                         <img 
-                            src={picPreview ? picPreview : 'http://localhost:8080/images/' + props.user.profilePic}
+                            src={viewerPic}
                             className="image-round"
-                            onClick={() => setPicMode(true)}
+                            // onClick={() => setPicMode(true)}
                         />
                         </label>
                         {props.owner ?
@@ -102,9 +183,24 @@ function UserProfile(props) {
                             id="profile-upload"
                             onChange={ e => {
                                 if (fileCheck(e)) {
-                                    setNewPic(e.target.files[0]);
-                                    setPicPreview(URL.createObjectURL(e.target.files[0]));
+                                    if (viewing === 'profile') {
+                                        setNewProfile(e.target.files[0]);
+                                        setProfilePreview(URL.createObjectURL(e.target.files[0]));
+                                    }
+                                    else if (viewing === 'pic1') {
+                                        setNewPic1(e.target.files[0]);
+                                        setPic1Preview(URL.createObjectURL(e.target.files[0]));
+                                    }
+                                    else if (viewing === 'pic2') {
+                                        setNewPic2(e.target.files[0]);
+                                        setPic2Preview(URL.createObjectURL(e.target.files[0]));
+                                    }
+                                    else if (viewing === 'pic3') {
+                                        setNewPic3(e.target.files[0]);
+                                        setPic3Preview(URL.createObjectURL(e.target.files[0]));
+                                    }
                                 }
+                                setPicMode(false);
                             }}
                         />
                         :
@@ -119,22 +215,32 @@ function UserProfile(props) {
                         <h1 className="name">{props.user.name}</h1>
                         {props.owner ? 
                         <React.Fragment>
-                            {(editMode || newPic) ?
+                            {(editMode || newProfile || newPic1 || newPic2 || newPic3) ?
                             <React.Fragment>
                                 <button 
                                     className="btn-edit"
                                     onClick={() => {
                                         setEditMode(false);
-                                        setNewPic(null);
-                                        setPicPreview(null);
+                                        setNewProfile(null);
+                                        setProfilePreview(null);
+                                        setNewPic1(null);
+                                        setPic1Preview(null);
+                                        setNewPic2(null);
+                                        setPic2Preview(null);
+                                        setNewPic3(null);
+                                        setPic3Preview(null);
                                     }}
                                 >Cancel</button>
                                 <button 
                                     className="btn-edit btn-save"
                                     onClick={() => {
-                                        if (newPic) {
+                                        // If uploading pics, make REST API request
+                                        if (newProfile || newPic1 || newPic2 || newPic3) {
                                             const data = new FormData();
-                                            data.append('file', newPic);
+                                            data.append('file', newProfile);
+                                            data.append('file', newPic1);
+                                            data.append('file', newPic2);
+                                            data.append('file', newPic3);
 
                                             fetch('http://localhost:8080/post-image', {
                                                 method: 'POST',
@@ -147,7 +253,10 @@ function UserProfile(props) {
                                                 updateProfile({ variables: {
                                                     id: props.userId,
                                                     userInput: {
-                                                        profilePic: "profile_" + props.user.id + '.' + newPic.name.split('.')[1],
+                                                        profilePic: newProfile ? "/" + props.user.id + "/" + newProfile.name : null,
+                                                        pic1: newPic1 ? "/" + props.user.id + '/' + newPic1.name : null,
+                                                        pic2: newPic2 ? "/" + props.user.id + '/' + newPic2.name : null,
+                                                        pic3: newPic3 ? "/" + props.user.id + '/' + newPic3.name : null,
                                                         name: name,
                                                         dob: dob,
                                                         gender: gender,
@@ -155,12 +264,14 @@ function UserProfile(props) {
                                                     }
                                                 }})
                                                 .then( response => {
-                                                    setNewPic(null);
+                                                    setNewProfile(null);
+                                                    setNewPic1(null);
+                                                    setNewPic2(null);
+                                                    setNewPic3(null);
                                                     setEditMode(false);
                                                 })
                                             })
                                         } else {
-                                            console.log(status)
                                             updateProfile({ variables: {
                                                 id: props.userId,
                                                 userInput: {
@@ -236,16 +347,70 @@ function UserProfile(props) {
                     </article>
 
                     <article className="status">
-                        <div
+                        <textarea
                             className="status-input"
-                            ref={statusInput}
-                            contentEditable={editMode}
-                            suppressContentEditableWarning={true}      
+                            readOnly={!props.owner || !editMode}
+                            defaultValue={props.user.status}    
                             autoComplete="off"
                             maxLength="250"
+                            onChange={e => {
+                                if (e.target.value.split('\n').length > 17) {
+                                    return;
+                                }
+                                setStatus(e.target.value)
+                            }}
                         />
                     </article>
                 </section>
+
+                <section className="player-history">
+                    <div className="stats">
+                        <p className="stats-title">Games played: <span className="stat">{props.gamesPlayed}</span></p>
+                        <p className="stats-title">Top sport: <span className="stat">{props.topSport.charAt(0) + props.topSport.substring(1).toLowerCase()}</span></p>
+                    </div>
+                    {pastGames}
+                </section>
+
+                <section className="pic-gallery">
+                    <div className="pic-carousel">
+
+                    
+                    <div className="gallery-pic">
+                        <img 
+                            src={pic1Preview ? pic1Preview : 'http://localhost:8080/images/' + props.user.pic1}
+                            className="image-round"
+                            onClick={() => {
+                                setPicMode(true);
+                                setViewerPic(pic1Preview ? pic1Preview : 'http://localhost:8080/images/' + props.user.pic1);
+                                setViewing('pic1');
+                            }}
+                        />
+                    </div>
+                    <div className="gallery-pic">
+                        <img 
+                            src={pic2Preview ? pic2Preview : 'http://localhost:8080/images/' + props.user.pic2}
+                            className="image-round"
+                            onClick={() => {
+                                setPicMode(true);
+                                setViewerPic(pic2Preview ? pic2Preview : 'http://localhost:8080/images/' + props.user.pic2)
+                                setViewing('pic2');
+                            }}
+                        />
+                    </div>
+                    <div className="gallery-pic">
+                        <img 
+                            src={pic3Preview ? pic3Preview : 'http://localhost:8080/images/' + props.user.pic3}
+                            className="image-round"
+                            onClick={() => {
+                                setPicMode(true);
+                                setViewerPic(pic3Preview ? pic3Preview : 'http://localhost:8080/images/' + props.user.pic3)
+                                setViewing('pic3');
+                            }}
+                        />
+                    </div>
+                    </div>
+                </section>
+
             </div>
                 
 
@@ -262,6 +427,10 @@ function UserProfile(props) {
                     animation-name: fadein;
                 }
 
+                br {
+                    line-height: 0.5em;
+                }
+
                 .pic-viewer {
                     z-index: 11;
                     position: absolute;
@@ -269,8 +438,8 @@ function UserProfile(props) {
                     right: 0; 
                     margin-left: auto; 
                     margin-right: auto; 
-                    width: 500px;
-                    height: 500px;
+                    width: 720px;
+                    height: 720px;
                     background-color: white;
                     border-radius: 10px;
                     animation-duration: 1.5s;
@@ -295,6 +464,8 @@ function UserProfile(props) {
                     height: 25%;
                     border-radius: 15px;
                     margin-bottom: 1em;
+                    color: white;
+                    font-weight: bold;
                     // position: absolute;
                     // top: 0;
                     // left: 0;
@@ -339,7 +510,6 @@ function UserProfile(props) {
                     width: 66%;
                     vertical-align: top;
                     font-weight: 800;
-                    color: white;
                 }
 
                 .name {
@@ -378,10 +548,6 @@ function UserProfile(props) {
                     width: 25%;
                     vertical-align: top;
                     padding-left: 1em;
-                    // font-size: 1.2em;
-                    font-weight: bold;
-                    // color: var(--darkermatter);
-                    color: white;
                     line-height: 1.5em;
                 }
 
@@ -409,7 +575,6 @@ function UserProfile(props) {
                 .input-fields {
                     width: 100%;
                     padding: 12px 20px;
-                    // margin: 8px 0;
                     border: 1px solid #ccc;
                     border-radius: 4px;
                     box-sizing: border-box;
@@ -430,13 +595,58 @@ function UserProfile(props) {
                     resize: none;
                     overflow: hidden;
                     border: none;
+                    font-size: 1.1em;
                     font-weight: bold;
                     font-style: italic;
                     color: var(--darkermatter);
-                    // word-wrap: break-word;
-                    // white-space: pre-wrap;
+                    background-color: var(--greenapple);
                 }
 
+                .player-history {
+                    display: inline-block;
+                    height: min-content;
+                    width: 35%;
+                    padding: 1em;
+                }
+
+                .stats {
+                    color: var(--darkmatter);
+                    font-weight: bold;
+                    font-size: 1.2em;
+                    margin-bottom: 1em;
+                    border-bottom: 2px solid white;
+                    width: 65%;
+                }
+
+                .stats-title {
+                    margin-bottom: 1em;
+                    font-size: 0.9em;
+                }
+
+                .stat {
+                    font-size: 1.2em;
+                    float: right;
+                }
+
+                .pic-gallery {
+                    display: inline-block;
+                    width: 60%;
+                    vertical-align: top;
+                    margin-left: 2em;
+                    // background-color: inherit;
+                }
+
+                .pic-carousel {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .gallery-pic {
+                    display: inline-block;
+                    width: 185px;
+                    height: 150px;
+                    margin: 0.5em;
+                }
 
             `}</style>
         </React.Fragment>

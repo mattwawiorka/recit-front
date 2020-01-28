@@ -39,12 +39,12 @@ function MyGames(props) {
                 display: block;
                 width: 95%;
                 height: min-content;
-                max-height: 80vh;
+                // max-height: 80vh;
                 text-align: center;
                 background-color: white;
                 border-radius: 15px;
                 margin-left: 1em;
-                overflow: auto;
+                // overflow: auto;
                 padding-top: 0.5em;
             }
     

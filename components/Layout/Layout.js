@@ -45,7 +45,7 @@ function GamesLayout(props) {
                 height: 100vh;
                 display: grid;
                 grid-template-columns: 20vw 80vw;
-                grid-template-rows: minmax(min-content, min-content) minmax(82vh, max-content) minmax(min-content, min-content);
+                grid-template-rows: 7vh minmax(82vh, max-content) minmax(min-content, min-content);
                 grid-template-areas:
                     "header header header"
                     "sidebar1 main sidebar2"
@@ -60,7 +60,7 @@ function GamesLayout(props) {
                 height: 100vh;
                 display: grid;
                 grid-template-columns: 20vw 60vw 20vw;
-                grid-template-rows: minmax(min-content, min-content) minmax(82vh, max-content) minmax(min-content, min-content);
+                grid-template-rows: 7vh minmax(82vh, max-content) minmax(min-content, min-content);
                 grid-template-areas:
                     "header header header"
                     "sidebar1 main sidebar2"
