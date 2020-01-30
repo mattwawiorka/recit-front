@@ -10,7 +10,6 @@ function Header() {
             <meta charSet="utf-8" />
             <link rel="icon" href="/rec-it.png" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-
         </Head> 
     );
 }

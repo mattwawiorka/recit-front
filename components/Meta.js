@@ -11,8 +11,7 @@ export default function Meta() {
                     --greenapple: #2ecc71;
                     --darkmatter: #34495e;
                     --darkermatter: #2c3e50;
-
-
+                    --linkColor: #3399ff;
                     --darkestTurf: #094d1c;
                     --darkTurf: #45a049;
                     --turf: #55ff64;

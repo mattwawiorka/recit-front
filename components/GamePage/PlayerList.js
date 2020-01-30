@@ -77,7 +77,7 @@ function PlayerList(props) {
             <div className="player">
               <span className="player-pic">
                 <img 
-                  src={'http://localhost:8080/images/' + player.profilePic} 
+                  src={player.profilePic} 
                   className="player-pic-round"
                 />
               </span>

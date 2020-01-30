@@ -1,214 +1,169 @@
 import Layout from '../components/Layout/Layout';
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Router from 'next/router';
+import MaskedInput from 'react-text-mask';
 import Link from 'next/link';
-import cookie from 'js-cookie';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo'
+import { useMutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
+import gql from 'graphql-tag';
+import cookie from 'js-cookie';
 import API from '../api.json';
+import FacebookLogin from 'react-facebook-login';
 
-const LOGIN = gql`
-    mutation Login($name: String!, $password: String!, $location: [Float], $city: String) {
-        login(name: $name, password: $password, location: $location, city: $city) 
-        {
-            token
-        }
+const SIGNIN = gql`
+    mutation Login($userInput: userInput) {
+        loginFb(userInput: $userInput) 
     }
-    `;
+`;
 
-class Login extends Component {
-    constructor() {
-        super()
-        this.state = { 
-            name: "",
-            password: "",
-            error: "",
-            location: [47.716983, -122.320409]
-        }
-    }
+function Login(props) {
 
-    componentDidMount() {
+    const [location, setLocation] = useState([47.7169839910907, -122.32040939782564]);
+    const [userInput, setUserInput] = useState(null);
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({
-                location: [position.coords.latitude, position.coords.longitude]
-            })
+            setLocation([position.coords.latitude, position.coords.longitude])
         })
+    }, [])
 
+    const [loginUser] = useMutation(SIGNIN);
+
+    // errors.map( (error, index) => {
+    //     errors.push(
+    //         <li key={index}>
+    //             {error.message}
+    //         </li>
+    //     );
+    // });
+
+    const responseFacebook = (response) => {
+        setUserInput({
+            facebookId: response.id,
+            facebookToken: response.accessToken,
+            loginLocation: location
+        })
     }
 
-    handleChange = (input) => (e) => {
-        this.setState({ 
-            [input]: e.target.value,
-            error: ""
-         });
-    };
-
-    render() {
-        const {name, password, location} = this.state;
-        return (
-        <Layout main={false}>
-        <br />
-        <div style={{ paddingTop: '25px' }}>
-            <h1 style={{textAlign: 'center'}}>Sign into Recit</h1><br />
-            <div className="container">
-                <div></div>
-                <div className="center-content">
-
-                    <span 
-                        className="alert"
-                        style={{ display: this.state.error ? "" : "none" }}
-                    >
-                        {this.state.error}
-                    </span>
-
-                    <div>
-                        <Mutation 
-                            mutation={LOGIN}
-                        >
-                            { Login => (    
-                            <form onSubmit={e => {
-                                e.preventDefault();
-                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.location[0]},${this.state.location[1]}&key=${API.key}`)
-                                .then((response) => {
-                                    return response.json()
-                                    .then(result => {
-                                        console.log(result.results[5].formatted_address)
-                                        Login({ variables: {
-                                            name: name,
-                                            password: password,
-                                            location: location,
-                                            city: result.results[5].formatted_address
-                                        }})
-                                        .then(response => {
-                                            if (response.errors) {
-                                                this.setState({
-                                                    error: response.errors[0].message
-                                                })
-                                                return;
-                                            }
-                                            cookie.set('token', response.data.login.token, { expires: 365 });
-                                            Router.push('/');
-                                        })
-                                        .catch(error => {
-                                            console.log(error);
-                                        });
-                                    })
-                                })
-
-                                
-                                
-                            }}>
-                                <div className="form-group">
-                                    <input 
-                                        onChange={this.handleChange("name")} 
-                                        type="text" 
-                                        value={name}
-                                        className="text-fields"
-                                        placeholder="Username"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input 
-                                        onChange={this.handleChange("password")} 
-                                        type="password" 
-                                        value={password} 
-                                        className="text-fields"
-                                        placeholder="Password"
-                                    />
-                                </div>
-                                <input type="submit" value="Submit" />
-                            </form>
-                            )}
-                        </Mutation>
-                        <br />
-                        </div>
-                        <div className="bottom">
-                            <div>
-                                <Link href="/Forgot_Password"><a style={{color: '#3399ff'}}>Forgot Password?</a></Link>
-                            </div>
-                            <div style={{textAlign: 'center'}}> | </div>
-                            <div>
-                                <p style={{float: 'right'}}>Don't have an account? <br />
-                                    <Link href="/Signup"><a style={{color: '#3399ff'}}><u>Signup for one!</u></a></Link>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-            <style jsx>{`
-            .container {
-                display: grid;
-                align-items: center;
-                grid-template-columns: 5vw 50vw 5vw;
-                grid-gap: 10px;
-            }
-
-            .center-content {
-                display: inline-grid;
-                align-items: center;
-                grid-template-columns: repeat(1, 1fr);
-            }
-
-            .bottom {
-                display: grid;
-                grid-template-columns: 1fr .5fr 1fr;
-            }
-
-            form {
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                padding: 12px 20px;
-                
-            }
-
-            .text-fields {
-                width: 100%;
-                padding: 12px 20px;
-                margin: 8px 0;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-            }
-
-            input[type=submit] {
-                width: 100%;
-                background-color: var(--darkermatter);
-                color: white;
-                padding: 14px 20px;
-                margin 8px 0;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            input[type=submit]:hover {
-                background-color: var(--darkmatter);
-            }
-
-            .alert {
-                // padding: 10px 16px;
-                // border-style: solid;
-                // border-color: #e14646;
-                // border-radius: 10px;
-                // background-color: #ffcccb; /* Red */
-                // box-shadow: 0 0 10px #ffcccb;
-                color: black;
-                margin-bottom: 15px;
-                text-align: center;
-            }
-
-            @media only screen and (max-width: 700px) {
-                .container {
-                    grid-template-columns: .25fr 1fr .25fr;
+    useEffect(() => {
+        if (userInput) {
+            loginUser({ variables: { userInput: userInput } })
+            .then(response => {
+                if (response.errors) {
+                    setErrors(response.errors[0].data)
+                    return;
                 }
-            }
-        `}</style>
-        </div>
-        <br />
-        </Layout>
-       );
-    }  
+                cookie.set('token', response.data.loginFb, { expires: 1 })
+                if (Router.query.invited) {
+                    Router.push('/Game/[game]', `/Game/${Router.query.game}`);
+                } else {
+                    Router.push('/');
+                } 
+            }) 
+        }
+    }, [userInput])
+
+    return (
+        <React.Fragment>
+            <Layout>
+                <br />
+
+                <div className="signup-container">
+
+                    {/* <span 
+                        className="alert"
+                        style={{ display: (this.state.errors[0].message !== "") ? "" : "none" }}
+                    >
+                        {errors}
+                    </span> */}
+
+                    <section className="signup-actions">
+                        <FacebookLogin
+                            appId={API.facebook}
+                            autoLoad={false}
+                            scope="public_profile, email, user_birthday, user_gender"
+                            fields="name, email, picture, birthday, gender"
+                            icon="fa fa-facebook-square"
+                            textButton="Login with Facebook"
+                            callback={responseFacebook}
+                        />
+                    </section>
+        
+                    <div className="login-link">
+                        <p>New to Rec-it? <Link href="/Signup"><a><u>Signup Today!</u></a></Link></p>
+                    </div> 
+                </div>
+
+                <br />
+            </Layout>
+
+            <style jsx>{`
+                .signup-container {
+                    display: block;
+                    width: 90%;
+                    margin: auto;
+                    margin-top: 2em;
+                    text-align: center;
+                    // border: 1px solid #ccc;
+                    // border-radius: 4px;
+                }
+
+                a > u {
+                    // font-weight: bold;
+                    font-size: 1.1em;
+                    color: var(--greenapple);
+                }
+
+                section {
+                    display: inline-block; 
+                }
+
+                .learn-more {
+                    margin-top: 0.2em;
+                    color: #616770;
+                }
+
+                .signup-actions {
+                    position: relative;
+                    width: 40%;
+                    height: 200px;
+                    padding: 12px;
+                    padding-top: 20px;
+                    background-color: white;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.05), 0 20px 48px rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.1);
+                }
+
+                .signup-actions > p {
+                    position: absolute;
+                    bottom: 10px;
+                    font-size: 0.9em;
+                    color: #616770;
+                }
+
+                .login-link {
+                    display: block;
+                    width: 100%;
+                    text-align: center;
+                    margin-top: 1.5em;
+                    font-size: 1.2em;
+                }
+
+                .alert {
+                    color: black;
+                    margin-bottom: 15px;
+                    text-align: center;
+                }
+
+                @media only screen and (max-width: 700px) {
+                    .container {
+                        grid-template-columns: .25fr 1fr .25fr;
+                    }
+                }
+            `}</style>      
+        </React.Fragment>
+    );
 }
 
 export default withApollo(Login);

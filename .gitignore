@@ -2,3 +2,5 @@ node_modules
 .next
 README.md
 api.json
+server.crt
+server.key

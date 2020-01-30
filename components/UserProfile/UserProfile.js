@@ -4,8 +4,8 @@ import { useMutation } from 'react-apollo';
 import dateTool from '../../lib/dateTool';
 
 const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $userInput: userInput) {
-    updateUser(id: $id, userInput: $userInput) {
+  mutation UpdateUser($userId: ID!, $userInput: userInput) {
+    updateUser(userId: $userId, userInput: $userInput) {
         id
         status
     }
@@ -45,7 +45,6 @@ function UserProfile(props) {
         // Only allow one image 
         if (files.length > 1) {
             err = 'Only 1 image can be uploaded at a time\n'
-            
         } 
 
         let size = 200000;
@@ -158,10 +157,10 @@ function UserProfile(props) {
                 <section className="user-main">
                     <article className="profile-pic"> 
                         <img 
-                            src={profilePreview ? profilePreview : 'http://localhost:8080/images/' + props.user.profilePic}
+                            src={profilePreview ? profilePreview : props.user.profilePic}
                             className="image-round"
                             onClick={() => {
-                                setViewerPic(profilePreview ? profilePreview : 'http://localhost:8080/images/' + props.user.profilePic);
+                                setViewerPic(profilePreview ? profilePreview : props.user.profilePic);
                                 setViewing('profile');
                                 setPicMode(true);
                             }}
@@ -251,12 +250,12 @@ function UserProfile(props) {
                                             })
                                             .then( response => {
                                                 updateProfile({ variables: {
-                                                    id: props.userId,
+                                                    userId: props.userId,
                                                     userInput: {
-                                                        profilePic: newProfile ? "/" + props.user.id + "/" + newProfile.name : null,
-                                                        pic1: newPic1 ? "/" + props.user.id + '/' + newPic1.name : null,
-                                                        pic2: newPic2 ? "/" + props.user.id + '/' + newPic2.name : null,
-                                                        pic3: newPic3 ? "/" + props.user.id + '/' + newPic3.name : null,
+                                                        profilePic: newProfile ? "http://localhost:8080/images/" + props.user.id + "/" + newProfile.name : null,
+                                                        pic1: newPic1 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic1.name : null,
+                                                        pic2: newPic2 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic2.name : null,
+                                                        pic3: newPic3 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic3.name : null,
                                                         name: name,
                                                         dob: dob,
                                                         gender: gender,
@@ -377,33 +376,33 @@ function UserProfile(props) {
                     
                     <div className="gallery-pic">
                         <img 
-                            src={pic1Preview ? pic1Preview : 'http://localhost:8080/images/' + props.user.pic1}
+                            src={pic1Preview ? pic1Preview : props.user.pic1}
                             className="image-round"
                             onClick={() => {
                                 setPicMode(true);
-                                setViewerPic(pic1Preview ? pic1Preview : 'http://localhost:8080/images/' + props.user.pic1);
+                                setViewerPic(pic1Preview ? pic1Preview : props.user.pic1);
                                 setViewing('pic1');
                             }}
                         />
                     </div>
                     <div className="gallery-pic">
                         <img 
-                            src={pic2Preview ? pic2Preview : 'http://localhost:8080/images/' + props.user.pic2}
+                            src={pic2Preview ? pic2Preview :  props.user.pic2}
                             className="image-round"
                             onClick={() => {
                                 setPicMode(true);
-                                setViewerPic(pic2Preview ? pic2Preview : 'http://localhost:8080/images/' + props.user.pic2)
+                                setViewerPic(pic2Preview ? pic2Preview : props.user.pic2)
                                 setViewing('pic2');
                             }}
                         />
                     </div>
                     <div className="gallery-pic">
                         <img 
-                            src={pic3Preview ? pic3Preview : 'http://localhost:8080/images/' + props.user.pic3}
+                            src={pic3Preview ? pic3Preview : props.user.pic3}
                             className="image-round"
                             onClick={() => {
                                 setPicMode(true);
-                                setViewerPic(pic3Preview ? pic3Preview : 'http://localhost:8080/images/' + props.user.pic3)
+                                setViewerPic(pic3Preview ? pic3Preview : props.user.pic3)
                                 setViewing('pic3');
                             }}
                         />
