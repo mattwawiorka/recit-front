@@ -14,6 +14,7 @@ function Navigation(props) {
         if (props.subscribeToNotifications) {
             props.subscribeToNotifications();
         }
+        
     }, [])
 
     let dropDownClass = classNames({
