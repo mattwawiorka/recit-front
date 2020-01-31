@@ -20,6 +20,7 @@ function Index(props) {
         });
 
         setLoading(false);
+        
     }, [])
 
     if (loading) return <Loading />

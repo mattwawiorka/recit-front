@@ -9,13 +9,19 @@ import gql from 'graphql-tag';
 import cookie from 'js-cookie';
 import API from '../api.json';
 import FacebookLogin from 'react-facebook-login';
+import classNames from 'classnames';
+
 
 const SIGNUP_FB = gql`
     mutation CreateUserFb($userInput: userInput) {
         createUserFb(userInput: $userInput) 
-
-        loginFb(userInput: $userInput) 
     }
+`;
+
+const LOGIN_FB = gql`
+    mutation CreateUserFb($userInput: userInput) {
+        loginFb(userInput: $userInput) 
+}
 `;
 
 const SEND_SMS = gql`
@@ -34,14 +40,16 @@ function Signup(props) {
 
     const [location, setLocation] = useState([47.7169839910907, -122.32040939782564]);
     const [userInput, setUserInput] = useState(null);
-    const [phoneNumber, setPhoneNumber] = useState(null);
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [firstName, setFirstName] = useState(null);
     const [lastName, setLastName] = useState(null);
     const [dob, setDOB] = useState(null);
-    const [gender, setGender] = useState(null);
+    const [gender, setGender] = useState("female");
     const [phoneCode, setPhoneCode] = useState(null);
     const [smsSent, setSMSSent] = useState(false);
     const [errors, setErrors] = useState([]);
+
+    let errorDisplay= [];
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -50,18 +58,20 @@ function Signup(props) {
     }, [])
 
     const [signupFb] = useMutation(SIGNUP_FB);
+    const [loginFb] = useMutation(LOGIN_FB);
     const [sendSMS] = useMutation(SEND_SMS);
     const [signupPhone] = useMutation(SIGNUP_PHONE);
 
-    // errors.map( (error, index) => {
-    //     errors.push(
-    //         <li key={index}>
-    //             {error.message}
-    //         </li>
-    //     );
-    // });
+    errors.map( (error, index) => {
+        errorDisplay.push(
+            <li key={index}>
+                {error.message}
+            </li>
+        );
+    });
 
-    const responseFacebook = (response) => {
+    const responseFacebook = useCallback((response) => {
+        if (!response) return;
         setUserInput({
             facebookId: response.id,
             facebookToken: response.accessToken,
@@ -70,7 +80,7 @@ function Signup(props) {
             gender: response.gender,
             loginLocation: location
         })
-    }
+    });
 
     useEffect(() => {
         if (!userInput) {
@@ -80,39 +90,50 @@ function Signup(props) {
             signupFb({ variables: { userInput: userInput } })
             .then(response => {
                 if (response.errors) {
-                    setErrors(response.errors[0].data)
+                    setErrors(response.errors)
                     return;
                 }
+                else if (response.data.createUserFb) {
+                    loginFb({ variables: { userInput: userInput } })
+                    .then(response => {
+                        if (response.data.loginFb) {
+                            cookie.set('token', response.data.loginFb, { expires: 1 })
 
-                if (response.data.createUserFb) {
-                    cookie.set('token', response.data.loginFb, { expires: 1 })
-
-                    if (Router.query.invited) {
-                        Router.push('/Game/[game]', `/Game/${Router.query.game}`);
-                    } else {
-                        Router.push('/');
-                    } 
+                            if (Router.query.invited) {
+                                Router.push('/Game/[game]', `/Game/${Router.query.game}`);
+                            } else {
+                                Router.push('/');
+                            } 
+                        }
+                    })
                 } 
             }) 
         } 
         else if (userInput.phoneCode) {
             signupPhone({ variables: { userInput: userInput } })
             .then(response => {
+                console.log(response)
                 if (response.errors) {
-                    setErrors(response.errors[0].data)
+                    setErrors(response.errors)
                     return;
                 }
+                else if (response.data.verifyUserPhone) {
+                    cookie.set('token', response.data.verifyUserPhone, { expires: 1 })
 
-                cookie.set('token', response.data.verifyUserPhone, { expires: 1 })
-
-                if (Router.query.invited) {
-                    Router.push('/Game/[game]', `/Game/${Router.query.game}`);
-                } else {
-                    Router.push('/');
-                } 
+                    if (Router.query.invited) {
+                        Router.push('/Game/[game]', `/Game/${Router.query.game}`);
+                    } else {
+                        Router.push('/');
+                    }
+                }
             }) 
         }
     }, [userInput])
+
+    const inputClass = classNames({
+        "input-fields": true,
+        "input-error": errors.length > 0
+    })
 
     return (
         <React.Fragment>
@@ -122,12 +143,9 @@ function Signup(props) {
                 <div className="signup-container">
                     <h1>Create your Rec-it Account</h1>
 
-                    {/* <span 
-                        className="alert"
-                        style={{ display: (this.state.errors[0].message !== "") ? "" : "none" }}
-                    >
-                        {errors}
-                    </span> */}
+                    <span className="alert">
+                        {errorDisplay}
+                    </span>
 
                     <section className="signup-actions">
                         {!smsSent ?
@@ -151,6 +169,7 @@ function Signup(props) {
                                     style={{ width: '100%', padding: '12px 20px', margin: '8px 0', border: '1px solid #ccc', borderRadius: '4px' }}
                                     guide={false}
                                     onChange={(e) => {
+                                        setErrors([]);
                                         let number = e.target.value.replace('(','');
                                         number = number.replace(')','');
                                         number = number.replace('-','');
@@ -160,19 +179,25 @@ function Signup(props) {
                                     placeholder="(123) 123-1234"
                                 />
                             </div>
-
+                            
+                            {phoneNumber.length === 10 ?
                             <button 
                                 className="form-button"
                                 onClick={() => {
                                     sendSMS({ variables: { phoneNumber: phoneNumber }  })
                                     .then(response => {
-                                        console.log(response)
-                                        if (response.data.createUserPhone) {
+                                        if (response.errors) {
+                                            setErrors(response.errors)
+                                            return;
+                                        }
+                                        else if (response.data.createUserPhone) {
                                             setSMSSent(true);
                                         }
                                     })
                                 }}
                             >Send SMS Code</button>
+                            :
+                            null}
                         </React.Fragment>
                         :
                         <div className="info-form">
@@ -215,9 +240,12 @@ function Signup(props) {
                             <div className="form-group">
                                 <label className="text-muted">SMS Code</label>
                                 <input 
-                                    onChange={(e) => setPhoneCode(e.target.value)} 
+                                    onChange={(e) => {
+                                        setErrors([]);
+                                        setPhoneCode(e.target.value);
+                                    }} 
                                     type="text" 
-                                    className="input-fields"
+                                    className={inputClass}
                                     placeholder="Verify your phone number"
                                 />
                             </div>
@@ -227,12 +255,13 @@ function Signup(props) {
                                 onClick={() => setSMSSent(false)} 
                             >keyboard_backspace</i> */}
 
+                            {(firstName && lastName && dob && gender && phoneCode) ?
                             <button 
                                 className="form-button"
                                 onClick={() => {
                                     setUserInput({
                                         phoneNumber: phoneNumber,
-                                        phoneCode: parseInt(phoneCode),
+                                        phoneCode: (isNaN(phoneCode) || phoneCode.toString().length > 9) ? 1 : parseInt(phoneCode),
                                         name: firstName + ' ' + lastName, 
                                         dob: dob,
                                         gender: gender,
@@ -240,6 +269,8 @@ function Signup(props) {
                                     });
                                 }}
                             >SIGN UP</button>
+                            :
+                            null}
                         </div>
                         }
 
@@ -359,6 +390,10 @@ function Signup(props) {
                     borderRadius: 4px;
                 }
 
+                .input-error {
+                    border-color: red;
+                }
+
                 .signup-actions > p {
                     position: absolute;
                     bottom: 10px;
@@ -367,9 +402,11 @@ function Signup(props) {
                 }
 
                 .form-button {
-                    width: 70%;
+                    width: 80%;
                     height: 2.5em;
                     margin-top: 0.5em;
+                    animation-duration: 1s;
+                    animation-name: fadein;
                 }
 
                 .info-form { 
@@ -395,7 +432,7 @@ function Signup(props) {
 
                 .reduced-width { 
                     display: inline-block;
-                    width: 70%;
+                    width: 80%;
                 }
 
                 .half-width {
