@@ -13,6 +13,9 @@ function GameCluster(props) {
     else if (games[0].sport === 'FOOTBALL') {
         image1 = "/american-football.svg";
     } 
+    else if (game.node.sport === 'SOCCER') {
+        image = "/soccer-ball.png";
+    } 
     else {
         image1 = "rec-it.png";
     }
@@ -25,6 +28,9 @@ function GameCluster(props) {
     }
     else if (games[1].sport === 'FOOTBALL') {
         image2 = "/american-football.svg";
+    } 
+    else if (game.node.sport === 'SOCCER') {
+        image = "/soccer-ball.png";
     } 
     else {
         image2 = "rec-it.png";

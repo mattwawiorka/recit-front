@@ -40,7 +40,7 @@ class CreateGameForm extends Component {
             address: this.props.address || "",
             coords: this.props.coords || [],
             description: this.props.description || "",
-            errors: [{message: ""}],
+            errors: [],
             loading: true
         }
 
@@ -78,7 +78,7 @@ class CreateGameForm extends Component {
     handleChange = (input) => (e) => {
         this.setState({ 
             [input]: e.target.value,
-            errors: [{message: ""}] 
+            errors: [] 
         });
 
         if (input === 'date') {
@@ -94,7 +94,7 @@ class CreateGameForm extends Component {
             let endTime = (d.getHours() < 10 ? '0' + d.getHours().toString() : d.getHours().toString()) + ":" + (d.getMinutes() < 10 ? '0' + d.getMinutes().toString() : d.getMinutes().toString());
             this.setState({
                 endTime: endTime,
-                errors: [{message: ""}]
+                errors: []
             })
         }
     };
@@ -108,7 +108,7 @@ class CreateGameForm extends Component {
             })
         } else {
             this.setState({
-                errors: [{message: "Please select a valid address"}],
+                errors: [{ message: "Please select a valid address" }],
             })
         }
     }
@@ -137,18 +137,29 @@ class CreateGameForm extends Component {
         const endDateTime = new Date(endDate + "T" + endTime);
 
         const errors = [];
-        this.state.errors.map( error => {
+        this.state.errors.map( (error, index) => {
             if (!needsInput) needsInput = error.field === "all";
             if (!invalidAddress) invalidAddress = error.field === "address";
             if (!invalidSpots) invalidSpots = error.field === "spots";
             if (!invalidDescrip) invalidDescrip = error.field === "description";
             if (!invalidDate) invalidDate = error.field === "date";
             if (!invalidEnd) invalidEnd = error.field === "endDate";
-            errors.push(
-                <li key={error.message} className="error">
-                    {error.message}
-                </li>
-            );
+            
+            if (error.data) {
+                error.data.map( (error, index) => {
+                    errors.push(
+                        <li key={index} className="error">
+                            {error.message}
+                        </li>
+                    );
+                })
+            } else {
+                errors.push(
+                    <li key={index} className="error">
+                        {error.message}
+                    </li>
+                );
+            }
         })
 
         let input = this.props.id ? { id: this.props.id, gameInput: {
@@ -243,7 +254,6 @@ class CreateGameForm extends Component {
 
                 <span 
                     className="alert"
-                    style={{ display: (this.state.errors[0].message !== "") ? "" : "none" }}
                 >
                     {errors}
                 </span>
@@ -259,9 +269,10 @@ class CreateGameForm extends Component {
                         e.preventDefault();
                         CreateGame()
                         .then(response => {
+                            console.log(response)
                             if (response.errors) {
                                 this.setState({
-                                    errors: response.errors[0].data
+                                    errors: response.errors
                                 })
                                 return;
                             }

@@ -16,6 +16,9 @@ function GameMarker(props) {
     else if (sport === 'FOOTBALL') {
         image = "/american-football.svg";
     } 
+    else if (sport === 'SOCCER') {
+        image = "/soccer-ball.png";
+    } 
     else {
         image = "rec-it.png";
     }

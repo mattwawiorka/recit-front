@@ -11,17 +11,20 @@ import dateTool from '../../lib/dateTool';
 const GET_USER = gql`
   query User($userId: ID!, $cursor: String, $pastGames: Boolean) {
     user(userId: $userId) {
-        id
-        name
-        createdAt
-        dob
-        gender
-        status
-        profilePic
-        pic1
-        pic2
-        pic3
-        city
+        node {
+            id
+            name
+            createdAt
+            dob
+            gender
+            status
+            profilePic
+            pic1
+            pic2
+            pic3
+            city
+        }
+        isMe
     }
 
     userGames(userId: $userId, cursor: $cursor, pastGames: $pastGames) {
@@ -51,7 +54,11 @@ function ProfilePage(props) {
     const router = useRouter();
 
     if (!props.auth.loggedIn()) {
-        if (typeof window !== 'undefined') router.push('/')
+        if (typeof window !== 'undefined') {
+            router.push('/')
+            router.replace('/','/profile/' + router.query.user)
+        }
+        
         return null
     }
 
@@ -72,10 +79,8 @@ function ProfilePage(props) {
         return <h1>ERROR</h1>
     } 
 
-    console.log(data)
-
-    const age = dateTool.getAge(data.user.dob);
-    const joinDate = new Date(parseInt(data.user.createdAt));
+    const age = dateTool.getAge(data.user.node.dob);
+    const joinDate = new Date(parseInt(data.user.node.createdAt));
     const joinString = dateTool.getMonth(joinDate.getMonth()) + " " + joinDate.getFullYear();
     
     return (
@@ -83,8 +88,8 @@ function ProfilePage(props) {
             <br />
             <UserProfile 
                 refetch={refetch} 
-                owner={props.auth.getUser() === user} 
-                user={data.user} 
+                owner={data.user.isMe} 
+                user={data.user.node} 
                 age={age} 
                 joinDate={joinString} 
                 userId={user} 

@@ -125,6 +125,9 @@ function GamesPrep(props) {
         else if (game.node.sport === 'FOOTBALL') {
             image = "/american-football.svg";
         } 
+        else if (game.node.sport === 'SOCCER') {
+            image = "/soccer-ball.png";
+        } 
         else {
             image = "rec-it.png";
         }
@@ -214,6 +217,9 @@ function GamesPrep(props) {
         }
         else if (game.node.sport === 'FOOTBALL') {
             image = "/american-football.svg";
+        } 
+        else if (game.node.sport === 'SOCCER') {
+            image = "/soccer-ball.png";
         } 
         else {
             image = "rec-it.png";

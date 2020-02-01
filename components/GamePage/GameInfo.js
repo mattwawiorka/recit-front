@@ -14,6 +14,9 @@ function GameInfo(props) {
   else if (game.sport === 'FOOTBALL') {
     image = "/american-football.svg";
   } 
+  else if (game.sport === 'SOCCER') {
+    image = "/soccer-ball.png";
+  } 
   else {
     image = "/rec-it.png";
   }

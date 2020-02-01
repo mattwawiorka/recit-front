@@ -241,7 +241,7 @@ function UserProfile(props) {
                                             data.append('file', newPic2);
                                             data.append('file', newPic3);
 
-                                            fetch('http://localhost:8080/post-image', {
+                                            fetch(`http://localhost:8080/post-image?user=${props.userId}`, {
                                                 method: 'POST',
                                                 headers: {
                                                     Authorization: 'Bearer ' + props.token
@@ -272,7 +272,7 @@ function UserProfile(props) {
                                             })
                                         } else {
                                             updateProfile({ variables: {
-                                                id: props.userId,
+                                                userId: props.userId,
                                                 userInput: {
                                                     name: name,
                                                     dob: dob,
