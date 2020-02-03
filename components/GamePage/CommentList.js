@@ -33,7 +33,7 @@ function CommentList(props) {
                             comment={comment.node}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
-                            isOwner={props.currentUser === comment.node.userId && !props.isOver} 
+                            isOwner={(comment.node.userId == props.currentUser || comment.isOwner) && !props.isOver} 
                         />
                         <div ref={lastCommentRef}></div>
                     </React.Fragment>
@@ -45,7 +45,7 @@ function CommentList(props) {
                             comment={comment.node}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
-                            isOwner={props.currentUser === comment.node.userId && !props.isOver} 
+                            isOwner={(comment.node.userId == props.currentUser || comment.isOwner) && !props.isOver} 
                         />
                     </React.Fragment>
                 );

@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import GamesPrep from './GamesPrep';
 import Loading from '../Loading/Loading';
+import cookie from 'js-cookie';
 
 const GET_GAMES = gql`
 query Games($cursor: String, $sport: String, $startDate: String, $openSpots: String, $bounds: [Float], $sortOrder: String) {
@@ -47,6 +48,10 @@ const MY_GAMES = gql`
         endCursor
         hasNextPage
       }
+    }
+
+    whoAmI {
+      id
     }
   }
 `;
@@ -94,7 +99,7 @@ function GameSource(props) {
   }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, { variables: variables, ssr: true });
-  const { data: data_myGames, loading: loading_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES, { skip: !props.loggedIn });
+  const { data: data_myGames, loading: loading_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES, { skip: !cookie.get('token') });
   if (loading) return <Loading />
   if (loading_myGames) return <Loading />
   if (error) {
@@ -104,9 +109,7 @@ function GameSource(props) {
 
   return (
     <>
-    {typeof props.loggedIn !== 'undefined' ?
-    <GamesPrep
-      loggedIn={props.loggedIn} 
+    <GamesPrep 
       currentLoc={props.currentLoc}
       getMapBounds={props.getMapBounds}
       bounds={props.bounds}
@@ -219,9 +222,6 @@ function GameSource(props) {
         }
       }
     /> 
-    :
-    <Loading/>
-    }
     </>
   )
 }

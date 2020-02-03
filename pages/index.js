@@ -4,13 +4,11 @@ import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
 import Announcements from '../components/Announcements/Announcements';
 import { withApollo } from '../lib/apollo';
-import withAuth from '../lib/withAuth';
 import Loading from '../components/Loading/Loading';
 
 function Index(props) {
 
     const [loading, setLoading] = useState(true);
-    const [loggedIn, setLoggedIn] = useState(props.auth.loggedIn());
     const [currentLoc, setCurrentLoc] = useState([47.7169839910907, -122.32040939782564]);
     const [createGame, setCreateGame] = useState(false);
 
@@ -44,7 +42,6 @@ function Index(props) {
                     null 
                     }
                     <SortingFiltering 
-                        loggedIn={loggedIn}  
                         currentLoc={currentLoc}
                         faded={createGame}
                     />
@@ -77,4 +74,4 @@ function Index(props) {
     );   
 }
 
-export default withApollo(withAuth(Index));
+export default withApollo(Index);

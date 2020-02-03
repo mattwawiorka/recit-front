@@ -6,7 +6,7 @@ import classNames from 'classnames';
 function Comment(props) {
     const { comment, isOwner } = props;
 
-    const [content, setContent] = useState(comment.content);
+    const [content, setContent] = useState(props.comment.content);
     const [showActions, setShowActions] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [showSave, setShowSave] = useState(false);
@@ -17,7 +17,7 @@ function Comment(props) {
         'input-fields': true,
         'edit-mode': editMode,
         'invite-comment': comment.type === 3 || comment.type === 4
-    })
+    });
 
     return (
         <React.Fragment key={comment.id}>

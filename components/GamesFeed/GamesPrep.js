@@ -95,7 +95,6 @@ function GamesPrep(props) {
                     onMouseEnter={getHovered}
                     hovered={hovered === cluster.points[0].id}
                     clearHovered={clearHovered}
-                    loggedIn={props.loggedIn}
                 />
         }
         else {
@@ -139,7 +138,6 @@ function GamesPrep(props) {
                 <GameRow 
                     game={game.node}
                     image={image}
-                    loggedIn={props.loggedIn} 
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
@@ -163,7 +161,6 @@ function GamesPrep(props) {
                 <GameRow 
                     game={game.node}
                     image={image}
-                    loggedIn={props.loggedIn} 
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
@@ -230,7 +227,6 @@ function GamesPrep(props) {
                 <GameRow 
                     game={game.node}
                     image={image}
-                    loggedIn={props.loggedIn} 
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
@@ -261,7 +257,7 @@ function GamesPrep(props) {
                 getMapBounds={props.getMapBounds}
             />
             <div style={{ width: "40%", maxHeight: "80vh", overflow: "auto"}}>
-                {myGames.length > 0 && props.loggedIn ?
+                {myGames.length > 0 ?
                 <MyGames 
                     myGames={myGames}
                     activeCount={props.activeCount}
@@ -271,7 +267,6 @@ function GamesPrep(props) {
                 :
                 null}
                 <GamesList 
-                    loggedIn={props.loggedIn}
                     todayGames={todayGames}
                     tomorrowGames={tomorrowGames}
                     thisWeekGames={thisWeekGames}

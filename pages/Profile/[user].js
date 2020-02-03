@@ -3,10 +3,10 @@ import UserProfile from '../../components/UserProfile/UserProfile';
 import { useRouter } from 'next/router';
 import { withApollo } from '../../lib/apollo';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 import Loading from '../../components/Loading/Loading';
-import withAuth from '../../lib/withAuth';
 import dateTool from '../../lib/dateTool';
+import cookie from 'js-cookie';
 
 const GET_USER = gql`
   query User($userId: ID!, $cursor: String, $pastGames: Boolean) {
@@ -47,19 +47,28 @@ const GET_USER = gql`
     topSport(userId: $userId)
     
   }
-  `;
+`;
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($userId: ID!, $userInput: userInput) {
+    updateUser(userId: $userId, userInput: $userInput) {
+        id
+        status
+    }
+  }
+`;
 
 function ProfilePage(props) {
 
     const router = useRouter();
 
-    if (!props.auth.loggedIn()) {
+    if (!cookie.get('token')) {
         if (typeof window !== 'undefined') {
             router.push('/')
             router.replace('/','/profile/' + router.query.user)
+        } else {
+            return null
         }
-        
-        return null
     }
 
     const { user } = router.query;
@@ -69,9 +78,11 @@ function ProfilePage(props) {
             { 
                 userId: user,
                 pastGames: true
-            }
+            },
+            skip: !cookie.get('token')
         }
     );
+    const [updateProfile] = useMutation(UPDATE_USER);
 
     if (loading) return <Loading />
     if (error) {
@@ -79,12 +90,18 @@ function ProfilePage(props) {
         return <h1>ERROR</h1>
     } 
 
+    if (!data) {
+        router.push('/')
+        router.replace('/','/profile/' + router.query.user)
+        return null
+    }
+
     const age = dateTool.getAge(data.user.node.dob);
     const joinDate = new Date(parseInt(data.user.node.createdAt));
     const joinString = dateTool.getMonth(joinDate.getMonth()) + " " + joinDate.getFullYear();
     
     return (
-        <Layout main={false} showLogout={props.auth.getUser() === user}>
+        <Layout main={false} showLogout={data.user.isMe}>
             <br />
             <UserProfile 
                 refetch={refetch} 
@@ -93,7 +110,7 @@ function ProfilePage(props) {
                 age={age} 
                 joinDate={joinString} 
                 userId={user} 
-                token={props.auth.getToken()} 
+                updateProfile={updateProfile}
                 pastGames={data.userGames.edges}
                 gamesPlayed={data.userGames.totalCount || 0}
                 hasMore={data.userGames.pageInfo.hasNextPage || false}
@@ -124,4 +141,4 @@ function ProfilePage(props) {
     ) 
 }
 
-export default withApollo(withAuth(ProfilePage));
+export default withApollo(ProfilePage);

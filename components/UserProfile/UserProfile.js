@@ -1,19 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import gql from 'graphql-tag';
-import { useMutation } from 'react-apollo';
 import dateTool from '../../lib/dateTool';
-
-const UPDATE_USER = gql`
-  mutation UpdateUser($userId: ID!, $userInput: userInput) {
-    updateUser(userId: $userId, userInput: $userInput) {
-        id
-        status
-    }
-  }
-`;
+import cookie from 'js-cookie';
 
 function UserProfile(props) {
-    let pastGames = [], image;
+    let pastGames = [], image; 
 
     const [editMode, setEditMode] = useState(false);
     const [name, setName] = useState();
@@ -35,8 +25,6 @@ function UserProfile(props) {
     const [viewing, setViewing] = useState(null);
 
     const overlay = useRef();
-
-    const [updateProfile] = useMutation(UPDATE_USER);
 
     const fileCheck = useCallback((e) => {
         let files = e.target.files 
@@ -244,12 +232,12 @@ function UserProfile(props) {
                                             fetch(`http://localhost:8080/post-image?user=${props.userId}`, {
                                                 method: 'POST',
                                                 headers: {
-                                                    Authorization: 'Bearer ' + props.token
+                                                    Authorization: 'Bearer ' + cookie.get('token')
                                                 },
                                                 body: data
                                             })
                                             .then( response => {
-                                                updateProfile({ variables: {
+                                                props.updateProfile({ variables: {
                                                     userId: props.userId,
                                                     userInput: {
                                                         profilePic: newProfile ? "http://localhost:8080/images/" + props.user.id + "/" + newProfile.name : null,
@@ -271,7 +259,7 @@ function UserProfile(props) {
                                                 })
                                             })
                                         } else {
-                                            updateProfile({ variables: {
+                                            props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
                                                     name: name,

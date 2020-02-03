@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import withAuth from '../../lib/withAuth';
 import classNames from 'classnames';
+import cookie from 'js-cookie';
 
 function BottomDockable(props) {
 
@@ -28,7 +28,7 @@ function BottomDockable(props) {
     }
 
     let action;
-    if (props.auth.loggedIn()) {
+    if (cookie.get('token')) {
         action = props.clickEvent;
     } 
     else {
@@ -115,4 +115,4 @@ function BottomDockable(props) {
     }
 }
 
-export default withAuth(BottomDockable);
+export default BottomDockable;

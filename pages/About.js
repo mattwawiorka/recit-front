@@ -1,5 +1,4 @@
 import Layout from '../components/Layout/Layout';
-import withAuth from '../lib/withAuth';
 
 function About() {
 
@@ -14,4 +13,4 @@ function About() {
     );
 }
 
-export default withAuth(About);
+export default About;

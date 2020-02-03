@@ -1,13 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from "react-apollo";
 import Navigation from './Navigation';
-import withAuth from '../../lib/withAuth';
 import Loading from '../Loading/Loading';
+import cookie from 'js-cookie';
 
 const NOTIFICATIONS = gql`
     query {
         notifications
+
+        whoAmI {
+            id
+            name
+        }
     }
 `;
 
@@ -25,11 +30,11 @@ const NOTIFICATION_MESSAGE = gql`
 
 function NotificationSource(props) {
 
-    if (!props.auth.loggedIn()) {
+    if (!cookie.get('token')) {
         return <Navigation />
     }
 
-    const { data, loading, error, refetch, subscribeToMore } = useQuery(NOTIFICATIONS, { skip: !props.auth.loggedIn });
+    const { data, loading, error, refetch, subscribeToMore } = useQuery(NOTIFICATIONS, { skip: !cookie.get('token') });
     
     useEffect(() => {
         refetch();
@@ -38,43 +43,48 @@ function NotificationSource(props) {
     if (loading) return <Loading />
     if (error) {
         console.log(error)
-        return <p>Error</p>
+        return <Navigation />
+    }
+
+    if (!data.whoAmI) {
+        return <Navigation />
     }
 
     return (
         <Navigation
             unread={data.notifications}
-            loggedIn={props.auth.loggedIn()}
-            user={props.auth.getUser()}
-            userName={props.auth.getUserName()}
+            user={data.whoAmI.id}
+            userName={data.whoAmI.name}
             showLogout={props.showLogout}
-            logout={props.auth.logout}
+            logout={() => cookie.remove('token')}
             subscribeToNotifications={() => {
-                subscribeToMore({
-                    document: NOTIFICATION_GAME,
-                    variables: {
-                        userId: props.auth.getUser()
-                    },
-                    updateQuery: (prev, { subscriptionData }) => {
-                        if (!subscriptionData) return;
-                        refetch();
-                        return prev;
-                    }
-                }),
-                subscribeToMore({
-                    document: NOTIFICATION_MESSAGE,
-                    variables: {
-                        userId: props.auth.getUser()
-                    },
-                    updateQuery: (prev, { subscriptionData }) => {
-                        if (!subscriptionData) return;
-                        refetch();
-                        return prev;
-                    }
-                })
+                if (data.whoAmI.id) {
+                    subscribeToMore({
+                        document: NOTIFICATION_GAME,
+                        variables: {
+                            userId: data.whoAmI.id
+                        },
+                        updateQuery: (prev, { subscriptionData }) => {
+                            if (!subscriptionData) return;
+                            refetch();
+                            return prev;
+                        }
+                    }),
+                    subscribeToMore({
+                        document: NOTIFICATION_MESSAGE,
+                        variables: {
+                            userId: data.whoAmI.id
+                        },
+                        updateQuery: (prev, { subscriptionData }) => {
+                            if (!subscriptionData) return;
+                            refetch();
+                            return prev;
+                        }
+                    })
+                }
             }}
         />
     );
 }
 
-export default withAuth(NotificationSource);
+export default NotificationSource;

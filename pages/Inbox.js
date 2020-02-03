@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Layout from '../components/Layout/Layout';
 import dateTool from '../lib/dateTool';
 import classNames from 'classnames';
+import cookie from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const INBOX = gql`
     query Inbox {
@@ -34,6 +36,17 @@ function Inbox(props) {
 
     const [waiting, setWaiting] = useState(true);
 
+    const router = useRouter();
+
+    if (!cookie.get('token')) {
+        if (typeof window !== 'undefined') {
+            router.push('/');
+            router.replace('/','/Inbox');
+        }
+        
+        return null
+    }
+
     const { data, loading, error, refetch } = useQuery(INBOX);
     
 
@@ -48,8 +61,6 @@ function Inbox(props) {
         console.log(error)
         return <p>Error</p>
     }
-
-    console.log(data)
 
     const threadStyle = 
         <style jsx="true">{`

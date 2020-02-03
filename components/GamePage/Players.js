@@ -3,6 +3,7 @@ import Loading from '../Loading/Loading';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 import PlayerList from './PlayerList';
+import cookie from 'js-cookie';
 
 const GET_PLAYERS = gql`
   query Players($gameId: ID!) {
@@ -11,6 +12,7 @@ const GET_PLAYERS = gql`
       name
       role
       profilePic
+      isMe
     }
   }
 `;
@@ -21,6 +23,8 @@ const JOIN_GAME = gql`
       userId
       name
       role
+      profilePic
+      isMe
     }
   }
 `;
@@ -39,6 +43,8 @@ const PLAYER_JOINED = gql`
       userId
       name
       role
+      profilePic
+      isMe
     }
   }
 `;
@@ -81,7 +87,7 @@ function Players(props) {
   }
 
   let playerFound = data.players.some(player => {
-    return player.userId == props.currentUser;
+    return player.isMe;
   });
 
   const btnStyle = 
@@ -113,7 +119,7 @@ function Players(props) {
       {btnStyle}
     </React.Fragment>
   } 
-  else if (props.currentUser && openSpots > 0) {
+  else if (cookie.get('token') && openSpots > 0) {
     joinButton = 
     <React.Fragment key="join"> 
       <button 

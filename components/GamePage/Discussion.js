@@ -4,7 +4,6 @@ import CommentList from './CommentList';
 import Loading from '../Loading/Loading';
 import InputBox from './InputBox';
 
-
 const GET_COMMENTS = gql`
     query Comments($conversationId: ID!, $cursor: String) {
         messages(conversationId: $conversationId, cursor: $cursor) {
@@ -24,6 +23,10 @@ const GET_COMMENTS = gql`
                 endCursor
                 hasNextPage
             }
+        }
+
+        whoAmI {
+            id
         }
     }
 `;
@@ -106,8 +109,6 @@ function Discussion(props) {
     if (loading) return <Loading />
     if (error) return <h4>ERROR!!!</h4>
 
-    console.log(data)
-
     return (
         <React.Fragment>
             <div className="discussion-container">
@@ -117,7 +118,6 @@ function Discussion(props) {
                 <InputBox 
                     conversationId={props.conversationId} 
                     createComment={createComment} 
-                    currentUser={props.currentUser} 
                     invite={invite}
                     gameId={props.gameId}
                 />
@@ -126,6 +126,8 @@ function Discussion(props) {
                 <CommentList 
                     isOver={props.isOver}
                     comments={data.messages.edges}
+                    conversationId={props.conversationId} 
+                    currentUser={data.whoAmI.id}
                     updateComment={updateComment} 
                     deleteComment={deleteComment}
                     hasMore={data.messages.pageInfo.hasNextPage}
@@ -207,8 +209,6 @@ function Discussion(props) {
                             }
                         });
                     }} 
-                    currentUser={props.currentUser} 
-                 conversationId={props.conversationId} 
                 />
             </div>
 

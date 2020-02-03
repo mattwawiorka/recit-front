@@ -11,7 +11,6 @@ function SortingFiltering(props) {
         props.currentLoc[1] - 0.1095172763
     ];
 
-    // const loggedIn = useContext(AuthContext)
     const [showPanel, setShowPanel] = useState();
     const [sport, setSport] = useState("ALL");
     const [startDate, setStartDate] = useState("ALL");
@@ -41,7 +40,6 @@ function SortingFiltering(props) {
         <React.Fragment>
             <div className="game-feed-container">
                 <GameSource 
-                    loggedIn={props.loggedIn} 
                     sport={sport} 
                     startDate={startDate} 
                     openSpots={openSpots}

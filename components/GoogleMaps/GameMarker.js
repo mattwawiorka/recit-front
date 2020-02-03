@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
+import cookie from 'js-cookie';
 
 import Link from 'next/link';
 
 function GameMarker(props) {
     let image;
-    const { id, sport, loggedIn, hovered, clearHovered, onMouseEnter } = props;
+    const { id, sport, hovered, clearHovered, onMouseEnter } = props;
 
     if (sport === 'TENNIS') {
         image = "/tennis-ball.svg";
@@ -32,7 +33,7 @@ function GameMarker(props) {
         'hovered': hovered
     })
 
-    if (loggedIn) {
+    if (cookie.get('token')) {
         return (
             <>
                 <Link href='/Game/[game]' as={`/Game/${id}`} >

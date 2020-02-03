@@ -14,7 +14,6 @@ function Navigation(props) {
         if (props.subscribeToNotifications) {
             props.subscribeToNotifications();
         }
-        
     }, [])
 
     let dropDownClass = classNames({
@@ -105,7 +104,7 @@ function Navigation(props) {
             }
         `}</style>
 
-    if (props.loggedIn) {
+    if (props.user) {
         links = 
         <React.Fragment>
             <Link href='/Inbox' shallow={true}>

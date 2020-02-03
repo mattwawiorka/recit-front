@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import MyGames from './MyGames';
+import cookie from 'js-cookie';
 
 let loginWarning;
 
 function GameList(props) {
 
-  if (!props.loggedIn) {
+  if (!cookie.get('token')) {
     loginWarning = <strong id="listLoginWarning">Log in to open games</strong>
   }
   else {

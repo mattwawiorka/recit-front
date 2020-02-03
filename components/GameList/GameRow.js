@@ -2,9 +2,10 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import dateTool from '../../lib/dateTool';
 import classNames from 'classnames';
+import cookie from 'js-cookie';
 
 function GameRow(props) {
-  const { game, image, loggedIn, onMouseEnter, hovered, clearHovered, getScrollHeight, role } = props;
+  const { game, image, onMouseEnter, hovered, clearHovered, getScrollHeight, role } = props;
   let dateFormat, involvement;
 
   if (parseInt(game.dateTime) < dateTool.getEndOfWeek().valueOf()) {
@@ -13,7 +14,7 @@ function GameRow(props) {
     dateFormat = dateTool.getDateTime(parseInt(game.dateTime), true, false)
   }
 
-  if (!loggedIn) {
+  if (!cookie.get('token')) {
     dateFormat = "";
     game.venue = "";
   }
@@ -144,7 +145,8 @@ function GameRow(props) {
     }
   `}</style>
 
-  if (loggedIn) {
+  // If logged in, link to games
+  if (cookie.get('token')) {
     return (
       <React.Fragment>
         <Link href='/Game/[game]' as={`/Game/${game.id}`} shallow={true} >
