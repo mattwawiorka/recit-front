@@ -28,7 +28,7 @@ function GameInfo(props) {
         <div className="titleSport">
           <h2 style={{ textAlign: 'left', fontSize: "2em" }}>{game.title}</h2>
           <div id="customBorder"></div>
-          <h4 style={{ display: 'inline-block', width: '50%',  }}>{game.sport}</h4>
+          <h4 style={{ display: 'inline-block', width: '100%',  }}>{game.sport + " - " + (game.public ? "PUBLIC" : "PRIVATE")}</h4>
         </div>
         <div className="sport-image">
           <img src={image} alt={game.sport} className="image" />

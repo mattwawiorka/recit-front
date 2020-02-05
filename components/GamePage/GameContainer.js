@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import Router, { useRouter } from 'next/router';
 import Loading from '../Loading/Loading';
 import GameInfo from './GameInfo';
 import Players from './Players';
@@ -22,6 +21,8 @@ const GET_GAME = gql`
       sport
       description
       spots
+      spotsReserved
+      players
       location {
         coordinates
       }
@@ -51,9 +52,6 @@ function GameContainer(props) {
   const [editMode, setEditMode] = useState(false);
   const [inviteMode, setInviteMode] = useState(false);
   const [cancelMode, setCancelMode] = useState(false);
-  
-  const router = useRouter();
-  const { invited } = router.query;
 
   const variables = {
     id: props.gameId,
@@ -62,8 +60,12 @@ function GameContainer(props) {
 
   const { data, loading, error, refetch } = useQuery(GET_GAME, { variables: variables });
   const [cancelGame] = useMutation(CANCEL_GAME, { variables: { gameId: props.gameId } });
-  if (loading) return <Loading></Loading>
-  if (error) return <h4>ERROR!!!</h4>
+  if (loading) return <Loading />
+  if (error) {
+    console.log('what')
+    props.redirect(true);
+    return null;
+  }
 
   const isOver = Date.now() > data.game.dateTime;
 
@@ -89,6 +91,8 @@ function GameContainer(props) {
           endTime={endTime}
           sport={data.game.sport}
           spots={data.game.spots}
+          spotsReserved={data.game.spotsReserved}
+          playersCount={data.game.players}
           venue={data.game.venue}
           address={data.game.address}
           coords={data.game.location.coordinates}
@@ -105,9 +109,12 @@ function GameContainer(props) {
           toggleCancel={() => setCancelMode(!cancelMode)}
           cancelMode={cancelMode}
           cancelGame={() => {
+            console.log('cancelling')
             cancelGame()
             .then(response => {
-              Router.push('/');
+              if (response.data.deleteGame) {
+                props.redirect(false);
+              }
             })
           }}
         />
@@ -139,7 +146,6 @@ function GameContainer(props) {
           spots={data.game.spots} 
           isHost={data.host.userId === data.whoAmI.id} 
           toggleInvite={() => setInviteMode(true)}
-          invited={invited}
         />
       </div>
       

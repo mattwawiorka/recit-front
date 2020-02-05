@@ -19,6 +19,7 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
           coordinates
         }
         spots
+        spotsReserved
         players
       }
       cursor

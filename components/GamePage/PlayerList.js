@@ -33,6 +33,12 @@ function PlayerList(props) {
         border: 0;
       }
 
+      .reserved-spot {
+        margin: auto;
+        background-color: var(--darkermatter);
+        font-style: italic;
+      }
+
       .open-spot {
         // transform(-50%, 0%);
         margin: auto;
@@ -70,7 +76,7 @@ function PlayerList(props) {
       host = player;
     }
 
-    if (player) {
+    if (player && player.role != 3) {
       players.push(
         <React.Fragment key={i}>
           <Link href='/Profile/[user]' as={`/Profile/${player.userId}`}>
@@ -90,7 +96,27 @@ function PlayerList(props) {
           {playerStyle}
         </React.Fragment>
       );
-    } else {
+    } 
+    else if (player && player.role == 3) {
+      players.push(
+        <React.Fragment key={i}>
+          <div className="player" onClick={() => { if (!props.playerFound) props.joinGame() }}>
+            <span className="player-pic">
+              <img 
+                src={player.profilePic} 
+                className="player-pic-round"
+              />
+            </span>
+            
+            <span className="player-name-container">
+              <h3 className="player-name" style={{ fontStyle: "italic", fontSize: "0.9em" }}>Reserved Spot</h3>
+            </span>
+          </div>
+          {playerStyle}
+        </React.Fragment>
+      );
+    }
+    else {
       players.push(
         <React.Fragment key={i}>
           <div className="player" onClick={() => { if (!props.playerFound) props.joinGame() }}>

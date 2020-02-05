@@ -35,7 +35,8 @@ class CreateGameForm extends Component {
             endDate: this.props.endDate || "",
             endTime: this.props.endTime || "",
             sport: this.props.sport ? (this.props.sport.charAt(0) + this.props.sport.substring(1).toLowerCase()) : "",
-            spots: this.props.spots || 2,
+            spots: this.props.spots || 4,
+            spotsReserved: this.props.spotsReserved || 0,
             venue: this.props.venue || "",
             address: this.props.address || "",
             coords: this.props.coords || [],
@@ -73,6 +74,8 @@ class CreateGameForm extends Component {
                 description: e.target.innerText
             })
         })
+
+        console.log(this.props.playersCount > 0)
     }
 
     handleChange = (input) => (e) => {
@@ -80,6 +83,12 @@ class CreateGameForm extends Component {
             [input]: e.target.value,
             errors: [] 
         });
+
+        if (input === 'spots') {
+            this.setState({
+                spotsReserved: 0
+            })
+        }
 
         if (input === 'date') {
             this.setState({
@@ -129,12 +138,15 @@ class CreateGameForm extends Component {
     }
 
     render() {
-        const { title, isPublic, date, time, endDate, endTime, sport, spots, venue, address, coords, description } = this.state;
+        const { title, isPublic, date, time, endDate, endTime, sport, spots, spotsReserved, venue, address, coords, description } = this.state;
         const dateTime = new Date(date + "T" + time);
         let needsInput, invalidAddress, invalidSpots, invalidDescrip, invalidDate, invalidEnd;
         needsInput = invalidAddress = invalidSpots = invalidDescrip = invalidDate = invalidEnd = false;
 
         const endDateTime = new Date(endDate + "T" + endTime);
+
+        // Need to have at least 1 public spot open in public game 
+        const maxReservable = Math.max(spots - (this.props.playersCount ? this.props.playersCount : 0) - 1, 0);
 
         const errors = [];
         this.state.errors.map( (error, index) => {
@@ -172,6 +184,7 @@ class CreateGameForm extends Component {
             sport: sport.toUpperCase().trim(),
             description: description,
             spots: parseInt(spots),
+            spotsReserved: parseInt(spotsReserved),
             public: isPublic
         } } : { gameInput: {
             title: title,
@@ -183,6 +196,7 @@ class CreateGameForm extends Component {
             sport: sport.toUpperCase().trim(),
             description: description,
             spots: parseInt(spots),
+            spotsReserved: parseInt(spotsReserved),
             public: isPublic
         } }
 
@@ -333,18 +347,33 @@ class CreateGameForm extends Component {
                                 autoComplete="off"
                             />
                         </div>
-                        <div className="form-group split-form">
+                        <div className="form-group split-form-half">
                             <label className="header">No. Players</label>
                             <input
                                 className={playersClass}
                                 onChange={this.handleChange("spots")}
                                 type="number"
                                 autoComplete="off"
-                                min={this.props.spots || 2}
+                                min={this.props.playersCount > 1 ? this.props.playersCount : 2}
                                 max="32"
                                 value={spots}
                             />
                         </div>
+                        {isPublic ? 
+                        <div className="form-group split-form-half">
+                            <label className="header">Reserve Spots</label>
+                            <input
+                                className={playersClass}
+                                onChange={this.handleChange("spotsReserved")}
+                                type="number"
+                                autoComplete="off"
+                                min="0"
+                                max={maxReservable}
+                                value={spotsReserved}
+                            />
+                        </div>
+                        :
+                        null}
                     </div>
 
                     <div className="section" id="descriptionForm">
@@ -544,6 +573,13 @@ class CreateGameForm extends Component {
 
                 .split-form {
                     width: 50%;
+                    display: inline-block;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+
+                .split-form-half {
+                    width: 25%;
                     display: inline-block;
                     padding-left: 5px;
                     padding-right: 5px;

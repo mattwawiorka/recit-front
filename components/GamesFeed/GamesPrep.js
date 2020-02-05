@@ -219,7 +219,7 @@ function GamesPrep(props) {
             image = "/soccer-ball.png";
         } 
         else {
-            image = "rec-it.png";
+            image = "/rec-it.png";
         }
 
         row = 

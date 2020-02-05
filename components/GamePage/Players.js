@@ -6,11 +6,19 @@ import PlayerList from './PlayerList';
 import cookie from 'js-cookie';
 
 const GET_PLAYERS = gql`
-  query Players($gameId: ID!) {
+  query Players($gameId: ID!, $conversationId: ID!) {
     players(gameId: $gameId) {
       userId
       name
       role
+      profilePic
+      isMe
+    }
+
+    participants(conversationId: $conversationId) {
+      userId
+      name
+      level
       profilePic
       isMe
     }
@@ -69,7 +77,10 @@ function Players(props) {
   const [joinGame] = useMutation(JOIN_GAME, { variables: variables });
   const [leaveGame] = useMutation(LEAVE_GAME, { variables: variables });
   if (loading) return <Loading />
-  if (error) return <h4>ERROR!!!</h4>
+  if (error) {
+    console.log(error)
+    return <h4>ERROR!!!</h4>
+  }
 
   const openSpots = props.spots - data.players.length;
 
@@ -77,7 +88,7 @@ function Players(props) {
     spotsMessage = null
   }
   else if (openSpots === 0) {
-    spotsMessage = <h4>Game is Full</h4>
+    spotsMessage = <h4>No Spots Left</h4>
   } 
   else if (openSpots === 1) {
     spotsMessage = <h4>1 Spot Left</h4>
@@ -86,8 +97,16 @@ function Players(props) {
     spotsMessage = <h4>Open Spots: {openSpots}</h4>
   }
 
-  let playerFound = data.players.some(player => {
-    return player.isMe;
+  let playerFound = data.players.some(p => {
+    return p.isMe;
+  });
+
+  let watcherFound = data.participants.some(p => {
+    return p.isMe;
+  });
+
+  let reservedSpotFound = data.players.some(p => {
+    return !p.userId;
   });
 
   const btnStyle = 
@@ -120,6 +139,21 @@ function Players(props) {
     </React.Fragment>
   } 
   else if (cookie.get('token') && openSpots > 0) {
+    joinButton = 
+    <React.Fragment key="join"> 
+      <button 
+        onClick={() => {
+          joinGame()
+          .then(response => {
+            refetch();
+          }) 
+        }} 
+        className="btn"
+      >Join Game</button>
+      {btnStyle}
+    </React.Fragment>
+  }
+  else if (reservedSpotFound && watcherFound) {
     joinButton = 
     <React.Fragment key="join"> 
       <button 

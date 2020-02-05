@@ -164,7 +164,7 @@ function GameRow(props) {
               <h3>{game.venue}</h3> 
             </div> */}
             <div className="spots">
-              <h3>{role ? involvement : game.players + " / " + game.spots}</h3>
+              <h3>{role ? involvement : (game.players + game.spotsReserved) + " / " + game.spots}</h3>
             </div>
           </div>
         </Link>

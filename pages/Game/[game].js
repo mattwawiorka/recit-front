@@ -19,9 +19,24 @@ function GamePage(props) {
   }
 
   return (
-    <Layout main={false} showGamesButton={true} startGame={false} submitGame={true} clickEvent={() => router.push('/')}>
+    <Layout 
+      main={false} 
+      showGamesButton={true} 
+      startGame={false} 
+      submitGame={true} 
+      clickEvent={() => router.push('/')}
+    >
       <Announcements />
-      <GameContainer gameId={game} />
+      <GameContainer 
+        gameId={game} 
+        redirect={(keepURL) => {
+          router.push('/');
+          console.log('redirect keepURL',keepURL)
+          if (keepURL) {
+            router.replace('/','/game/' + router.query.game);
+          }
+        }}
+      />
       <br />
     </Layout>
   );
