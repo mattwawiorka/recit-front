@@ -71,6 +71,7 @@ const GAME_ADDED = gql`
           coordinates
         }
         spots
+        spotsReserved
         players
       }
     }
@@ -97,10 +98,14 @@ function GameSource(props) {
     if (props.bounds) {
       refetch();
     }
-  }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots])
+  }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots]);
+
+  useEffect(() => {
+    refetch_myGames();
+  }, [])
 
   const { data, loading, error, refetch, subscribeToMore, fetchMore } = useQuery(GET_GAMES, { variables: variables, ssr: true });
-  const { data: data_myGames, loading: loading_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES, { skip: !cookie.get('token') });
+  const { data: data_myGames, loading: loading_myGames, refetch: refetch_myGames, fetchMore: fetchMore_myGames } = useQuery(MY_GAMES, { skip: !cookie.get('token') });
   if (loading) return <Loading />
   if (loading_myGames) return <Loading />
   if (error) {
@@ -170,7 +175,6 @@ function GameSource(props) {
           },
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData.data.gameAdded) return prev;
-            // if (subscriptionData.data.gameAdded.cursor > prev.games.pageInfo.endCursor) return prev
             const gameExists = prev.games.edges.filter(edge => {
               return edge.node.id === subscriptionData.data.gameAdded.node.id;
             }).length > 0;

@@ -76,6 +76,7 @@ const COMMENT_ADDED = gql`
             }
             cursor
             isOwner
+            userPic
         }
     }
 `;
