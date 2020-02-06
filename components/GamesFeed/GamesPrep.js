@@ -231,7 +231,7 @@ function GamesPrep(props) {
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
                     getScrollHeight={scrollList}
-                    role={game.role}
+                    level={game.level}
                 />
                     
                 <div id="customBorder"></div>

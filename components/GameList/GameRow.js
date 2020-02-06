@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import cookie from 'js-cookie';
 
 function GameRow(props) {
-  const { game, image, onMouseEnter, hovered, clearHovered, getScrollHeight, role } = props;
+  const { game, image, onMouseEnter, hovered, clearHovered, getScrollHeight, level } = props;
   let dateFormat, involvement;
 
   if (parseInt(game.dateTime) < dateTool.getEndOfWeek().valueOf()) {
@@ -30,13 +30,13 @@ function GameRow(props) {
     if (scrollHeight !== null) getScrollHeight(scrollHeight)
   }, [hovered])
 
-  if (role == 1 ) {
+  if (level == 1 ) {
     involvement = "hosting";
   } 
-  else if (role == 2) {
+  else if (level == 2) {
     involvement = "joined";
   } 
-  else if (role == 3) {
+  else if (level == 3) {
     involvement = "interested";
   }
 
@@ -164,7 +164,7 @@ function GameRow(props) {
               <h3>{game.venue}</h3> 
             </div> */}
             <div className="spots">
-              <h3>{role ? involvement : (game.players + game.spotsReserved) + " / " + game.spots}</h3>
+              <h3>{level ? involvement : (game.players + game.spotsReserved) + " / " + game.spots}</h3>
             </div>
           </div>
         </Link>

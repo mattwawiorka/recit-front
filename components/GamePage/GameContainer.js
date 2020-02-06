@@ -62,7 +62,6 @@ function GameContainer(props) {
   const [cancelGame] = useMutation(CANCEL_GAME, { variables: { gameId: props.gameId } });
   if (loading) return <Loading />
   if (error) {
-    console.log('what')
     props.redirect(true);
     return null;
   }
@@ -109,7 +108,6 @@ function GameContainer(props) {
           toggleCancel={() => setCancelMode(!cancelMode)}
           cancelMode={cancelMode}
           cancelGame={() => {
-            console.log('cancelling')
             cancelGame()
             .then(response => {
               if (response.data.deleteGame) {

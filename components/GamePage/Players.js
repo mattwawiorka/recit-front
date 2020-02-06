@@ -1,26 +1,28 @@
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import Loading from '../Loading/Loading';
 import gql from 'graphql-tag';
-import Link from 'next/link';
 import PlayerList from './PlayerList';
-import cookie from 'js-cookie';
 
-const GET_PLAYERS = gql`
-  query Players($gameId: ID!, $conversationId: ID!) {
+const GET_PARTICIPANTS = gql`
+  query Participants($gameId: ID!, $conversationId: ID!) {
     players(gameId: $gameId) {
-      userId
-      name
-      role
-      profilePic
-      isMe
-    }
-
-    participants(conversationId: $conversationId) {
       userId
       name
       level
       profilePic
       isMe
+    }
+
+    watchers(conversationId: $conversationId) {
+      userId
+      name
+      level
+      profilePic
+      isMe
+    }
+
+    whoAmI {
+      id
     }
   }
 `;
@@ -30,7 +32,7 @@ const JOIN_GAME = gql`
     joinGame(gameId: $gameId, conversationId: $conversationId) {
       userId
       name
-      role
+      level
       profilePic
       isMe
     }
@@ -45,180 +47,169 @@ const LEAVE_GAME = gql`
   }
 `;
 
-const PLAYER_JOINED = gql`
-  subscription PlayerJoined($gameId: ID!) {
-    playerJoined(gameId: $gameId) {
+const SUBSCRIBE = gql`
+  mutation SubscribeToGame($gameId: ID!, $conversationId: ID!) {
+    subscribe(gameId: $gameId, conversationId: $conversationId) {
       userId
       name
-      role
+      level
       profilePic
       isMe
     }
   }
 `;
 
-const PLAYER_LEFT = gql`
-  subscription PlayerLeft($gameId: ID!) {
-    playerLeft(gameId: $gameId) {
+const UNSUBSCRIBE = gql`
+  mutation UnsubscribeToGame($gameId: ID!, $conversationId: ID!) {
+    unsubscribe(gameId: $gameId, conversationId: $conversationId) {
       userId
+      name
+      level
+      profilePic
+      isMe
+    }
+  }
+`;
+
+const NEW_PARTICIPANT = gql`
+  subscription ParticipantJoined($gameId: ID!) {
+    participantJoined(gameId: $gameId) {
+      userId
+      name
+      level
+      profilePic
+      isMe
+      invited
+      player
+      wasInterested
+    }
+  }
+`;
+
+const PARTICIPANT_LEFT = gql`
+  subscription ParticipantLeft($gameId: ID!) {
+    participantLeft(gameId: $gameId) {
+      userId
+      player
     }
   }
 `;
 
 function Players(props) {
-  let variables, spotsMessage, joinButton, inviteButton;
 
-  variables = { 
+  let variables = { 
     gameId: props.gameId,
     conversationId: props.conversationId
   }
 
-  const { data, loading, error, subscribeToMore, refetch } = useQuery(GET_PLAYERS, { variables: variables }); 
+  const { data, loading, error, subscribeToMore } = useQuery(GET_PARTICIPANTS, { variables: variables }); 
   const [joinGame] = useMutation(JOIN_GAME, { variables: variables });
   const [leaveGame] = useMutation(LEAVE_GAME, { variables: variables });
+  const [subscribe] = useMutation(SUBSCRIBE, { variables: variables });
+  const [unsubscribe] = useMutation(UNSUBSCRIBE, { variables: variables });
   if (loading) return <Loading />
   if (error) {
     console.log(error)
     return <h4>ERROR!!!</h4>
   }
 
-  const openSpots = props.spots - data.players.length;
-
-  if (props.isOver) {
-    spotsMessage = null
-  }
-  else if (openSpots === 0) {
-    spotsMessage = <h4>No Spots Left</h4>
-  } 
-  else if (openSpots === 1) {
-    spotsMessage = <h4>1 Spot Left</h4>
-  }
-  else {
-    spotsMessage = <h4>Open Spots: {openSpots}</h4>
-  }
-
-  let playerFound = data.players.some(p => {
-    return p.isMe;
+  let joined = data.players.some(p => {
+    return p.userId == data.whoAmI.id;
   });
 
-  let watcherFound = data.participants.some(p => {
-    return p.isMe;
+  let invited = data.watchers.some(w => {
+    return ((w.userId == data.whoAmI.id) && w.level == 3);
+  });
+
+  let interested = data.watchers.some(w => {
+    return ((w.userId == data.whoAmI.id) && w.level == 2);
   });
 
   let reservedSpotFound = data.players.some(p => {
     return !p.userId;
   });
 
-  const btnStyle = 
-    <style jsx="true">{`
-      .btn {
-        width: 55%;
-        // width: 7em;
-        height: 2em;
-        margin-top: 1em;
-      }
-    `}</style>
-
-  // Determine Join Button
-  if (props.isOver || props.isHost) {
-    joinButton = null;
-  }
-  else if (playerFound) {
-    joinButton = 
-    <React.Fragment key="join"> 
-      <button 
-        onClick={() => {
-          leaveGame()
-          .then(response => {
-            refetch();
-          }) 
-        }} 
-        className="btn"
-      >Leave Game</button>
-      {btnStyle}
-    </React.Fragment>
-  } 
-  else if (cookie.get('token') && openSpots > 0) {
-    joinButton = 
-    <React.Fragment key="join"> 
-      <button 
-        onClick={() => {
-          joinGame()
-          .then(response => {
-            refetch();
-          }) 
-        }} 
-        className="btn"
-      >Join Game</button>
-      {btnStyle}
-    </React.Fragment>
-  }
-  else if (reservedSpotFound && watcherFound) {
-    joinButton = 
-    <React.Fragment key="join"> 
-      <button 
-        onClick={() => {
-          joinGame()
-          .then(response => {
-            refetch();
-          }) 
-        }} 
-        className="btn"
-      >Join Game</button>
-      {btnStyle}
-    </React.Fragment>
-  }
-  else if (props.invited) {
-    joinButton = 
-    <React.Fragment key="join"> 
-      <Link href={`/Signup?invited=true&game=${props.gameId}`}>
-        <button className="btn">Join Game</button>
-      </Link>
-      {btnStyle}
-    </React.Fragment>
-  }
-  else {
-    joinButton = null;
-  }
-
-  // Determine Invite Button
-  if (!props.invited && !props.isOver) {
-    inviteButton = 
-      <React.Fragment key="invite">
-        <button onClick={props.toggleInvite} className="btn">Invite Players</button>
-        {btnStyle}
-      </React.Fragment>
-  }
-  else {
-    inviteButton = null;
-  }
-
   return (
     <PlayerList 
       players={data.players}
-      spotsMessage={spotsMessage}
+      watchers={data.watchers}
       spots={props.spots}
+      isOver={props.isOver}
+      isHost={props.isHost}
+      joined={joined}
+      reservedSpotFound={reservedSpotFound}
+      invited={invited}
+      interested={interested}
       joinGame={joinGame}
-      joinButton={joinButton}
-      inviteButton={inviteButton}
-      playerFound={playerFound}
+      leaveGame={leaveGame}
+      subscribe={subscribe}
+      unsubscribe={unsubscribe}
+      toggleInvite={props.toggleInvite}
       subscribeToMore={() => {
         subscribeToMore({
-          document: PLAYER_JOINED,
+          document: NEW_PARTICIPANT,
           variables: { gameId: props.gameId },
           updateQuery: (prev, { subscriptionData }) => {
-            if (!subscriptionData.data.playerJoined) return prev;
-            return { players: prev.players.concat([subscriptionData.data.playerJoined]) }
+            if (!subscriptionData.data.participantJoined) return prev;
+            else if (subscriptionData.data.participantJoined.player) {
+              let players, watchers;
+              if (subscriptionData.data.participantJoined.invited) {
+                let i = prev.players.findIndex(p => { return !p.userId })
+                players = prev.players;
+                players[i] = subscriptionData.data.participantJoined;
+              } else {
+                players = prev.players.concat([subscriptionData.data.participantJoined])
+              }
+              if (subscriptionData.data.participantJoined.wasInterested) {
+                watchers = prev.watchers.filter( val => {
+                  return val.userId !== subscriptionData.data.participantJoined.userId
+                });
+              } else {
+                watchers = prev.watchers
+              }
+              return {
+                players: players,
+                whoAmI: prev.whoAmI,
+                watchers: watchers
+              }
+            }
+            else {
+              let watchers = prev.watchers.concat([subscriptionData.data.participantJoined]);
+              return {
+                players: prev.players,
+                whoAmI: prev.whoAmI,
+                watchers: watchers
+              }
+            }
           }
         });
         subscribeToMore({
-          document: PLAYER_LEFT,
+          document: PARTICIPANT_LEFT,
           variables: { gameId: props.gameId },
           updateQuery: (prev, { subscriptionData }) => {
-            if (!subscriptionData.data.playerLeft) return prev;
-            return { players: prev.players.filter( val => {
-              return val.userId !== subscriptionData.data.playerLeft.userId
-            }) }
+            if (!subscriptionData.data.participantLeft) return prev;
+            else if (subscriptionData.data.participantLeft.player) {
+              let players;
+              players = prev.players.filter( val => {
+                return val.userId !== subscriptionData.data.participantLeft.userId
+              });
+              return {
+                players: players,
+                whoAmI: prev.whoAmI,
+                watchers: prev.watchers
+              }
+            }
+            else {
+              let watchers;
+              watchers = prev.watchers.filter( val => {
+                return val.userId !== subscriptionData.data.participantLeft.userId
+              });
+              return {
+                players: prev.players,
+                whoAmI: prev.whoAmI,
+                watchers: watchers
+              }
+            }
           }
         });
       }}

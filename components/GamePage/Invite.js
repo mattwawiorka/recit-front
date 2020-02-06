@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { useLazyQuery, useMutation } from 'react-apollo';
 
@@ -24,7 +24,7 @@ function Invite(props) {
 
     const router = useRouter();
 
-    const URL = "http://localhost:3000" + router.asPath + "?invited=true";
+    const URL = "https://localhost:3000" + router.asPath;
 
     const [searchValue, setSearchValue] = useState("");
     const [players, setPlayers] = useState([]);
@@ -68,6 +68,12 @@ function Invite(props) {
             })
         }
     }
+
+    const copyText = useCallback((e) => {
+        link.current.select();
+        document.execCommand('copy');
+        e.target.focus();
+    }, [])
 
     return (
         <React.Fragment>
@@ -138,8 +144,17 @@ function Invite(props) {
                 </div>
                 
                 <div className="section link-invite">
-                    <h3 className="game-link-heading">Shareable Link</h3>
-                    <p ref={link} className="game-link">{URL}</p>
+                    <h3>Shareable Link</h3>
+                    <div className="link-copy">
+                        <input 
+                            type="text"
+                            ref={link} 
+                            className="game-link" 
+                            readOnly
+                            value={URL}
+                        />
+                        <button onClick={(e) => copyText(e)}>Copy</button>
+                    </div>
                 </div>
                 
             </div>
@@ -239,15 +254,37 @@ function Invite(props) {
                     animation-name: fadein;
                 }
 
-                .game-link-heading {
+                .link-invite > h3 {
                     text-align: center;
                     margin-top: 1em;
                 }
 
+                .link-copy {
+                    display: inline-block;
+                    width: 100%;
+                    text-align: center;
+                }
+
                 .game-link {
                     text-align: center;
+                    min-width: 50%;
                     margin-top: 0.5em;
+                    resize: none;
+                    overflow: hidden;
+                    border: none;
+                    outline: none;
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    font-style: italic;
+                    color: var(--darkermatter);
+                    background-color: var(--greenapple);
                 } 
+
+                .link-copy > button {
+                    vertical-align: middle;
+                    height: 2em;
+                    width: 4em;
+                }
 
                 @keyframes fadein {
                     from {

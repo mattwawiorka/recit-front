@@ -1,12 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Loading from '../Loading/Loading';
 import Link from 'next/link';
 
 function PlayerList(props) {
-  let host, i;
+  let i, j;
 
-  useEffect(() => {
-      props.subscribeToMore();
-  }, [])
+  const [loading, setLoading] = useState(true);
+  const [host, setHost] = useState(null);
+  const [players, setPlayers] = useState([]);
+  const [spotsMessage, setSpotsMessage] = useState(null);
+  const [interestedMessage, setInterestedMessage] = useState(null);
+  const [joinButton, setJoinButton] = useState(null);
+  const [interestButton, setInterestButton] = useState(null);
+  const [inviteButton, setInviteButton] = useState(null);
+
+  const btnStyle = 
+    <style jsx="true">{`
+      .btn {
+        width: 55%;
+        // width: 7em;
+        height: 2em;
+        margin-top: 1em;
+      }
+
+      .btn-opposite {
+        background-color: var(--greyapple);
+        color: var(--darkermatter);
+      }
+
+      .btn-opposite:hover {
+        background-color: var(--greyapple);
+        color: var(--darkmatter);
+      }
+    `}</style>
 
   const playerStyle = 
     <style jsx="true">{`
@@ -68,19 +94,50 @@ function PlayerList(props) {
       }
     `}</style>
 
-  const players = [];
-  for (i = 0; i < props.spots; i++) {
-    let player = props.players[i];
 
-    if (player && player.role === 1) {
-      host = player;
-    }
+  useEffect(() => {
+    props.subscribeToMore();
+  }, [])
 
-    if (player && player.role != 3) {
-      players.push(
-        <React.Fragment key={i}>
-          <Link href='/Profile/[user]' as={`/Profile/${player.userId}`}>
-            <div className="player">
+  useEffect(() => {
+    const openSpots = Math.max(props.spots - props.players.length, 0);
+    let playersDisplay = [];
+
+    console.log(props)
+
+    // Determine Players
+    for (i = 0; i < props.spots; i++) {
+      let player = props.players[i];
+
+      if (player && player.level === 1) {
+        setHost(player.name);
+      }
+
+      if (player && player.level != 3) {
+        playersDisplay.push(
+          <React.Fragment key={i}>
+            <Link href='/Profile/[user]' as={`/Profile/${player.userId}`}>
+              <div className="player">
+                <span className="player-pic">
+                  <img 
+                    src={player.profilePic} 
+                    className="player-pic-round"
+                  />
+                </span>
+                
+                <span className="player-name-container">
+                  <h3 className="player-name">{player.name}</h3>
+                </span>
+              </div>
+            </Link>
+            {playerStyle}
+          </React.Fragment>
+        );
+      } 
+      else if (player && player.level == 3) {
+        playersDisplay.push(
+          <React.Fragment key={i}>
+            <div className="player" onClick={() => { if (!props.joined && props.invited) props.joinGame() }}>
               <span className="player-pic">
                 <img 
                   src={player.profilePic} 
@@ -89,73 +146,195 @@ function PlayerList(props) {
               </span>
               
               <span className="player-name-container">
-                <h3 className="player-name">{player.name}</h3>
+                <h3 className="player-name" style={{ fontStyle: "italic", fontSize: "0.9em" }}>Reserved Spot</h3>
               </span>
             </div>
-          </Link>
-          {playerStyle}
+            {playerStyle}
+          </React.Fragment>
+        );
+      }
+      else {
+        playersDisplay.push(
+          <React.Fragment key={i}>
+            <div className="player" onClick={() => { if (!props.joined) props.joinGame() }}>
+              <span className="player-pic">
+                <div 
+                  className="player-pic-round open-spot"
+                />
+              </span>
+              
+              <span className="player-name-container">
+                <h3 className="player-name" style={{ fontStyle: "italic", fontSize: "0.9em" }}>Open Spot</h3>
+              </span>
+            </div>
+            {playerStyle}
+          </React.Fragment>
+        );
+      }
+
+      if (i == props.spots - 1) {
+        setPlayers(playersDisplay)
+        setLoading(false)
+      }
+    }
+
+    // Spots message
+    if (props.isOver) {
+      setSpotsMessage(null)
+    }
+    else if (openSpots === 0) {
+      setSpotsMessage(<h4>No Spots Left</h4>)
+    } 
+    else if (openSpots === 1) {
+      setSpotsMessage(<h4>1 Spot Left</h4>)
+    }
+    else {
+      setSpotsMessage(<h4>Open Spots: {openSpots}</h4>)
+    }
+
+    // Watchers message
+    let numberInterested = 0;
+    for (j = 0; j < props.watchers.length; j++) {
+      if (props.watchers[j].level == 2) numberInterested++
+    }
+    if (numberInterested=== 0) {
+      setInterestedMessage(null)
+    }
+    else {
+      setInterestedMessage(<h4>{numberInterested + " Interested"}</h4>)
+    }
+
+    // Determine Join Button
+    if (props.isOver) {
+      setJoinButton(null);
+    }
+    else if (props.joined && !props.isHost) {
+      setJoinButton(
+        <React.Fragment key="leave"> 
+          <button 
+            onClick={() => {
+              props.leaveGame()
+              .then(response => {
+                // refetch();
+              }) 
+            }} 
+            className="btn"
+          >Leave Game</button>
+          {btnStyle}
         </React.Fragment>
       );
     } 
-    else if (player && player.role == 3) {
-      players.push(
-        <React.Fragment key={i}>
-          <div className="player" onClick={() => { if (!props.playerFound) props.joinGame() }}>
-            <span className="player-pic">
-              <img 
-                src={player.profilePic} 
-                className="player-pic-round"
-              />
-            </span>
-            
-            <span className="player-name-container">
-              <h3 className="player-name" style={{ fontStyle: "italic", fontSize: "0.9em" }}>Reserved Spot</h3>
-            </span>
-          </div>
-          {playerStyle}
+    else if (!props.joined && openSpots > 0) {
+      setJoinButton(
+        <React.Fragment key="join"> 
+          <button 
+            onClick={() => {
+              console.log('joining')
+              props.joinGame()
+              .then(response => {
+                // refetch();
+              }) 
+            }} 
+            className="btn"
+          >Join Game</button>
+          {btnStyle}
+        </React.Fragment>
+      );
+    }
+    else if (props.reservedSpotFound && props.invited) {
+      setJoinButton(
+        <React.Fragment key="join"> 
+          <button 
+            onClick={() => {
+              props.joinGame()
+              .then(response => {
+                // refetch();
+              }) 
+            }} 
+            className="btn"
+          >Join Game</button>
+          {btnStyle}
+        </React.Fragment>
+      );
+    }
+
+    // Determine Interest Button
+    if (props.isOver) {
+      setInterestButton(null);
+    }
+    else if (!props.joined && !props.isHost && !props.interested) {
+      setInterestButton(
+        <React.Fragment key="subscribe"> 
+          <button 
+            onClick={() => {
+              props.subscribe()
+              .then(response => {
+                console.log(response)
+              }) 
+            }} 
+            className="btn"
+          >Interested</button>
+          {btnStyle}
+        </React.Fragment>
+      );
+    } 
+    else if (props.interested) {
+      setInterestButton(
+        <React.Fragment key="unsubscribe"> 
+          <button 
+            onClick={() => {
+              props.unsubscribe()
+              .then(response => {
+                // refetch();
+              }) 
+            }} 
+            className="btn btn-opposite"
+          >Not Interested</button>
+          {btnStyle}
         </React.Fragment>
       );
     }
     else {
-      players.push(
-        <React.Fragment key={i}>
-          <div className="player" onClick={() => { if (!props.playerFound) props.joinGame() }}>
-            <span className="player-pic">
-              <div 
-                className="player-pic-round open-spot"
-              />
-            </span>
-            
-            <span className="player-name-container">
-              <h3 className="player-name" style={{ fontStyle: "italic", fontSize: "0.9em" }}>Open Spot</h3>
-            </span>
-          </div>
-          {playerStyle}
-        </React.Fragment>
+      setInterestButton(null)
+    }
+
+    // Determine Invite Button
+    if (!props.isOver) {
+      setInviteButton(
+          <React.Fragment key="invite">
+            <button onClick={props.toggleInvite} className="btn">Invite Players</button>
+            {btnStyle}
+          </React.Fragment>
       );
     }
-    
-  }
+
+  }, [props.players, props.watchers])
+
+  if (loading) return <Loading />
 
   return (
     <React.Fragment>
       <div className="players-container">
         <div className="host">  
-          <h3>{host ? "Hosted by " + host.name : null}</h3>
+          <h3>{host ? "Hosted by " + host : null}</h3>
         </div>
 
         <div className="players">
-          {/* <h3 style={{ textDecoration: 'underline' }}>Players</h3> */}
           {players}
         </div>
 
         <div className="spots">
-          {props.spotsMessage}
+          {spotsMessage}
+        </div>
+
+        <div className="spots">
+          {interestedMessage}
         </div>
 
         <div className="buttons">
-          {props.joinButton}
-          {props.inviteButton}
+          {joinButton}
+          {interestButton}
+          {inviteButton}
         </div>
       </div>
 

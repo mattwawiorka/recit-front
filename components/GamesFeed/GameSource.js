@@ -42,7 +42,7 @@ const MY_GAMES = gql`
           sport
           dateTime
         }
-        role
+        level
       }
       totalCount
       pageInfo {     

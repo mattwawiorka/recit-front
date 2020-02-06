@@ -79,11 +79,8 @@ function Login(props) {
                 }
                 else if (response.data.loginFb) {
                     cookie.set('token', response.data.loginFb, { expires: 1 })
-                    if (Router.query.invited) {
-                        Router.push('/Game/[game]', `/Game/${Router.query.game}`);
-                    } else {
-                        Router.push('/');
-                    }
+
+                    Router.push('/');
                 }
             }) 
         }
@@ -97,11 +94,7 @@ function Login(props) {
                 else if (response.data.verifyUserPhone) {
                     cookie.set('token', response.data.verifyUserPhone, { expires: 1 })
 
-                    if (Router.query.invited) {
-                        Router.push('/Game/[game]', `/Game/${Router.query.game}`);
-                    } else {
-                        Router.push('/');
-                    }
+                    Router.push('/');
                 }
             }) 
         }
