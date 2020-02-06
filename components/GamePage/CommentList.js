@@ -31,6 +31,7 @@ function CommentList(props) {
                     <React.Fragment key={comment.node.id}>
                         <Comment 
                             comment={comment.node}
+                            userPic={comment.userPic}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
                             isOwner={(comment.node.userId == props.currentUser || comment.isOwner) && !props.isOver} 
@@ -43,6 +44,7 @@ function CommentList(props) {
                     <React.Fragment key={comment.node.id}>
                         <Comment 
                             comment={comment.node}
+                            userPic={comment.userPic}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
                             isOwner={(comment.node.userId == props.currentUser || comment.isOwner) && !props.isOver} 

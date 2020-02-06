@@ -18,6 +18,7 @@ const GET_COMMENTS = gql`
                 }
                 cursor
                 isOwner
+                userPic
             }
             pageInfo {     
                 endCursor
@@ -27,6 +28,7 @@ const GET_COMMENTS = gql`
 
         whoAmI {
             id
+            profilePic
         }
     }
 `;
@@ -120,6 +122,7 @@ function Discussion(props) {
                     createComment={createComment} 
                     invite={invite}
                     gameId={props.gameId}
+                    userPic={data.whoAmI.profilePic}
                 />
                 }
 
