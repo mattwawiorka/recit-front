@@ -10,6 +10,7 @@ const FIND_PLAYER = gql`
                 node {
                     id
                     name
+                    number
                 }
                 cursor
             }
@@ -41,10 +42,8 @@ function Invite(props) {
     
     const link = useRef(null);
 
-    const [findPlayer, { called, loading, data, refetch }] = useLazyQuery(FIND_PLAYER);
+    const [findPlayer, { called, data }] = useLazyQuery(FIND_PLAYER);
     const [invite] = useMutation(INVITE);
-
-    console.log(data)
 
     if (data && data.findUser) {
         if (searchValue === "") {
@@ -60,7 +59,10 @@ function Invite(props) {
                                 setPlayers([...players, { id: user.node.id, name: user.node.name }]);
                                 setSearchValue("");
                             }}
-                        >{user.node.name}</div>
+                        >
+                            {user.node.name}
+                            <span className="jersey-number">{"#" + user.node.number}</span>
+                        </div>
 
                         <style jsx>{`
                             .search-result {
@@ -68,6 +70,13 @@ function Invite(props) {
                                 color: black;
                                 font-size: 1.2em;
                                 cursor: pointer;
+                            }
+
+                            .jersey-number {
+                                color: grey;
+                                font-size: 0.65em;
+                                margin-left: 1em;
+                                font-family: 'Bitter', serif;
                             }
 
                             .search-result:hover {

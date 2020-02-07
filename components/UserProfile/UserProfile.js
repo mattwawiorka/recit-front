@@ -186,7 +186,7 @@ function UserProfile(props) {
                     }
                     
                     <article className="user-heading">
-                        <h1 className="name">{props.user.name}</h1>
+                        <h1 className="name">{props.user.name}<span className="jersey-number">{props.user.number}</span></h1>
                         {props.owner ? 
                         <React.Fragment>
                             {(editMode || newProfile || newPic1 || newPic2 || newPic3) ?
@@ -496,6 +496,13 @@ function UserProfile(props) {
                     display: inline-block;
                     font-size: 2.5em;
                     padding-left: 0.5em;
+                }
+
+                .jersey-number {
+                    color: white;
+                    font-size: 0.65em;
+                    margin-left: 2em;
+                    font-family: 'Bitter', serif;
                 }
 
                 .btn-edit {

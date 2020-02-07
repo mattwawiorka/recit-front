@@ -14,6 +14,7 @@ const GET_USER = gql`
         node {
             id
             name
+            number
             createdAt
             dob
             gender
