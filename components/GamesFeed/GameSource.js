@@ -90,15 +90,14 @@ function GameSource(props) {
     sport: props.sport,
     startDate: props.startDate,
     openSpots: props.openSpots,
-    bounds: props.bounds,
-    sortOrder: props.sortOrder
+    bounds: props.bounds
   };
 
   useEffect(() => {
     if (props.bounds) {
       refetch();
     }
-  }, [props.sport, props.startDate, props.bounds, props.sortOrder, props.openSpots]);
+  }, [props.sport, props.startDate, props.bounds, props.openSpots]);
 
   useEffect(() => {
     refetch_myGames();
@@ -145,7 +144,6 @@ function GameSource(props) {
         })
       }
       hasMore={data.games.pageInfo.hasNextPage}
-      sortOrder={props.sortOrder}
       loadMore={() => 
         fetchMore({
           variables: {cursor: data.games.pageInfo.endCursor},

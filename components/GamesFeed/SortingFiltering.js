@@ -17,7 +17,6 @@ function SortingFiltering(props) {
     const [openSpots, setOpenSpots] = useState("0");
     const [bounds, setBounds] = useState(initialBounds);
     const [zoom, setZoom] = useState(12);
-    const [sortOrder, setSortOrder] = useState("DATE");
 
     const setMapBounds = useCallback((mapBounds, mapZoom) => {
         setBounds(mapBounds);
@@ -47,7 +46,6 @@ function SortingFiltering(props) {
                     getMapBounds={setMapBounds}
                     bounds={bounds}
                     zoom={zoom}
-                    sortOrder={sortOrder}
                 />
             </div>
                 
@@ -97,35 +95,16 @@ function SortingFiltering(props) {
                     </div>
 
                     <div className="form-group">
-                        <label className="header">Open Spots</label>
-                        <select 
-                            onChange={e => setOpenSpots(e.target.value)} 
+                        <label className="header">Min Open Spots</label>
+                        <input 
+                            type="number"
                             className="input-fields"
                             value={openSpots}
-                        >
-                            <option value={0}>Show Full</option>
-                            <option value={1}>1+</option>
-                            <option value={2}>2+</option>
-                            <option value={3}>3+</option>
-                            <option value={4}>4+</option>
-                        </select>
+                            onChange={e => setOpenSpots(e.target.value)} 
+                            min="0"
+                            max="31"
+                        />
                     </div>
-
-                    
-                    {/* Disable sorting by open spots, at least for now
-                    <div className="form-group">
-                        <label className="header">Sort Order</label>
-                        <select 
-                            onChange={e => setSortOrder(e.target.value)} 
-                            className="input-fields"
-                            value={sortOrder}
-                        >
-                            <option value="DATE">Date</option>
-                            <option value="SPOTS" >Open Spots</option>
-                        </select>
-                    </div> 
-                    */}
-                    
                 </form>
             </aside>
 

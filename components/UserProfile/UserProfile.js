@@ -5,6 +5,8 @@ import cookie from 'js-cookie';
 function UserProfile(props) {
     let pastGames = [], image; 
 
+    console.log(props)
+
     const [editMode, setEditMode] = useState(false);
     const [name, setName] = useState();
     const [dob, setDOB] = useState();
@@ -76,7 +78,7 @@ function UserProfile(props) {
 
         row = 
             <React.Fragment key={game.node.id}>
-                <div className="past-game" ref={(index + 1 === props.pastGames.length) ? lastGameRef : null}>
+                <div className="past-game">
                     <img className="sport-image" src={image} />
                     <div className="game-title">{game.node.title}</div>
                     <div className="game-date">{dateTool.getMonthYear(game.node.dateTime)}</div>
@@ -116,20 +118,6 @@ function UserProfile(props) {
         pastGames.push(row)
     });
 
-    const observer = useRef();
-    const lastGameRef = useCallback(node => {
-        if (observer.current) observer.current.disconnect()
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {    
-                observer.current.disconnect();
-                if (props.hasMore) {
-                    props.loadMore();
-                } 
-            }
-        })
-        if (node) observer.current.observe(node)
-    },[props.pastGames, props.hasMore])
-
     useEffect(() => {
         if (overlay.current) {
             overlay.current.addEventListener("click", e => {
@@ -161,7 +149,6 @@ function UserProfile(props) {
                         <img 
                             src={viewerPic}
                             className="image-round"
-                            // onClick={() => setPicMode(true)}
                         />
                         </label>
                         {props.owner ?
@@ -356,6 +343,12 @@ function UserProfile(props) {
                         <p className="stats-title">Top sport: <span className="stat">{props.topSport.charAt(0) + props.topSport.substring(1).toLowerCase()}</span></p>
                     </div>
                     {pastGames}
+                    {props.hasMore ?
+                    <button className="btn-load-more" onClick={props.loadMore}>
+                         + Load more
+                    </button>
+                    :
+                    null}
                 </section>
 
                 <section className="pic-gallery">
@@ -594,6 +587,18 @@ function UserProfile(props) {
                     height: min-content;
                     width: 35%;
                     padding: 1em;
+                }
+    
+                .btn-load-more {
+                    transform: translate(-50%);
+                    margin: 0 50%;
+                    width: 10em;
+                    background-color: var(--greenapple);
+                    color: var(--darkmatter);
+                    text-align: center;
+                    font-size: 1em;
+                    cursor: pointer;
+                    outline: none;
                 }
 
                 .stats {

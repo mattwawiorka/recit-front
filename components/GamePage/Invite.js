@@ -4,10 +4,19 @@ import gql from 'graphql-tag';
 import { useLazyQuery, useMutation } from 'react-apollo';
 
 const FIND_PLAYER = gql`
-    query FindPlayer($name: String!, $location: [Float]) {
-        findUser(name: $name, location: $location) {
-            id
-            name
+    query FindPlayer($name: String!, $location: [Float], $cursor: String) {
+        findUser(name: $name, location: $location, cursor: $cursor) {
+            edges {
+                node {
+                    id
+                    name
+                }
+                cursor
+            }
+            pageInfo {     
+                endCursor
+                hasNextPage
+            }
         }
     }
 `;
@@ -32,24 +41,34 @@ function Invite(props) {
     
     const link = useRef(null);
 
-    const [findPlayer, { called, loading, data }] = useLazyQuery(FIND_PLAYER);
+    const [findPlayer, { called, loading, data, refetch }] = useLazyQuery(FIND_PLAYER);
     const [invite] = useMutation(INVITE);
 
-    if (data) {
+    console.log(data)
+
+    if (data && data.findUser) {
         if (searchValue === "") {
             searchResults = null;
         } else {
-            searchResults = data.findUser.map( user => {
-                if (players.filter(p => p.name === user.name).length > 0) return
+            searchResults = data.findUser.edges.map( (user, index) => {
+                if (players.filter(p => p.name === user.node.name).length > 0) return
                 return (
-                    <React.Fragment key={user.id}>
+                    <React.Fragment key={user.node.id}>
                         <div 
                             className="search-result"
                             onClick={() => {
-                                setPlayers([...players, { id: user.id, name: user.name }]);
+                                setPlayers([...players, { id: user.node.id, name: user.node.name }]);
                                 setSearchValue("");
                             }}
-                        >{user.name}</div>
+                        >{user.node.name}</div>
+
+                        {/* {(data.findUser.edges.length > 9) && (index == data.findUser.edges.length - 1) ?
+                        <div 
+                            className="search-result"
+                            onClick={() => findPlayer({ variables: { name: searchValue,  location: props.location, cursor: data.findUser.pageInfo.endCursor } })}
+                        >Load More</div>
+                        :
+                        null} */}
 
                         <style jsx>{`
                             .search-result {

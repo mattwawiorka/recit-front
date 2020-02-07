@@ -180,26 +180,21 @@ function GamesPrep(props) {
             </React.Fragment>
         }
 
-        if (props.sortOrder === "DATE") {
-            if (parseInt(game.node.dateTime) < dateTool.getTomorrow().valueOf()) {
-                todayGames.push(row);
-            } 
-            else if (parseInt(game.node.dateTime) < dateTool.getDayAfterTomorrow().valueOf()) {
-                tomorrowGames.push(row);
-            }
-            else if (parseInt(game.node.dateTime) < dateTool.getEndOfWeek().valueOf()) {
-                thisWeekGames.push(row);
-            }
-            else if (parseInt(game.node.dateTime) < dateTool.getEndOfNextWeek().valueOf()) {
-                nextWeekGames.push(row);
-            }
-            else {
-                laterGames.push(row);
-            }
-        } else {
-            gamesBySpots.push(row);
+        if (parseInt(game.node.dateTime) < dateTool.getTomorrow().valueOf()) {
+            todayGames.push(row);
+        } 
+        else if (parseInt(game.node.dateTime) < dateTool.getDayAfterTomorrow().valueOf()) {
+            tomorrowGames.push(row);
         }
-        
+        else if (parseInt(game.node.dateTime) < dateTool.getEndOfWeek().valueOf()) {
+            thisWeekGames.push(row);
+        }
+        else if (parseInt(game.node.dateTime) < dateTool.getEndOfNextWeek().valueOf()) {
+            nextWeekGames.push(row);
+        }
+        else {
+            laterGames.push(row);
+        }  
     });
 
     // Set data for my games
@@ -272,7 +267,6 @@ function GamesPrep(props) {
                     thisWeekGames={thisWeekGames}
                     nextWeekGames={nextWeekGames}
                     laterGames={laterGames}
-                    sortOrder={props.sortOrder}
                     gamesBySpots={gamesBySpots}
                     scroll={scroll}
                     scrollTo={scrollHeight}

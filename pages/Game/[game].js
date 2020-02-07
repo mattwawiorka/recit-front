@@ -31,7 +31,6 @@ function GamePage(props) {
         gameId={game} 
         redirect={(keepURL) => {
           router.push('/');
-          console.log('redirect keepURL',keepURL)
           if (keepURL) {
             router.replace('/','/game/' + router.query.game);
           }
