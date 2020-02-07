@@ -62,14 +62,6 @@ function Invite(props) {
                             }}
                         >{user.node.name}</div>
 
-                        {/* {(data.findUser.edges.length > 9) && (index == data.findUser.edges.length - 1) ?
-                        <div 
-                            className="search-result"
-                            onClick={() => findPlayer({ variables: { name: searchValue,  location: props.location, cursor: data.findUser.pageInfo.endCursor } })}
-                        >Load More</div>
-                        :
-                        null} */}
-
                         <style jsx>{`
                             .search-result {
                                 background-color: white;
@@ -125,6 +117,14 @@ function Invite(props) {
                             searchResults
                             : null}
                         </div>
+
+                        {data && data.findUser.pageInfo.hasNextPage && searchValue != "" ?
+                        <button 
+                            className="btn-load-more"
+                            onClick={() => findPlayer({ variables: { name: searchValue,  location: props.location, cursor: data.findUser.pageInfo.endCursor } })}
+                        >Load More</button>
+                        :
+                        null}
                     </div>
 
                     <div className="players-selected">

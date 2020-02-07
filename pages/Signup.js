@@ -38,7 +38,7 @@ const SIGNUP_PHONE = gql`
 
 function Signup(props) {
 
-    const [location, setLocation] = useState([47.7169839910907, -122.32040939782564]);
+    const [location, setLocation] = useState([47.621354, -122.333289]);
     const [userInput, setUserInput] = useState(null);
     const [phoneNumber, setPhoneNumber] = useState("");
     const [firstName, setFirstName] = useState(null);
