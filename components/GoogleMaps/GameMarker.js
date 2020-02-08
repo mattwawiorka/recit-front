@@ -5,24 +5,8 @@ import cookie from 'js-cookie';
 import Link from 'next/link';
 
 function GameMarker(props) {
-    let image;
-    const { id, sport, hovered, clearHovered, onMouseEnter } = props;
 
-    if (sport === 'TENNIS') {
-        image = "/tennis-ball.svg";
-    } 
-    else if (sport === 'BASKETBALL') {
-        image = "/basketball.svg";
-    }
-    else if (sport === 'FOOTBALL') {
-        image = "/american-football.svg";
-    } 
-    else if (sport === 'SOCCER') {
-        image = "/soccer-ball.png";
-    } 
-    else {
-        image = "rec-it.png";
-    }
+    const { id, sport, image, hovered, clearHovered, onMouseEnter } = props;
 
     const getHovered = useCallback(() => {
         onMouseEnter(id, true)

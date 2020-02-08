@@ -34,6 +34,7 @@ const GET_USER = gql`
               id
               title
               sport
+              image
               dateTime
             }
             cursor

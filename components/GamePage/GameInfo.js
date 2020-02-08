@@ -4,23 +4,6 @@ function GameInfo(props) {
 
   const { game, isHost, toggleEditing, cancelMode, toggleCancel, cancelGame } = props;
 
-  let image;
-  if (game.sport === 'TENNIS') {
-    image = "/tennis-ball.svg";
-  } 
-  else if (game.sport === 'BASKETBALL') {
-    image = "/basketball.svg";
-  }
-  else if (game.sport === 'FOOTBALL') {
-    image = "/american-football.svg";
-  } 
-  else if (game.sport === 'SOCCER') {
-    image = "/soccer-ball.png";
-  } 
-  else {
-    image = "/rec-it.png";
-  }
-
   return (
     <React.Fragment>
     <div className="game-info-container">
@@ -31,7 +14,7 @@ function GameInfo(props) {
           <h4 style={{ display: 'inline-block', width: '100%',  }}>{game.sport + " - " + (game.public ? "PUBLIC" : "PRIVATE")}</h4>
         </div>
         <div className="sport-image">
-          <img src={image} alt={game.sport} className="image" />
+          <img src={game.image} alt={game.sport} className="image" />
         </div>
       </div>
 

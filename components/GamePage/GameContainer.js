@@ -19,6 +19,7 @@ const GET_GAME = gql`
       venue
       address
       sport
+      image
       description
       spots
       spotsReserved

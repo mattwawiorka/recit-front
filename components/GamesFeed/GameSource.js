@@ -13,6 +13,7 @@ query Games($cursor: String, $sport: String, $startDate: String, $openSpots: Str
         id
         title
         sport
+        image
         venue
         dateTime
         location {
@@ -40,6 +41,7 @@ const MY_GAMES = gql`
           id
           title
           sport
+          image
           dateTime
         }
         level

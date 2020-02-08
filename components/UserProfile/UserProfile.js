@@ -3,9 +3,7 @@ import dateTool from '../../lib/dateTool';
 import cookie from 'js-cookie';
 
 function UserProfile(props) {
-    let pastGames = [], image; 
-
-    console.log(props)
+    let pastGames = []; 
 
     const [editMode, setEditMode] = useState(false);
     const [name, setName] = useState();
@@ -60,26 +58,13 @@ function UserProfile(props) {
         return true;
     }, []);
 
-    props.pastGames.map( (game, index) => {
+    props.pastGames.map( game => {
         let row;
-
-        if (game.node.sport === 'TENNIS') {
-            image = "/tennis-ball.svg";
-        } 
-        else if (game.node.sport === 'BASKETBALL') {
-            image = "/basketball.svg";
-        }
-        else if (game.node.sport === 'FOOTBALL') {
-            image = "/american-football.svg";
-        } 
-        else {
-            image = "/rec-it.png";
-        }
 
         row = 
             <React.Fragment key={game.node.id}>
                 <div className="past-game">
-                    <img className="sport-image" src={image} />
+                    <img className="sport-image" src={game.node.image} />
                     <div className="game-title">{game.node.title}</div>
                     <div className="game-date">{dateTool.getMonthYear(game.node.dateTime)}</div>
                 </div>

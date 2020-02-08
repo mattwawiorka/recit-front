@@ -9,7 +9,7 @@ import supercluster from 'points-cluster';
 import MyGames from '../GameList/MyGames';
 
 function GamesPrep(props) {
-    let marker, image;
+    let marker;
     const [games, setGames] = useState(props.games || [])
     const [hovered, setHovered] = useState(null);
     const [scroll, setScroll] = useState(false);
@@ -68,6 +68,7 @@ function GamesPrep(props) {
         markersData.push({
             id: g.node.id,
             sport: g.node.sport,
+            image: g.node.image,
             lat: g.node.location.coordinates[0],
             lng: g.node.location.coordinates[1]
         })
@@ -92,6 +93,7 @@ function GamesPrep(props) {
                     lat={cluster.wy}
                     lng={cluster.wx}
                     sport={cluster.points[0].sport}
+                    image={cluster.points[0].image}
                     onMouseEnter={getHovered}
                     hovered={hovered === cluster.points[0].id}
                     clearHovered={clearHovered}
@@ -114,30 +116,12 @@ function GamesPrep(props) {
 
     // Set data for games list
     games.map((game, index) => {
-
-        if (game.node.sport === 'TENNIS') {
-            image = "/tennis-ball.svg";
-        } 
-        else if (game.node.sport === 'BASKETBALL') {
-            image = "/basketball.svg";
-        }
-        else if (game.node.sport === 'FOOTBALL') {
-            image = "/american-football.svg";
-        } 
-        else if (game.node.sport === 'SOCCER') {
-            image = "/soccer-ball.png";
-        } 
-        else {
-            image = "rec-it.png";
-        }
-
         let row;
         if (games.length === index + 1) {
             row = 
             <React.Fragment key={game.node.id}>
                 <GameRow 
                     game={game.node}
-                    image={image}
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
@@ -160,7 +144,6 @@ function GamesPrep(props) {
             <React.Fragment key={game.node.id}>
                 <GameRow 
                     game={game.node}
-                    image={image}
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
@@ -200,28 +183,10 @@ function GamesPrep(props) {
     // Set data for my games
     props.myGames.map(game => {
         let row;
-
-        if (game.node.sport === 'TENNIS') {
-            image = "/tennis-ball.svg";
-        } 
-        else if (game.node.sport === 'BASKETBALL') {
-            image = "/basketball.svg";
-        }
-        else if (game.node.sport === 'FOOTBALL') {
-            image = "/american-football.svg";
-        } 
-        else if (game.node.sport === 'SOCCER') {
-            image = "/soccer-ball.png";
-        } 
-        else {
-            image = "/rec-it.png";
-        }
-
         row = 
             <React.Fragment key={game.node.id}>
                 <GameRow 
                     game={game.node}
-                    image={image}
                     onMouseEnter={getHovered}
                     hovered={hovered === game.node.id}
                     clearHovered={clearHovered}
