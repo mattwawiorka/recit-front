@@ -91,6 +91,7 @@ const PARTICIPANT_LEFT = gql`
     participantLeft(gameId: $gameId) {
       userId
       player
+      number
     }
   }
 `;
@@ -189,10 +190,13 @@ function Players(props) {
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData.data.participantLeft) return prev;
             else if (subscriptionData.data.participantLeft.player) {
-              let players;
-              players = prev.players.filter( val => {
-                return val.userId !== subscriptionData.data.participantLeft.userId
-              });
+              console.log(subscriptionData)
+              let players, index;
+              players = prev.players.slice();
+              index = players.findIndex((player) => {
+                return player.userId == subscriptionData.data.participantLeft.userId
+              })
+              players.splice(index, subscriptionData.data.participantLeft.number || 1);
               return {
                 players: players,
                 whoAmI: prev.whoAmI,

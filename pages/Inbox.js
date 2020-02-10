@@ -27,6 +27,10 @@ const INBOX = gql`
                     updatedAt
                 }
             }
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
         }
     } 
 `;
@@ -48,7 +52,6 @@ function Inbox(props) {
     }
 
     const { data, loading, error, refetch } = useQuery(INBOX);
-    
 
     useEffect(() => {
         refetch();
