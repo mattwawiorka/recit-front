@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import cookie from 'js-cookie';
 
 function GameRow(props) {
-  const { game, image, onMouseEnter, hovered, clearHovered, getScrollHeight, level } = props;
+  const { game, onMouseEnter, hovered, clearHovered, getScrollHeight, level } = props;
   let dateFormat, involvement;
 
   if (parseInt(game.dateTime) < dateTool.getEndOfWeek().valueOf()) {

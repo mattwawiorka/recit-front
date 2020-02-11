@@ -38,6 +38,7 @@ const GET_GAME = gql`
     whoAmI {
       id
       name
+      profilePic
     }
   }
   `;
@@ -104,7 +105,7 @@ function GameContainer(props) {
         <GameInfo 
           game={data.game} 
           isOver={isOver}
-          isHost={data.host.userId === data.whoAmI.id} 
+          isHost={data.host.isMe} 
           toggleEditing={() => setEditMode(true)} 
           toggleCancel={() => setCancelMode(!cancelMode)}
           cancelMode={cancelMode}
@@ -123,6 +124,7 @@ function GameContainer(props) {
             isOver={isOver}
             conversationId={data.game.conversationId} 
             gameId={props.gameId}
+            currentUser={data.whoAmI}
           />
         </div>
       </div>
@@ -143,7 +145,8 @@ function GameContainer(props) {
           isOver={isOver}
           conversationId={data.game.conversationId} 
           spots={data.game.spots} 
-          isHost={data.host.userId === data.whoAmI.id} 
+          isHost={data.host.isMe} 
+          currentUser={data.whoAmI}
           toggleInvite={() => setInviteMode(true)}
         />
       </div>

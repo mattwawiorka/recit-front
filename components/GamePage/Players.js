@@ -20,10 +20,6 @@ const GET_PARTICIPANTS = gql`
       profilePic
       isMe
     }
-
-    whoAmI {
-      id
-    }
   }
 `;
 
@@ -115,15 +111,15 @@ function Players(props) {
   }
 
   let joined = data.players.some(p => {
-    return p.userId == data.whoAmI.id;
+    return p.userId == props.currentUser.id;
   });
 
   let invited = data.watchers.some(w => {
-    return ((w.userId == data.whoAmI.id) && w.level == 3);
+    return ((w.userId == props.currentUser.id) && w.level == 3);
   });
 
   let interested = data.watchers.some(w => {
-    return ((w.userId == data.whoAmI.id) && w.level == 2);
+    return ((w.userId == props.currentUser.id) && w.level == 2);
   });
 
   let reservedSpotFound = data.players.some(p => {
@@ -170,7 +166,6 @@ function Players(props) {
               }
               return {
                 players: players,
-                whoAmI: prev.whoAmI,
                 watchers: watchers
               }
             }
@@ -178,7 +173,6 @@ function Players(props) {
               let watchers = prev.watchers.concat([subscriptionData.data.participantJoined]);
               return {
                 players: prev.players,
-                whoAmI: prev.whoAmI,
                 watchers: watchers
               }
             }
@@ -199,7 +193,6 @@ function Players(props) {
               players.splice(index, subscriptionData.data.participantLeft.number || 1);
               return {
                 players: players,
-                whoAmI: prev.whoAmI,
                 watchers: prev.watchers
               }
             }
@@ -210,7 +203,6 @@ function Players(props) {
               });
               return {
                 players: prev.players,
-                whoAmI: prev.whoAmI,
                 watchers: watchers
               }
             }

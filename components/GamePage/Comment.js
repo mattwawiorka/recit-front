@@ -4,7 +4,7 @@ import Link from 'next/link';
 import classNames from 'classnames';
 
 function Comment(props) {
-    const { comment, isOwner, userPic } = props;
+    const { comment, userPic } = props;
 
     const [content, setContent] = useState(props.comment.content);
     const [showActions, setShowActions] = useState(false);
@@ -38,12 +38,34 @@ function Comment(props) {
                             </Link>
                         </div> 
                         <div className="dateTime">
-                            {dateTool.getDateTime(parseInt(comment.updatedAt))}
+                            {dateTool.getDateTime(parseInt(comment.createdAt))}
                         </div>
                     </div>
 
                     <div className="actions">
-                        {(isOwner && comment.type === 1) ? 
+                        {showActions ?
+                        <div className="action-btns">
+                            {props.currentUser.id == comment.userId ? 
+                            <React.Fragment>
+                                <button onClick={() => setEditMode(!editMode)} className="btn">Edit</button>
+                                <button onClick={() => props.deleteComment({ variables: { id: comment.id } })} className="btn">Delete</button>
+                            </React.Fragment>
+                            :
+                            <button 
+                                onClick={() => { 
+                                    if (comment.reply) {
+                                        props.setReply({ author: comment.author, content: comment.content.split("%REPLY%")[1] })
+                                    } else {
+                                        props.setReply({ author: comment.author, content: comment.content })
+                                    }
+                                }} 
+                                className="btn"
+                            >Reply</button>}
+                        </div>
+                        :
+                        null}
+
+                        {(comment.type === 1 && !props.gameOver) ? 
                         <strong 
                             onClick={() => {
                                 setShowActions(!showActions);
@@ -53,18 +75,16 @@ function Comment(props) {
                         >...</strong> 
                         : 
                         null} 
-
-                        {showActions ?
-                        <div className="action-btns">
-                            <button onClick={() => setEditMode(!editMode)} className="btn">Edit</button>
-                            <button onClick={() => props.deleteComment({ variables: { id: comment.id } })} className="btn">Delete</button>
-                        </div>
-                        :
-                        null}
                     </div>
                 </div>
 
                 <div className="body">
+                    {comment.reply ?
+                    <span className="reply-header">
+                        {comment.content.split("%REPLY%")[0]}
+                    </span>
+                    :
+                    null}
                     <div
                         ref={commentInput}
                         className={bodyClass}
@@ -76,7 +96,7 @@ function Comment(props) {
                         }}              
                         autoComplete="off"
                     >
-                        {comment.content}
+                        {comment.reply ? comment.content.split("%REPLY%")[1] : comment.content}
                     </div>  
                     {showSave ? 
                         <button 
@@ -180,6 +200,10 @@ function Comment(props) {
                     width: 4em;
                     height: 1.5em;
                     vertical-align: top;
+                }
+
+                .reply-header {
+                    color: #555;
                 }
 
                 .body {

@@ -1,96 +1,89 @@
-import React, { useRef, useState, useCallback } from "react";
-import classNames from 'classnames';
+import React, { useRef, useState, useCallback, useEffect } from "react";
 
 function InputBox(props) {
-
-    // const mentionPattern = /@[a-z]*\s/i;
-    const invitePattern = /@invite+/i;
 
     const commentInput = useRef();
     const commentActions = useRef();
 
     const [content, setContent] = useState(null);
-    const [showActions, setShowActions] = useState(false);
-    const [invite, setInvite] = useState(false);
+    const [replyHeading, setReplyHeading] = useState(null);
+    const [showPost, setShowPost] = useState(false);
 
     const clearInput = useCallback( () => {
-        setShowActions(false);
+        setShowPost(false);
+        setContent(null);
+        setReplyHeading(null);
         if (commentInput.current) {
             commentInput.current.innerText = "";
         }
     });
 
-    const textClass = classNames({
-        "input-fields": true,
-        "mention": invite
-    });
+    useEffect(() => {
+        if (!props.reply.author) {
+            return;
+        } else {
+            setReplyHeading("Replying to " + props.reply.author + "\n" + props.reply.content.substring(0, 50) + (props.reply.content.length > 50 ? "..." : ""));
+        }
+    }, [props.reply])
 
     return (
         <React.Fragment> 
             <div className="new-comment">
                 <div className="user-pic-round">
                     <img 
-                        src={props.userPic}
+                        src={props.currentUser.profilePic}
                         className="user-pic"
                     />
                 </div>
+
+                {replyHeading ?
+                <span className="reply-header">
+                    {replyHeading}
+                </span>
+                :
+                null}
                 
                 <div
                     ref={commentInput}
-                    className={textClass} 
+                    className="input-fields"
                     contentEditable={true} 
                     placeholder="Add a comment..." 
                     onInput={e => {
-                        if (invitePattern.test(e.target.innerText)) {
-                            setInvite(true)
-                        } else {
-                            setInvite(false)
-                        }
                         setContent(e.target.innerText);
-                        setShowActions(e.target.innerText !== "");
+                        setShowPost(e.target.innerText.trim() !== "" && e.target.innerText.trim() !== "%REPLY%");
                     }}
                     autoComplete="off"
                 />
             
-                {showActions ?
+                {showPost ?
                 <div className="actions" ref={commentActions}>
                     <button 
                         className="btn-post-comment"
                         onClick={() => {
-                            if (content) {
-                                if (invite) {
-                                    props.invite({ variables:
-                                        {
-                                            conversationId: props.conversationId, 
-                                            userId: parseInt(content.split("@invite")[1].trim()), 
-                                            gameId: props.gameId
-                                        }
-                                    })
-                                    .then(response => {
-                                        console.log(response)
-                                        if (response.errors) {
-                                            console.log(response.errors)
-                                        }
-                                        clearInput();
-                                    });
-                                } else {
-                                    props.createComment({ variables: 
-                                        { messageInput: 
-                                            {
-                                                conversationId: props.conversationId,
-                                                gameId: props.gameId,
-                                                content: content.trim()
-                                            } 
-                                        }
-                                    })
-                                    .then(response => {
-                                        if (response.errors) {
-                                            console.log(response.errors)
-                                        }
-                                        clearInput();
-                                    });
-                                }  
-                            }  
+                            let messageInput;
+                            if (replyHeading) {
+                                messageInput = {
+                                    conversationId: props.conversationId,
+                                    gameId: props.gameId,
+                                    content: replyHeading + '\n%REPLY%' + content.trim(),
+                                    reply: true
+                                }
+                            }  else {
+                                messageInput = {
+                                    conversationId: props.conversationId,
+                                    gameId: props.gameId,
+                                    content: content.trim()
+                                }
+                            }
+                            props.createComment({ variables: 
+                                { messageInput: messageInput }
+                            })
+                            .then(response => {
+                                if (response.errors) {
+                                    console.log(response.errors)
+                                }
+                                clearInput();
+                            });
                         }}
                     >Post</button>
                 </div>
@@ -106,6 +99,7 @@ function InputBox(props) {
                     background-color: white;
                     border-radius: 5px;
                     border-bottom-style: groove;
+                    white-space: pre-wrap;
                 }
 
                 .user-pic-round {
@@ -132,6 +126,11 @@ function InputBox(props) {
                     vertical-align: top;
                     font-size: 1.2em;
                     overflow: hidden;
+                    margin-left: 3.2em;
+                }
+
+                .reply-header {
+                    color: #555;
                 }
 
                 .mention {

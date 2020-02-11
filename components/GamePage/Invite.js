@@ -38,7 +38,6 @@ function Invite(props) {
 
     const [searchValue, setSearchValue] = useState("");
     const [players, setPlayers] = useState([]);
-
     
     const link = useRef(null);
 

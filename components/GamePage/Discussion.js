@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import gql from "graphql-tag";
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import CommentList from './CommentList';
@@ -14,7 +15,9 @@ const GET_COMMENTS = gql`
                     userId
                     content
                     updatedAt
+                    createdAt
                     type
+                    reply
                 }
                 cursor
                 isOwner
@@ -24,11 +27,6 @@ const GET_COMMENTS = gql`
                 endCursor
                 hasNextPage
             }
-        }
-
-        whoAmI {
-            id
-            profilePic
         }
     }
 `;
@@ -71,8 +69,10 @@ const COMMENT_ADDED = gql`
                 author
                 content
                 updatedAt 
+                createdAt
                 userId 
                 type
+                reply
             }
             cursor
             isOwner
@@ -103,6 +103,8 @@ const COMMENT_DELETED = gql`
 `;
 
 function Discussion(props) {
+
+    const [reply, setReply] = useState({});
     
     const { data, loading, error, fetchMore, subscribeToMore } = useQuery(GET_COMMENTS, { variables: { conversationId: props.conversationId }, ssr: true });
     const [createComment] = useMutation(CREATE_COMMENT);
@@ -123,17 +125,19 @@ function Discussion(props) {
                     createComment={createComment} 
                     invite={invite}
                     gameId={props.gameId}
-                    userPic={data.whoAmI.profilePic}
+                    reply={reply}
+                    currentUser={props.currentUser}
                 />
                 }
 
                 <CommentList 
-                    isOver={props.isOver}
+                    gameOver={props.isOver}
                     comments={data.messages.edges}
+                    currentUser={props.currentUser}
                     conversationId={props.conversationId} 
-                    currentUser={data.whoAmI.id}
                     updateComment={updateComment} 
                     deleteComment={deleteComment}
+                    setReply={setReply}
                     hasMore={data.messages.pageInfo.hasNextPage}
                     loadMore={() => 
                         fetchMore({
@@ -161,6 +165,7 @@ function Discussion(props) {
                             updateQuery: (prev, { subscriptionData }) => {
                                 if (!subscriptionData.data.messageAdded) return prev;
                                 const newComment = subscriptionData.data.messageAdded;
+                                newComment.node.createdAt = Date.parse(newComment.node.createdAt)
                                 const newComments = Object.assign({}, prev, { messages: {
                                     edges: [newComment, ...prev.messages.edges],
                                     pageInfo: {

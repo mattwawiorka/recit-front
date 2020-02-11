@@ -12,6 +12,7 @@ const NOTIFICATIONS = gql`
         whoAmI {
             id
             name
+            profilePic
         }
     }
 `;
@@ -41,6 +42,7 @@ function NotificationSource(props) {
     }, [])
 
     if (loading) return <Loading />
+
     if (error) {
         console.log(error)
         return <Navigation />

@@ -79,7 +79,6 @@ function Login(props) {
                 }
                 else if (response.data.loginFb) {
                     cookie.set('token', response.data.loginFb)
-
                     Router.push('/');
                 }
             }) 
@@ -93,7 +92,6 @@ function Login(props) {
                 }
                 else if (response.data.verifyUserPhone) {
                     cookie.set('token', response.data.verifyUserPhone)
-
                     Router.push('/');
                 }
             }) 
