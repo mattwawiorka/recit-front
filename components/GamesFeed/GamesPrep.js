@@ -131,12 +131,12 @@ function GamesPrep(props) {
                 <div id="customBorder" ref={lastGameRef}></div>
 
                 <style jsx>{`
-                #customBorder {
-                    border-bottom-style: groove;
-                    border-width: thin;
-                    width: 85%;
-                    margin: 0 auto;
-                }
+                    #customBorder {
+                        border-bottom-style: groove;
+                        border-width: thin;
+                        width: 85%;
+                        margin: 0 auto;
+                    }
                 `}</style>
             </React.Fragment>
         } else {
@@ -153,12 +153,12 @@ function GamesPrep(props) {
                 <div id="customBorder"></div>
 
                 <style jsx>{`
-                #customBorder {
-                    border-bottom-style: groove;
-                    border-width: thin;
-                    width: 85%;
-                    margin: 0 auto;
-                }
+                    #customBorder {
+                        border-bottom-style: groove;
+                        border-width: thin;
+                        width: 85%;
+                        margin: 0 auto;
+                    }
                 `}</style>
             </React.Fragment>
         }

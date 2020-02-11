@@ -91,7 +91,11 @@ function Comment(props) {
                         contentEditable={editMode}
                         suppressContentEditableWarning={true}
                         onInput={e => {
-                            setContent(e.target.innerText);
+                            if (comment.reply) {
+                                setContent(comment.content.split("%REPLY%")[0] + "%REPLY%" + e.target.innerText);
+                            } else {
+                                setContent(e.target.innerText);
+                            }
                             setShowSave(e.target.innerText !== comment.content && e.target.innerText !== "");
                         }}              
                         autoComplete="off"
