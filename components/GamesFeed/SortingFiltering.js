@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import GameSource from './GameSource';
 import classNames from 'classnames';
+import Select from 'react-select';
+import { CATEGORIES, SPORT_SEARCH, BOARD_SEARCH, CARD_SEARCH, VIDEO_SEARCH } from '../../lib/lists';
 
 function SortingFiltering(props) {
 
@@ -12,7 +14,9 @@ function SortingFiltering(props) {
     ];
 
     const [showPanel, setShowPanel] = useState();
+    const [category, setCategory] = useState("ALL");
     const [sport, setSport] = useState("ALL");
+    const [showWriteIn, setShowWriteIn] = useState(false)
     const [startDate, setStartDate] = useState("ALL");
     const [openSpots, setOpenSpots] = useState("0");
     const [bounds, setBounds] = useState(initialBounds);
@@ -39,6 +43,7 @@ function SortingFiltering(props) {
         <React.Fragment>
             <div className="game-feed-container">
                 <GameSource 
+                    category={category}
                     sport={sport} 
                     startDate={startDate} 
                     openSpots={openSpots}
@@ -56,26 +61,90 @@ function SortingFiltering(props) {
             <aside className={panelClass}>
                 <form className='sorting-filtering'>
                     <div className="form-group">
-                        <label className="header">Sport</label>
-                        <select 
-                            onChange={e => setSport(e.target.value)} 
-                            className="input-fields"
-                            value={sport}
-                        >
-                            <option value="ALL">All</option>
-                            <option value="TENNIS">Tennis</option>
-                            <option value="BASKETBALL" >Basketball</option>
-                            <option value="FOOTBALL">Football</option>
-                            <option value="VOLLEYBALL" >Volleyball</option>
-                            <option value="SOFTBALL">Softball</option>
-                            <option value="BASEBALL">Baseball</option>
-                            <option value="FIELD HOCKEY">Field Hockey</option>
-                            <option value="TABLE TENNIS">Table Tennis</option>
-                            <option value="SOCCER">Soccer</option>
-                            <option value="BADMINTON">Badminton</option>
-                            <option value="GOLF">Golf</option>
-                            <option value="DISC GOLF">Disc Golf</option>
-                        </select>
+                        <label className="header">Category</label>
+                        <Select 
+                            onChange={category => setCategory(category.value)} 
+                            options={CATEGORIES}
+                            placeholder="All"
+                        />
+                    </div>
+                    <div className="form-group">
+                        {category === "SPORT" || category === "ALL" ?
+                        <label className="header">
+                            Sport
+                            <Select 
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={SPORT_SEARCH}
+                                placeholder="All"
+                            />
+                        </label>
+                        :
+                        null}
+                        {category === "BOARD" ?
+                        <label className="header">
+                            Game
+                            <Select 
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={BOARD_SEARCH}
+                                placeholder="All"
+                            />
+                        </label>
+                        :
+                        null}
+                        {category === "CARD" ?
+                        <label className="header">
+                            Game
+                            <Select 
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={CARD_SEARCH}
+                                placeholder="All"
+                            />
+                        </label>
+                        :
+                        null}
+                        {category === "VIDEO" ?
+                        <label className="header">
+                            Game
+                            <Select 
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={VIDEO_SEARCH}
+                                placeholder="All"
+                            />
+                        </label>
+                        :
+                        null}
+                        {showWriteIn ?
+                        <label className="header">
+                            What will you be playing
+                            <input
+                                onChange={(e) => setSport(e.target.value)} 
+                                type="text" 
+                                className="input-fields"
+                                placeholder="What game will you be playing"
+                            />
+                        </label>
+                        :
+                        null}
                     </div>
 
                     <div className="form-group">

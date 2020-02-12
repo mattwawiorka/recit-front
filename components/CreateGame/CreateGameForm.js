@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Select from 'react-select';
 import { useMutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import PlaceSearch from '../GoogleMaps/PlaceSearch';
 import classNames from 'classnames';
 import dateTool from '../../lib/dateTool';
+import { SPORT, BOARD, CARD, VIDEO } from '../../lib/lists';
+import CategorySelect from './CategorySelect';
+// import SportSelect from './SportSelect';
 
 const CREATE_GAME = gql`
     mutation CreateGame($gameInput: gameInput) {
@@ -24,6 +28,7 @@ const UPDATE_GAME = gql`
 `;
 
 function CreateGameForm(props) {
+    
 
     const [title, setTitle] = useState(props.title || "");
     const [isPublic, setIsPublic] = useState(props.isPublic === false ? false : true);
@@ -31,7 +36,9 @@ function CreateGameForm(props) {
     const [time, setTime] = useState(props.time || "");
     const [endDate, setEndDate] = useState(props.endDate || "");
     const [endTime, setEndTime] = useState(props.endTime || "");
-    const [sport, setSport] = useState(props.sport ? (props.sport.charAt(0) + props.sport.substring(1).toLowerCase()) : "");
+    const [category, setCategory] = useState(props.category || "SPORT");
+    const [showWriteIn, setShowWriteIn] = useState(false)
+    const [sport, setSport] = useState(props.sport || "");
     const [spots, setSpots] = useState(props.spots || 4);
     const [spotsReserved, setSpotsReserved] = useState(props.spotsReserved || 0);
     const [venue, setVenue] = useState(props.venue || "");
@@ -64,24 +71,6 @@ function CreateGameForm(props) {
 
     }, [])
 
-    const handleGooglePlace = useCallback((place) => {
-        if (place.formatted_address) {
-            setAddress(place.formatted_address);
-            setCoords([place.geometry.location.lat(), place.geometry.location.lng()]);
-            setVenue(place.name)
-        } else {
-            setErrors([{ message: "Please select a valid address" }]);
-        }
-    });
-
-    const dateTime = new Date(date + "T" + time);
-    let needsInput, invalidAddress, invalidSpots, invalidDescrip, invalidDate, invalidEnd;
-    needsInput = invalidAddress = invalidSpots = invalidDescrip = invalidDate = invalidEnd = false;
-
-    const endDateTime = new Date(endDate + "T" + endTime);
-
-    // Need to have at least 1 public spot open in public game 
-    const maxReservable = Math.max(spots - (props.playersCount ? props.playersCount : 1) - 1, 0);
 
     const errorsDisplay = [];
     errors.map( (error, index) => {
@@ -109,6 +98,28 @@ function CreateGameForm(props) {
         }
     });
 
+
+    const handleGooglePlace = useCallback((place) => {
+        if (place.formatted_address) {
+            setAddress(place.formatted_address);
+            setCoords([place.geometry.location.lat(), place.geometry.location.lng()]);
+            setVenue(place.name)
+        } else {
+            setErrors([{ message: "Please select a valid address" }]);
+        }
+    });
+
+    const dateTime = new Date(date + "T" + time);
+    let needsInput, invalidAddress, invalidSpots, invalidDescrip, invalidDate, invalidEnd;
+    needsInput = invalidAddress = invalidSpots = invalidDescrip = invalidDate = invalidEnd = false;
+
+    const endDateTime = new Date(endDate + "T" + endTime);
+
+    // Need to have at least 1 public spot open in public game 
+    const maxReservable = Math.max(spots - (props.playersCount ? props.playersCount : 1) - 1, 0);
+
+    
+
     const publicBtnClass = classNames({
         "btn-public": true,
         "private": !isPublic
@@ -120,7 +131,6 @@ function CreateGameForm(props) {
     })
     const titleClass = classNames({
         "input-fields": true,
-        "title-input": true,
         "needs-input": needsInput && title == ""
     })
     const sportClass = classNames({
@@ -133,6 +143,7 @@ function CreateGameForm(props) {
     })
     const descriptionClass = classNames({
         "input-fields": true,
+        "description": true,
         "needs-input": needsInput && description == "" || invalidDescrip
     })
     const dateClass = classNames({
@@ -147,7 +158,6 @@ function CreateGameForm(props) {
         "input-fields": true,
         "needs-input": needsInput && time == ""
     })
-
     const endDateTimeClass = classNames({
         "endDateTime": true,
         "show": showEnd
@@ -157,33 +167,14 @@ function CreateGameForm(props) {
 
     return (
         <React.Fragment>
-
-        <datalist id="sports">
-            <option value="Tennis" />
-            <option value="Basketball" />
-            <option value="Football" />
-            <option value="Volleyball" />
-            <option value="Softball" />
-            <option value="Baseball" />
-            <option value="Field Hockey" />
-            <option value="Table Tennis" />
-            <option value="Soccer" />
-            <option value="Badminton" />
-            <option value="Golf" />
-            <option value="Disc Golf" />
-        </datalist>
-
         <div className={containerClass}>
-
             <span 
                 className="alert"
             >
                 {errorsDisplay}
             </span>
 
-
             <form 
-                className="gameForm"
                 onSubmit={ e => {
                     e.preventDefault();
 
@@ -194,6 +185,7 @@ function CreateGameForm(props) {
                         venue: venue,
                         address: address,
                         coords: coords,
+                        category: category,
                         sport: sport.toUpperCase().trim(),
                         description: description,
                         spots: parseInt(spots),
@@ -205,7 +197,6 @@ function CreateGameForm(props) {
 
                     createGame({ variables: variables })
                     .then(response => {
-                        console.log(response)
                         if (response.errors) {
                             setErrors(response.errors)
                             return;
@@ -218,7 +209,6 @@ function CreateGameForm(props) {
                             props.refetch(); 
                             props.exitFunc(); 
                         }
-                            
                     })
                     .catch(error => {
                         console.log(error);
@@ -228,10 +218,11 @@ function CreateGameForm(props) {
                 {/* This prevents implicit submission of the form (pressing enter) */}
                 <button type="submit" disabled style={{display: "none"}} aria-hidden="true"></button>
                 
-                <div className="section" id="titleSportForm">
-                    <div className="form-group">
-                        <label id="title" className="header">Title</label>
-                        <button onClick={props.exitFunc} className="exit-btn" type="button">X</button>
+                <button onClick={props.exitFunc} className="exit-btn" type="button">X</button>
+
+                <article>
+                    <div className="form-group title">
+                        <label>Title</label>
                         <input
                             onChange={(e) => setTitle(e.target.value)} 
                             type="text" 
@@ -241,34 +232,117 @@ function CreateGameForm(props) {
                             placeholder="Give your sporting event a unique title"
                             autoComplete="off" 
                         />
-                        <button 
-                            type="button"
+                    </div>
+                    <div className="form-group public">
+                        <button type="button" className={publicBtnClass}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setIsPublic(!isPublic);
                             }} 
-                            className={publicBtnClass}
-                        >{isPublic ? "Public" : "Private"}</button>
+                        >{isPublic ? "Public" : "Private"}
+                        </button>
                     </div>
-                    
-                </div>
+                </article>
 
-                <div className="section">
-                    <div className="form-group split-form">
-                        <label className="header">Sport</label>
-                        <input 
-                            onChange={(e) => setSport(e.target.value)} 
-                            list="sports"
-                            type="text" 
-                            autoCapitalize="word"
-                            className={sportClass}
-                            value={sport} 
-                            placeholder="Pick a sport from the list or specify your own"
-                            autoComplete="off"
+                <article>
+                    <div className="form-group category-select">
+                        <CategorySelect 
+                            currentSelection={category}
+                            makeSelection={(selection) => {
+                                setSport("");
+                                setCategory(selection)
+                            }}
                         />
                     </div>
-                    <div className="form-group split-form-half">
-                        <label className="header">No. Players</label>
+                </article>
+
+                <article>
+                    <div className="form-group sport-select">
+                        {category === "SPORT" ?
+                        <React.Fragment>
+                            <label className="header sport-header">Sport</label>
+                            <Select className={sportClass}
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={SPORT}
+                                placeholder="Select sport"
+                                defaultInputValue={sport}
+                            />
+                        </React.Fragment>
+                        :
+                        null}
+
+                        {category === "BOARD" ?
+                        <React.Fragment>
+                        <label className="header sport-header">Game</label>
+                            <Select className={sportClass}
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={BOARD}
+                                placeholder="Select sport"
+                                defaultInputValue={sport}
+                            />
+                        </React.Fragment>
+                        :
+                        null}
+
+                        {category === "CARD" ?
+                        <React.Fragment>
+                        <label className="header sport-header">Game</label>
+                            <Select className={sportClass}
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    } 
+                                }}
+                                options={CARD}
+                                placeholder="Select sport"
+                                defaultInputValue={sport}
+                            />
+                        </React.Fragment>
+                        :
+                        null}
+
+                        {category === "VIDEO" ?
+                        <React.Fragment>
+                        <label className="header sport-header">Game</label>
+                            <Select className={sportClass}
+                                onChange={(sport) => {
+                                    setSport(sport.value)
+                                    if (sport.value === "OTHER") {
+                                        setShowWriteIn(true)
+                                    }
+                                }}
+                                options={VIDEO}
+                                placeholder="Select sport"
+                                defaultInputValue={sport}
+                            />
+                        </React.Fragment>
+                        :
+                        null}
+
+                        {showWriteIn ?
+                        <input
+                            onChange={(e) => setSport(e.target.value)} 
+                            type="text" 
+                            className={sportClass}
+                            placeholder="What will you be playing"
+                        />
+                        :
+                        null} 
+                    </div>
+
+                    <div className="form-group spots">
+                        <label >No. Players</label>
                         <input
                             className={playersClass}
                             onChange={(e) => {
@@ -282,9 +356,10 @@ function CreateGameForm(props) {
                             value={spots}
                         />
                     </div>
+
                     {isPublic ? 
-                    <div className="form-group split-form-half">
-                        <label className="header">Reserve Spots</label>
+                    <div className="form-group spots">
+                        <label >Reserve Spots</label>
                         <input
                             className={playersClass}
                             onChange={(e) => setSpotsReserved(e.target.value)}
@@ -297,36 +372,38 @@ function CreateGameForm(props) {
                     </div>
                     :
                     null}
-                </div>
+                </article>
 
-                <div className="section" id="descriptionForm">
-                    <div className="form-group">
-                        <label className="header">Description</label>
+                <article>
+                    <div className="form-group description">
+                        <label >Description</label>
                         <div
                             ref={descriptionInput}
                             className={descriptionClass}
                             contentEditable="true" 
                             placeholder="Let's play!"                 
                             autoComplete="off"
-                        >
-                        </div>
+                        />
                     </div>
-                </div>
+                </article>
 
-                <div className="section" id="locationForm">
-                    <div className="form-group" id="addressForm">
-                        <label className="header">Address</label>
+                <article>
+                    <i className="material-icons">public</i>
+                    <div className="form-group address">
+                        <label >Address</label>
                         <PlaceSearch
                             onChangeFunc={handleGooglePlace}
                             prevPlace={props.address}
                             needsInput={needsInput && address == "" || invalidAddress}
                         />
                     </div>
-                </div>
+                </article>
                 
-                <div className="section" id="dateTimeForm">
-                    <label className="header" id="dateTimeLabel">Date/Time</label>
-                    <div className="form-group small-form" id="startDateForm">
+                <article>
+                    <i className="material-icons">calendar_today</i>
+        
+                    <div className="form-group">
+                    <label >Date/Time</label>
                         <input 
                             onChange={(e) => {
                                 setDate(e.target.value);
@@ -338,7 +415,7 @@ function CreateGameForm(props) {
                             autoComplete="off"
                         />
                     </div>
-                    <div className="form-group small-form" id="stateTimeForm">
+                    <div className="form-group time">
                         <input 
                             onChange={(e) => {
                                 setTime(e.target.value);
@@ -362,20 +439,18 @@ function CreateGameForm(props) {
                     >+</a>
 
                     <div className={endDateTimeClass} ref={endInput}>
-                        <div className="form-group small-form" id="endDateForm">
-                            <label className="header">End Date</label>
+                        <div className="form-group">
+                            <label >End Date</label>
                             <input 
-                                id="endDateInput"
                                 onChange={(e) => setEndDate(e.target.value)} 
                                 type="date" 
                                 className={endClass}
                                 value={endDate} 
                             />
                         </div>
-                        <div className="form-group small-form" id="endTimeForm">
-                            <label className="header">End Time</label>
+                        <div className="form-group">
+                            <label >End Time</label>
                             <input 
-                                id="endTimeInput"
                                 onChange={(e) => setEndTime(e.target.value)} 
                                 type="time" 
                                 className={endClass}
@@ -383,7 +458,8 @@ function CreateGameForm(props) {
                             />
                         </div>
                     </div>
-                </div>
+                </article>
+
                 <input type="submit" value={props.id ? "Update Game" : "Create Game!"} />
             </form>
 
@@ -394,15 +470,16 @@ function CreateGameForm(props) {
         <style jsx>{`
             .create-game-container {
                 z-index: 11;
-                display: inline-block;
-                height: auto;
-                max-height: 75vh;
+                display: block;
+                position: relative;
+                // min-height: 650px;
+                max-height: 800px;
+                padding: 10px 20px;
+                overflow-x: hidden;
                 background-color: white;
                 border-radius: 10px;
-                padding: 10px;
                 animation-duration: 1.5s;
                 animation-name: fadein;
-                overflow: auto;
             }
 
             .create {
@@ -410,8 +487,9 @@ function CreateGameForm(props) {
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 40vw;
+                width: 700px;
                 max-width: 50vw;
+                box-shadow: 0 2px 26px rgba(0, 0, 0, .3), 0 0 0 1px rgba(0, 0, 0, .1);
             }
 
             .update {
@@ -420,101 +498,36 @@ function CreateGameForm(props) {
                 width: 40vw;
             }
 
-            @keyframes fadein {
-                from {
-                    opacity: 0;
-                } 
-                
-                to {
-                    opacity: 1;
-                }
-            }
-
-            .gameForm {
+            article {
+                display: block;
+                padding: 5px 0;
                 width: 100%;
-                height: 100%;
-                padding: 10px
-                display: inline-block;
-            }
-
-            .section {
-                padding: 5px;
-                display: block;
-            }
-
-            .header {
-                display: block;
-                color: #4b4f56;
-                // color: var(--darkmatter);
-                padding-left: 5px;
-                font-weight: 500;
-                font-weight: bold;
-            }
-
-            #title {
-                display: inline-block;
-                width: 95%;
-            }
-
-            .exit-btn {
-                background: none;
-                border: none;
-                text-align: center;
-                outline: none;
-                font-weight: bold;
-                color: #4b4f56;
-                cursor: pointer;
             }
 
             .form-group {
-                vertical-align: middle;
-                padding-top: 5px;
+                display: inline-block;
+                padding-right: 25px;
+                // height: 75px;
+                min-height: auto;
+                vertical-align: top;
+            }
+
+            label {
+                display: block;
+                color: #4b4f56;
+                font-weight: bold;
             }
 
             .input-fields {
-                display: inline-block;
-                margin : 0 auto;
+                height: 38px;
                 width: 100%;
+                margin : 0 auto;
                 padding: 12px 20px;
                 margin: 8px 0;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 box-sizing: border-box;
                 outline: none;
-            }
-
-            .needs-input {
-                outline: solid;
-                outline-color: var(--greenapple);
-            }
-
-            .title-input {
-                max-width: 60%;
-            }
-
-            .btn-public {
-                margin-left: 15%;
-                height: 2.5em;
-                width: 6vw;
-            }
-
-            .private {
-                color: var(--darkermatter);
-                background-color: var(--greyapple);
-            }
-
-            .split-form {
-                width: 50%;
-                display: inline-block;
-                padding-left: 5px;
-                padding-right: 5px;
-            }
-
-            .split-form-half {
-                width: 25%;
-                display: inline-block;
-                padding-left: 5px;
-                padding-right: 5px;
             }
 
             .input-fields[placeholder]:empty:before {
@@ -524,11 +537,78 @@ function CreateGameForm(props) {
                 font-style: italic;
             }
 
-            .small-form {
-                width: 40%;
-                display: inline-block;
-                padding-left: 5px;
-                padding-right: 5px;
+            .needs-input {
+                outline: solid;
+                outline-color: var(--greenapple);
+            }
+
+            .title {
+                padding-left: 0;
+                width: 440px;
+            }
+
+            .title > label {
+                float: left;
+            }
+
+            .public {
+                height: 40px;
+                vertical-align: bottom;
+                padding-left: 75px;
+            }
+
+            .btn-public {
+                position: relative;
+                top: -8px;
+                height: 38px;
+                width: 100px;
+            }
+
+            .private {
+                color: var(--darkermatter);
+                background-color: var(--greyapple);
+            }
+
+            .category-select {
+                padding: 10px 0;
+            }
+
+            .sport-header {
+                padding-bottom: 7px;
+            }
+
+            .sport-select {
+                width: 250px;
+            }
+
+            .spots {
+                vertical-align: top;
+                width: 110px;
+                padding: 0;
+                font-size: 1em;
+            }
+
+            .spots > input {
+                width: 60px;
+                padding: 12px 10px;
+            }
+
+            .description {
+                height: auto;
+                width: 100%;
+            }
+
+            i {
+                width: 66px;
+                padding: 25px 20px;
+            }
+
+            .address {
+                width: 380px;
+            }
+
+            .time {
+                vertical-align: bottom;
             }
 
             .toggle-endtime {
@@ -544,6 +624,7 @@ function CreateGameForm(props) {
 
             .endDateTime {
                 display: none;
+                padding-left: 66px;
             }
 
             .show {
@@ -572,11 +653,35 @@ function CreateGameForm(props) {
                 text-align: center;
             }
 
-            // .alert {
-            //     color: black;
-            //     margin-bottom: 15px;
-            //     text-align: center;
-            // }
+            .exit-btn {
+                position: absolute;
+                top: 10px;
+                right: 12px;
+                background: none;
+                border: none;
+                text-align: center;
+                outline: none;
+                font-size: 1.2em;
+                font-weight: bold;
+                color: #4b4f56;
+                color: var(--darkermatter);
+                cursor: pointer;
+                float: right;
+            }
+
+            .exit-btn:hover {
+                color: var(--darkmatter);
+            }
+
+            @keyframes fadein {
+                from {
+                    opacity: 0;
+                } 
+                
+                to {
+                    opacity: 1;
+                }
+            }
 
             ::-webkit-input-placeholder {
                 font-style: italic;

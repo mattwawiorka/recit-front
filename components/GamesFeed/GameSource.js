@@ -6,8 +6,8 @@ import Loading from '../Loading/Loading';
 import cookie from 'js-cookie';
 
 const GET_GAMES = gql`
-query Games($cursor: String, $sport: String, $startDate: String, $openSpots: String, $bounds: [Float], $sortOrder: String) {
-  games(cursor: $cursor, sport: $sport, startDate: $startDate, openSpots: $openSpots, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
+query Games($cursor: String, $category: String, $sport: String, $startDate: String, $openSpots: String, $bounds: [Float], $sortOrder: String) {
+  games(cursor: $cursor, category: $category, sport: $sport, startDate: $startDate, openSpots: $openSpots, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -89,6 +89,7 @@ const GAME_DELETED = gql`
 function GameSource(props) {
   
   let variables = {
+    category: props.category,
     sport: props.sport,
     startDate: props.startDate,
     openSpots: props.openSpots,
@@ -99,7 +100,7 @@ function GameSource(props) {
     if (props.bounds) {
       refetch();
     }
-  }, [props.sport, props.startDate, props.bounds, props.openSpots]);
+  }, [props.category, props.sport, props.startDate, props.bounds, props.openSpots]);
 
   useEffect(() => {
     refetch_myGames();

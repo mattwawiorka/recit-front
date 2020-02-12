@@ -18,6 +18,7 @@ const GET_GAME = gql`
       endDateTime
       venue
       address
+      category
       sport
       image
       description
@@ -90,6 +91,7 @@ function GameContainer(props) {
           time={time}
           endDate={endD.getFullYear().toString() + '-' + ((endD.getMonth() + 1) < 10 ? '0' + (endD.getMonth() + 1).toString() : (endD.getMonth() + 1).toString()) + '-' +  (endD.getDate() < 10 ? '0' + endD.getDate().toString() : endD.getDate().toString())}
           endTime={endTime}
+          category={data.game.category}
           sport={data.game.sport}
           spots={data.game.spots}
           spotsReserved={data.game.spotsReserved}

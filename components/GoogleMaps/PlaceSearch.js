@@ -46,6 +46,7 @@ function PlaceSearch(props) {
                 display: block;
                 margin : 0 auto;
                 width: 100%;
+                height: 40px;
                 padding: 12px 20px;
                 margin: 8px 0;
                 border: 1px solid #ccc;
