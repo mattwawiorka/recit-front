@@ -5,7 +5,7 @@ function Header() {
     return (
         <Head>
             <title>Recit</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta httpEquiv="X-UA-Compatiable" content="ie=edge" />
             <meta charSet="utf-8" />
             <link rel="icon" href="/rec-it.png" />

@@ -55,7 +55,7 @@ function BottomDockable(props) {
                     left: 50%;
                     transform: translate(-50%);
                     width: 40vw;
-                    height: 4.5em;
+                    height: 70px;
                     border-top-left-radius: 110px; 
                     border-top-right-radius: 110px;
                     border-bottom: 0;
@@ -102,6 +102,13 @@ function BottomDockable(props) {
                 @keyframes fadeout {
                     from {bottom: 10vh; opacity: 1;}
                     to {bottom: 0; opacity: 0;}
+                }
+
+                @media only screen and (max-width: 375px) {
+                    .bottom-button {
+                        width: 100%;
+                        border-radius: 0;
+                    }
                 }
 
             `}</style>

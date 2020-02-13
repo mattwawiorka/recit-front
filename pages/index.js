@@ -10,7 +10,7 @@ function Index(props) {
 
     const [loading, setLoading] = useState(true);
     const [currentLoc, setCurrentLoc] = useState([47.621354, -122.333289]);
-    const [createGame, setCreateGame] = useState(true);
+    const [createGame, setCreateGame] = useState(false);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {

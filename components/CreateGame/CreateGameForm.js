@@ -44,7 +44,7 @@ function CreateGameForm(props) {
     const [venue, setVenue] = useState(props.venue || "");
     const [address, setAddress] = useState(props.address || "");
     const [coords, setCoords] = useState(props.coords || []);
-    const [description, setDescription] = useState(props.description || "");
+    const [description, setDescription] = useState(props.description || "Let's play!");
     const [errors, setErrors] = useState([]);
     const [showEnd, setShowEnd] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -174,10 +174,253 @@ function CreateGameForm(props) {
                 {errorsDisplay}
             </span>
 
-            <form 
-                onSubmit={ e => {
-                    e.preventDefault();
+            <button onClick={props.exitFunc} className="exit-btn" type="button">X</button>
 
+            <div className="form">
+            <article>
+                <div className="form-group title">
+                    <label>Title</label>
+                    <input
+                        onChange={(e) => setTitle(e.target.value)} 
+                        type="text" 
+                        className={titleClass}
+                        value={title}
+                        minLength="4"
+                        placeholder="Give your game a unique title"
+                        autoComplete="off" 
+                    />
+                </div>
+                <div className="form-group public">
+                    <button type="button" className={publicBtnClass}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setIsPublic(!isPublic);
+                        }} 
+                    >{isPublic ? "Public" : "Private"}
+                    </button>
+                </div>
+            </article>
+
+            <article className="sidebar">
+                <div className="form-group category-select">
+                    <CategorySelect 
+                        currentSelection={category}
+                        makeSelection={(selection) => {
+                            setSport("");
+                            setCategory(selection)
+                        }}
+                    />
+                </div>
+            </article>
+
+            <article className="sidebar">
+                <div className="form-group sport-select">
+                    {category === "SPORT" ?
+                    <React.Fragment>
+                        <label className="header sport-header">Sport</label>
+                        <Select className={sportClass}
+                            onChange={(sport) => {
+                                setSport(sport.value)
+                                if (sport.value === "OTHER") {
+                                    setShowWriteIn(true)
+                                }
+                            }}
+                            options={SPORT}
+                            placeholder="Select sport"
+                            defaultInputValue={sport}
+                        />
+                    </React.Fragment>
+                    :
+                    null}
+
+                    {category === "BOARD" ?
+                    <React.Fragment>
+                    <label className="header sport-header">Game</label>
+                        <Select className={sportClass}
+                            onChange={(sport) => {
+                                setSport(sport.value)
+                                if (sport.value === "OTHER") {
+                                    setShowWriteIn(true)
+                                }
+                            }}
+                            options={BOARD}
+                            placeholder="Select sport"
+                            defaultInputValue={sport}
+                        />
+                    </React.Fragment>
+                    :
+                    null}
+
+                    {category === "CARD" ?
+                    <React.Fragment>
+                    <label className="header sport-header">Game</label>
+                        <Select className={sportClass}
+                            onChange={(sport) => {
+                                setSport(sport.value)
+                                if (sport.value === "OTHER") {
+                                    setShowWriteIn(true)
+                                } 
+                            }}
+                            options={CARD}
+                            placeholder="Select sport"
+                            defaultInputValue={sport}
+                        />
+                    </React.Fragment>
+                    :
+                    null}
+
+                    {category === "VIDEO" ?
+                    <React.Fragment>
+                    <label className="header sport-header">Game</label>
+                        <Select className={sportClass}
+                            onChange={(sport) => {
+                                setSport(sport.value)
+                                if (sport.value === "OTHER") {
+                                    setShowWriteIn(true)
+                                }
+                            }}
+                            options={VIDEO}
+                            placeholder="Select sport"
+                            defaultInputValue={sport}
+                        />
+                    </React.Fragment>
+                    :
+                    null}
+
+                    {showWriteIn ?
+                    <input
+                        onChange={(e) => setSport(e.target.value)} 
+                        type="text" 
+                        className={sportClass}
+                        placeholder="What will you be playing"
+                    />
+                    :
+                    null} 
+                </div>
+
+                <div className="form-group spots">
+                    <label >Players</label>
+                    <input
+                        className={playersClass}
+                        onChange={(e) => {
+                            setSpots(e.target.value);
+                            setSpotsReserved(0);
+                        }}
+                        type="number"
+                        autoComplete="off"
+                        min={props.playersCount > 1 ? props.playersCount : 2}
+                        max="32"
+                        value={spots}
+                    />
+                </div>
+
+                {isPublic ? 
+                <div className="form-group spots">
+                    <label >Reserved</label>
+                    <input
+                        className={playersClass}
+                        onChange={(e) => setSpotsReserved(e.target.value)}
+                        type="number"
+                        autoComplete="off"
+                        min="0"
+                        max={maxReservable}
+                        value={spotsReserved}
+                    />
+                </div>
+                :
+                null}
+            </article>
+
+            <article>
+                <div className="form-group description">
+                    <label >Description</label>
+                    <div
+                        ref={descriptionInput}
+                        className={descriptionClass}
+                        contentEditable="true" 
+                        placeholder="Let's play!"                 
+                        autoComplete="off"
+                    />
+                </div>
+            </article>
+
+            <article>
+                <i className="material-icons">public</i>
+                <div className="form-group address">
+                    <label >Address</label>
+                    <PlaceSearch
+                        onChangeFunc={handleGooglePlace}
+                        prevPlace={props.address}
+                        needsInput={needsInput && address == "" || invalidAddress}
+                    />
+                </div>
+            </article>
+            
+            <article>
+                <i className="material-icons">calendar_today</i>
+    
+                <div className="form-group datetime">
+                <label>Date/Time</label>
+                    <input 
+                        onChange={(e) => {
+                            setDate(e.target.value);
+                            setEndDate(e.target.value);
+                        }} 
+                        type="date" 
+                        className={dateClass}
+                        value={date} 
+                        autoComplete="off"
+                    />
+                </div>
+                <div className="form-group time datetime">
+                    <input 
+                        onChange={(e) => {
+                            setTime(e.target.value);
+                            let d = new Date();
+                            d.setHours(parseInt(e.target.value.split(":")[0]) + 2)
+                            d.setMinutes(parseInt(e.target.value.split(":")[1]))
+                            let endTime = (d.getHours() < 10 ? '0' + d.getHours().toString() : d.getHours().toString()) + ":" + (d.getMinutes() < 10 ? '0' + d.getMinutes().toString() : d.getMinutes().toString());
+                            setEndTime(endTime);
+                        }} 
+                        type="time" 
+                        className={timeClass}
+                        value={time} 
+                        autoComplete="off"
+                    />
+                </div>
+
+                <a 
+                    className="toggle-endtime"
+                    href="#" 
+                    onClick={() => setShowEnd(!showEnd)}
+                >+</a>
+
+                <div className={endDateTimeClass} ref={endInput}>
+                    <div className="form-group datetime">
+                        <label >End Date</label>
+                        <input 
+                            onChange={(e) => setEndDate(e.target.value)} 
+                            type="date" 
+                            className={endClass}
+                            value={endDate} 
+                        />
+                    </div>
+                    <div className="form-group datetime">
+                        <label >End Time</label>
+                        <input 
+                            onChange={(e) => setEndTime(e.target.value)} 
+                            type="time" 
+                            className={endClass}
+                            value={endTime} 
+                        />
+                    </div>
+                </div>
+            </article>
+            </div>
+
+            {(title && sport && spots && description && address && date && time && endDate && endTime)?
+            <button className="btn-submit-game"
+                onClick={() => {
                     let gameInput = {
                         title: title,
                         dateTime: dateTime,
@@ -212,260 +455,12 @@ function CreateGameForm(props) {
                     })
                     .catch(error => {
                         console.log(error);
-                    });
+                    }); 
                 }}
-            >
-                {/* This prevents implicit submission of the form (pressing enter) */}
-                <button type="submit" disabled style={{display: "none"}} aria-hidden="true"></button>
-                
-                <button onClick={props.exitFunc} className="exit-btn" type="button">X</button>
-
-                <article>
-                    <div className="form-group title">
-                        <label>Title</label>
-                        <input
-                            onChange={(e) => setTitle(e.target.value)} 
-                            type="text" 
-                            className={titleClass}
-                            value={title}
-                            minLength="4"
-                            placeholder="Give your sporting event a unique title"
-                            autoComplete="off" 
-                        />
-                    </div>
-                    <div className="form-group public">
-                        <button type="button" className={publicBtnClass}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setIsPublic(!isPublic);
-                            }} 
-                        >{isPublic ? "Public" : "Private"}
-                        </button>
-                    </div>
-                </article>
-
-                <article>
-                    <div className="form-group category-select">
-                        <CategorySelect 
-                            currentSelection={category}
-                            makeSelection={(selection) => {
-                                setSport("");
-                                setCategory(selection)
-                            }}
-                        />
-                    </div>
-                </article>
-
-                <article>
-                    <div className="form-group sport-select">
-                        {category === "SPORT" ?
-                        <React.Fragment>
-                            <label className="header sport-header">Sport</label>
-                            <Select className={sportClass}
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={SPORT}
-                                placeholder="Select sport"
-                                defaultInputValue={sport}
-                            />
-                        </React.Fragment>
-                        :
-                        null}
-
-                        {category === "BOARD" ?
-                        <React.Fragment>
-                        <label className="header sport-header">Game</label>
-                            <Select className={sportClass}
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={BOARD}
-                                placeholder="Select sport"
-                                defaultInputValue={sport}
-                            />
-                        </React.Fragment>
-                        :
-                        null}
-
-                        {category === "CARD" ?
-                        <React.Fragment>
-                        <label className="header sport-header">Game</label>
-                            <Select className={sportClass}
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    } 
-                                }}
-                                options={CARD}
-                                placeholder="Select sport"
-                                defaultInputValue={sport}
-                            />
-                        </React.Fragment>
-                        :
-                        null}
-
-                        {category === "VIDEO" ?
-                        <React.Fragment>
-                        <label className="header sport-header">Game</label>
-                            <Select className={sportClass}
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={VIDEO}
-                                placeholder="Select sport"
-                                defaultInputValue={sport}
-                            />
-                        </React.Fragment>
-                        :
-                        null}
-
-                        {showWriteIn ?
-                        <input
-                            onChange={(e) => setSport(e.target.value)} 
-                            type="text" 
-                            className={sportClass}
-                            placeholder="What will you be playing"
-                        />
-                        :
-                        null} 
-                    </div>
-
-                    <div className="form-group spots">
-                        <label >No. Players</label>
-                        <input
-                            className={playersClass}
-                            onChange={(e) => {
-                                setSpots(e.target.value);
-                                setSpotsReserved(0);
-                            }}
-                            type="number"
-                            autoComplete="off"
-                            min={props.playersCount > 1 ? props.playersCount : 2}
-                            max="32"
-                            value={spots}
-                        />
-                    </div>
-
-                    {isPublic ? 
-                    <div className="form-group spots">
-                        <label >Reserve Spots</label>
-                        <input
-                            className={playersClass}
-                            onChange={(e) => setSpotsReserved(e.target.value)}
-                            type="number"
-                            autoComplete="off"
-                            min="0"
-                            max={maxReservable}
-                            value={spotsReserved}
-                        />
-                    </div>
-                    :
-                    null}
-                </article>
-
-                <article>
-                    <div className="form-group description">
-                        <label >Description</label>
-                        <div
-                            ref={descriptionInput}
-                            className={descriptionClass}
-                            contentEditable="true" 
-                            placeholder="Let's play!"                 
-                            autoComplete="off"
-                        />
-                    </div>
-                </article>
-
-                <article>
-                    <i className="material-icons">public</i>
-                    <div className="form-group address">
-                        <label >Address</label>
-                        <PlaceSearch
-                            onChangeFunc={handleGooglePlace}
-                            prevPlace={props.address}
-                            needsInput={needsInput && address == "" || invalidAddress}
-                        />
-                    </div>
-                </article>
-                
-                <article>
-                    <i className="material-icons">calendar_today</i>
-        
-                    <div className="form-group">
-                    <label >Date/Time</label>
-                        <input 
-                            onChange={(e) => {
-                                setDate(e.target.value);
-                                setEndDate(e.target.value);
-                            }} 
-                            type="date" 
-                            className={dateClass}
-                            value={date} 
-                            autoComplete="off"
-                        />
-                    </div>
-                    <div className="form-group time">
-                        <input 
-                            onChange={(e) => {
-                                setTime(e.target.value);
-                                let d = new Date();
-                                d.setHours(parseInt(e.target.value.split(":")[0]) + 2)
-                                d.setMinutes(parseInt(e.target.value.split(":")[1]))
-                                let endTime = (d.getHours() < 10 ? '0' + d.getHours().toString() : d.getHours().toString()) + ":" + (d.getMinutes() < 10 ? '0' + d.getMinutes().toString() : d.getMinutes().toString());
-                                setEndTime(endTime);
-                            }} 
-                            type="time" 
-                            className={timeClass}
-                            value={time} 
-                            autoComplete="off"
-                        />
-                    </div>
-
-                    <a 
-                        className="toggle-endtime"
-                        href="#" 
-                        onClick={() => setShowEnd(!showEnd)}
-                    >+</a>
-
-                    <div className={endDateTimeClass} ref={endInput}>
-                        <div className="form-group">
-                            <label >End Date</label>
-                            <input 
-                                onChange={(e) => setEndDate(e.target.value)} 
-                                type="date" 
-                                className={endClass}
-                                value={endDate} 
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label >End Time</label>
-                            <input 
-                                onChange={(e) => setEndTime(e.target.value)} 
-                                type="time" 
-                                className={endClass}
-                                value={endTime} 
-                            />
-                        </div>
-                    </div>
-                </article>
-
-                <input type="submit" value={props.id ? "Update Game" : "Create Game!"} />
-            </form>
-
-
-            <br />
-
+            >{props.id ? "Update Game" : "Create Game!"}
+            </button>
+            :
+            <button onClick={() => setErrors([{ message: "Please fill in all required fields" }])} className="btn-submit-game incomplete">{props.id ? "Update Game" : "Create Game!"}</button>}
         </div>
         <style jsx>{`
             .create-game-container {
@@ -473,8 +468,8 @@ function CreateGameForm(props) {
                 display: block;
                 position: relative;
                 // min-height: 650px;
-                max-height: 800px;
-                padding: 10px 20px;
+                max-height: 770px;
+                // padding: 10px 20px;
                 overflow-x: hidden;
                 background-color: white;
                 border-radius: 10px;
@@ -488,7 +483,6 @@ function CreateGameForm(props) {
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 700px;
-                max-width: 50vw;
                 box-shadow: 0 2px 26px rgba(0, 0, 0, .3), 0 0 0 1px rgba(0, 0, 0, .1);
             }
 
@@ -496,6 +490,10 @@ function CreateGameForm(props) {
                 display: block;
                 margin-top: 2em;
                 width: 40vw;
+            }
+
+            .form {
+                padding: 10px 20px;
             }
 
             article {
@@ -594,6 +592,7 @@ function CreateGameForm(props) {
             }
 
             .description {
+                min-height: 4em;
                 height: auto;
                 width: 100%;
             }
@@ -631,22 +630,31 @@ function CreateGameForm(props) {
                 display: block;
             }
 
-            input[type=submit] {
+            .btn-submit-game {
                 display: block;
-                margin-left: auto;
-                margin-right: auto;
-                width: 50%;
+                width: 100%;
+                height: 70px;
+                font-size: 1.5em;
                 background-color: var(--darkermatter);
                 color: white;
                 padding: 14px 20px;
-                margin-top: 12px;
+                margin: 12px auto;
+                padding-bottom: 0;
+                margin-bottom: 0;
                 border: none;
-                border-radius: 4px;
                 cursor: pointer;
             }
 
-            input[type=submit]:hover {
+            .incomplete {
+                background-color: grey;
+            }
+
+            .btn-submit-game:hover {
                 background-color: var(--darkmatter);
+            }
+
+            .incomplete:hover {
+                background-color: grey;
             }
 
             .error {
@@ -687,14 +695,103 @@ function CreateGameForm(props) {
                 font-style: italic;
             }
 
-            @media only screen and (max-width: 1000px) {
+            @media only screen and (max-width: 768px) {
+                .create {
+                    width: 600px;
+                }
+
+                .title {
+                    width: 340px;
+                }
+
                 .toggle-endtime:after {  
                     content: "";
                 }
 
                 .toggle-endtime {
-                    font-size: 1.5em;
+                    font-size: 2.5em;
+                    vertical-align: middle;
                     text-align: center;
+                }
+            }
+
+            @media only screen and (max-width: 375px) {
+                .create {
+                    width: 100%;
+                    height: 500px;
+                    padding-bottom: 0;
+                }
+
+                .title {
+                    width: 190px;
+                    padding-right: 20px;
+                }
+
+                .public {
+                    width: 100px;
+                    padding-left: 0;
+                }
+
+                .sidebar {
+                    display: inline-block;
+                    width: 50%;
+                    vertical-align: top;
+                }
+
+                .category-select {
+                    width: 100px;
+                }
+
+                .sport-select {
+                    margin: 0;
+                    margin-left: -10px;
+                    width: 190px;
+                }
+
+                .spots {
+                    width: 70px;
+                    padding: 10px 0;
+                    margin-left: -10px;
+                }
+
+                .spots > label {
+                    content: "Reserved";
+                }
+
+                i {
+                    display: none;
+                }
+
+                .address {
+                    width: 300px;
+                }
+
+                .datetime {
+                    width: 145px;
+                    padding-right: 10px;
+                }
+
+                .datetime > input {
+                    padding: 12px 6px;
+                }
+
+                .endDateTime {
+                    padding-left: 0;
+                }
+
+                .toggle-endtime:after {  
+                    content: "";
+                }
+
+                .toggle-endtime {
+                    margin: 0;
+                    width: 10px;
+                    vertical-align: bottom;
+                }
+
+                .btn-submit-game {
+                    position: sticky;
+                    bottom: 0;
                 }
             }
         `}</style>
