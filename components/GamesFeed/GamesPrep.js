@@ -197,12 +197,12 @@ function GamesPrep(props) {
                 <div id="customBorder"></div>
 
                 <style jsx>{`
-                #customBorder {
-                    border-bottom-style: groove;
-                    border-width: thin;
-                    width: 85%;
-                    margin: 0 auto;
-                }
+                    #customBorder {
+                        border-bottom-style: groove;
+                        border-width: thin;
+                        width: 85%;
+                        margin: 0 auto;
+                    }
                 `}</style>
             </React.Fragment>
 
@@ -215,14 +215,16 @@ function GamesPrep(props) {
                 currentLoc={props.currentLoc}
                 markers={markers}
                 getMapBounds={props.getMapBounds}
+                viewMode={props.viewMode}
             />
-            <div style={{ width: "40%", maxHeight: "80vh", overflow: "auto"}}>
+            <div style={{ maxHeight: "86vh", overflowX: "hidden", margin: "0 auto" }}>
                 {myGames.length > 0 ?
                 <MyGames 
                     myGames={myGames}
                     activeCount={props.activeCount}
                     hasMore={props.hasMore_myGames}
                     loadMore={props.loadMore_myGames}
+                    viewMode={props.viewMode}
                 />  
                 :
                 null}
@@ -235,6 +237,7 @@ function GamesPrep(props) {
                     gamesBySpots={gamesBySpots}
                     scroll={scroll}
                     scrollTo={scrollHeight}
+                    viewMode={props.viewMode}
                 />
             </div>
         </>

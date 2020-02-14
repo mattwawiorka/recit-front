@@ -24,7 +24,7 @@ function Navigation(props) {
     let style = 
         <style jsx="true">{`
             nav {
-                height: min-content;
+                height: 100%;
                 width: 100%;
             }
 
@@ -78,8 +78,12 @@ function Navigation(props) {
 
             .dropdown {
                 display: none;
+                position: absolute;
+                width: 100%;
+                height: 120px;
                 background-color: var(--greenapple);
                 text-align: center;
+                z-index: 6;     // Needs to be higher than view button
             }
 
             .show {
@@ -107,7 +111,7 @@ function Navigation(props) {
     if (props.user) {
         links = 
         <React.Fragment>
-            <Link href='/Inbox' shallow={true}>
+            <Link href='/Inbox'>
                 {props.unread > 0 ? <a>{"Inbox (" + props.unread + ")"}</a> : <a>Inbox</a>}
             </Link>
             {props.showLogout ?
@@ -147,7 +151,7 @@ function Navigation(props) {
                     <Link href="/">
                         <div className="nav-title">
                             <img src="/rec-it.png" alt="Recit"
-                            style={{ width: '48px', height: '48px', borderRadius: '10px'}}/>
+                            style={{ width: '42px', height: '42px', borderRadius: '10px'}}/>
                         </div>
                     </Link>
                     <div className="links">

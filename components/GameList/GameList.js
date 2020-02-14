@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import cookie from 'js-cookie';
+import classNames from 'classnames';
 
 let loginWarning;
 
@@ -14,11 +15,17 @@ function GameList(props) {
 
   const list = useRef(null);
 
-  useEffect(() => {
-    if (props.scroll 
-        && ( (props.scrollTo < list.current.scrollTop) || (props.scrollTo > (list.current.scrollTop + list.current.clientHeight)))) 
-        list.current.scrollTo(0, props.scrollTo - 100)
-  }, [props.scrollTo])
+  // useEffect(() => {
+  //   if (props.scroll 
+  //       && ( (props.scrollTo < list.current.scrollTop) || (props.scrollTo > (list.current.scrollTop + list.current.clientHeight)))) 
+  //       list.current.scrollTo(0, props.scrollTo - 100)
+  // }, [props.scrollTo])
+
+  // For view select on mobile
+  const listClass = classNames({
+    "list-container": true,
+    "hide": props.viewMode
+  })
 
   let today, tomorrow, thisWeek, nextWeek, later;
   const chronStyle = 
@@ -136,7 +143,7 @@ function GameList(props) {
 
   return (
     <React.Fragment>
-      <div className="list-container" ref={list}>
+      <div className={listClass} ref={list}>
         <h3 className="list-title">Games in Your Area</h3>
         {loginWarning}
         {today}
@@ -149,13 +156,13 @@ function GameList(props) {
       <style jsx>{`
         .list-container {
           display: block;
-          width: 95%;
+          width: 570px;
           height: min-content;
-          max-height: 80vh;
+          max-height: 85vh;
           text-align: center;
           background-color: white;
           border-radius: 15px;
-          margin-left: 1em;
+          margin: 0 15px;
           // overflow: hidden;
         }
 
@@ -166,11 +173,40 @@ function GameList(props) {
           color: #111;
         }
 
-        // @media only screen and (max-width: 700px) {
-        //   .container {
-        //       grid-template-columns: .25fr 1fr .25fr;
-        //   }
-        // }
+        @media only screen and (max-width: 1600px) {
+          .list-container {
+            width: 400px;
+          }
+        }
+
+        @media only screen and (max-width: 768px) {
+          .list-container {
+            width: 300px;
+            margin: 0;
+          }
+        }
+
+        @media only screen and (max-width: 600px) {
+          .list-container {
+            width: 100%;
+            height: max-content;
+          }
+
+          .hide {
+            display: none;
+          }
+        }
+
+        @media only screen and (max-height: 425px) {
+          .list-container {
+            width: 100%;
+            height: max-content;
+          }
+
+          .hide {
+            display: none;
+          }
+        }
       `}</style>
     </React.Fragment>
   ); 

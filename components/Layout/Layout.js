@@ -33,9 +33,9 @@ function GamesLayout(props) {
                     {props.children[2]}
                 </aside>
                 }
-                <footer>
-                    <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
-                </footer>
+
+                <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
+
             </div>
 
             <style jsx>{`
@@ -44,11 +44,10 @@ function GamesLayout(props) {
                     height: 100vh;
                     display: grid;
                     grid-template-columns: 20vw 80vw;
-                    grid-template-rows: min-content minmax(82vh, max-content) minmax(min-content, min-content);
+                    grid-template-rows: 50px minmax(82vh, max-content);
                     grid-template-areas:
                         "header header header"
-                        "sidebar1 main sidebar2"
-                        "footer footer footer";
+                        "sidebar1 main sidebar2";
                     overflow-y: hidden;
                     overflow-x: hidden; 
                     background-color: var(--greyapple);
@@ -59,11 +58,10 @@ function GamesLayout(props) {
                     height: 100vh;
                     display: grid;
                     grid-template-columns: 20vw 60vw 20vw;
-                    grid-template-rows: min-content minmax(82vh, max-content) minmax(min-content, min-content);
+                    grid-template-rows: 50px minmax(82vh, max-content);
                     grid-template-areas:
                         "header header header"
-                        "sidebar1 main sidebar2"
-                        "footer footer footer";
+                        "sidebar1 main sidebar2";
                     overflow-y: auto;
                     overflow-x: hidden; 
                     background-color: var(--greyapple);
@@ -95,11 +93,16 @@ function GamesLayout(props) {
                     // overflow: auto;
                 }
 
-                footer {
-                    grid-area: footer;
-                    margin-top: 4.5em;
-                    background-color: var(--greyapple);
-                    overflow-x: hidden;
+                @media only screen and (max-width: 1024px) {
+                    .container-two-parts {
+                        grid-template-columns: 0vw 100vw;
+                    }
+                }
+
+                @media only screen and (max-height: 425px) {
+                    .container-two-parts {
+                        grid-template-columns: 0vw 100vw;
+                    }
                 }
             `}</style>
         </React.Fragment>

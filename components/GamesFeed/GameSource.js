@@ -122,6 +122,7 @@ function GameSource(props) {
       getMapBounds={props.getMapBounds}
       bounds={props.bounds}
       zoom={props.zoom}
+      viewMode={props.viewMode}
       games={data.games.edges || []} 
       myGames={data_myGames ? data_myGames.userGames.edges : []}
       activeCount={data_myGames ? data_myGames.userGames.totalCount : 0}

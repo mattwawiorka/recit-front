@@ -92,6 +92,19 @@ export default function Meta() {
                     background: var(--darkmatter); 
                 }
 
+                /***** REMOVE SCROLLBARS ON FINGER SCOLLING DEVICES *****/
+                @media only screen and (max-width: 768px) {
+                    *::-webkit-scrollbar {
+                      display: none;
+                    }
+                }
+
+                @media only screen and (max-height: 425px) {
+                    *::-webkit-scrollbar {
+                      display: none;
+                    }
+                }
+
             `}</style>
         </div>
     );

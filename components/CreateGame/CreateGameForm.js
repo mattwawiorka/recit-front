@@ -186,6 +186,7 @@ function CreateGameForm(props) {
                         className={titleClass}
                         value={title}
                         minLength="4"
+                        maxLength="50"
                         placeholder="Give your game a unique title"
                         autoComplete="off" 
                     />
@@ -695,7 +696,7 @@ function CreateGameForm(props) {
                 font-style: italic;
             }
 
-            @media only screen and (max-width: 768px) {
+            @media only screen and (max-width: 1024px) {
                 .create {
                     width: 600px;
                 }
@@ -715,7 +716,7 @@ function CreateGameForm(props) {
                 }
             }
 
-            @media only screen and (max-width: 375px) {
+            @media only screen and (max-width: 600px) {
                 .create {
                     width: 100%;
                     height: 500px;
@@ -792,6 +793,40 @@ function CreateGameForm(props) {
                 .btn-submit-game {
                     position: sticky;
                     bottom: 0;
+                }
+
+                *::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+
+            @media only screen and (max-height: 425px) {
+                .create {
+                    position: absolute;
+                    transform: translate(-50%, 0%);
+                    width: 100%;
+                    height: 300px;
+                    top: 0; 
+                }
+
+                .title {
+                    width: 400px;
+                    padding-right: 20px;
+                }
+
+                .btn-submit-game {
+                    position: sticky;
+                    bottom: 0;
+                }
+            }
+
+            @media only screen and (max-height: 320px) {
+                .create {
+                    position: absolute;
+                    transform: translate(-50%, 0%);
+                    width: 100%;
+                    height: 250px;
+                    top: 0;
                 }
             }
         `}</style>

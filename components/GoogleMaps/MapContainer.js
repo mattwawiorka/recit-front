@@ -2,8 +2,15 @@ import React, { useCallback } from 'react';
 import API from '../../api.json';
 import Map from 'google-map-react';
 import mapStyles from './mapStyles.json';
+import classNames from 'classnames';
 
 function MapContainer(props) {
+
+  // For view select on mobile
+  const mapClass = classNames({
+    "map-container": true,
+    "hide": !props.viewMode
+  })
 
   const handleApiLoaded = useCallback((map, maps) => {
 
@@ -28,7 +35,7 @@ function MapContainer(props) {
 
   return (
     <>
-    <div className="map-container">
+    <div className={mapClass}>
         <Map
             bootstrapURLKeys={{ key: API.key }}
             defaultCenter={ 
@@ -52,11 +59,32 @@ function MapContainer(props) {
     </div>
 
     <style jsx>{`
+      .map-container {
+        height: 85vh;
+        width: 55vw;
+      }
+
+      @media only screen and (max-width: 768px) {
         .map-container {
-            height: 80vh;
-            width: 50vw;
-            border-radius: 15px;
+          width: 575px;
         }
+      }
+
+      @media only screen and (max-width: 600px) {
+        .hide {
+          display: none;
+        }
+      }
+
+      @media only screen and (max-height: 425px) {
+        .hide {
+          display: none;
+        }
+
+        .map-container {
+          width: 100%;
+        }
+      }
     `}</style>
     </>
   );

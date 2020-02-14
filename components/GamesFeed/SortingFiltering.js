@@ -13,7 +13,7 @@ function SortingFiltering(props) {
         props.currentLoc[1] - 0.1095172763
     ];
 
-    const [showPanel, setShowPanel] = useState();
+    const [showPanel, setShowPanel] = useState(); // Must be left undefined for animations to work
     const [category, setCategory] = useState("ALL");
     const [sport, setSport] = useState("ALL");
     const [showWriteIn, setShowWriteIn] = useState(false)
@@ -21,6 +21,8 @@ function SortingFiltering(props) {
     const [openSpots, setOpenSpots] = useState("0");
     const [bounds, setBounds] = useState(initialBounds);
     const [zoom, setZoom] = useState(12);
+    // For small viewports (mobile)
+    const [viewMode, setViewMode] = useState(true); // True = show map, False = show list
 
     const setMapBounds = useCallback((mapBounds, mapZoom) => {
         setBounds(mapBounds);
@@ -39,6 +41,16 @@ function SortingFiltering(props) {
         'btn-right': showPanel === false
     });
 
+    // For view select
+    const mapSelect = classNames({
+        "checked": viewMode,
+        "unchecked": !viewMode
+    })
+    const listSelect = classNames({
+        "checked": !viewMode,
+        "unchecked": viewMode
+    })
+
     return (
         <React.Fragment>
             <div className="game-feed-container">
@@ -51,7 +63,25 @@ function SortingFiltering(props) {
                     getMapBounds={setMapBounds}
                     bounds={bounds}
                     zoom={zoom}
+                    viewMode={viewMode}
                 />
+            </div>
+
+            <div className="view-select-container">
+                <label className={mapSelect}>
+                    <input type="radio" name="View" value="MAP" 
+                        className="view-button"
+                        checked={viewMode}
+                        onChange={() => setViewMode(true)} />
+                    Map 
+                </label>
+                <label className={listSelect}>
+                    <input type="radio" name="View" value="LIST" 
+                        className="view-button"
+                        checked={!viewMode}
+                        onChange={() => setViewMode(false)} />
+                    List
+                </label>
             </div>
                 
             <button onClick={() => setShowPanel(!showPanel)} className={btnClass}>
@@ -61,17 +91,18 @@ function SortingFiltering(props) {
             <aside className={panelClass}>
                 <form className='sorting-filtering'>
                     <div className="form-group">
-                        <label className="header">Category</label>
+                        <label className="header select-header">Category</label>
                         <Select 
                             onChange={category => setCategory(category.value)} 
                             options={CATEGORIES}
                             placeholder="All"
+                            className="input-fields"
                         />
                     </div>
                     <div className="form-group">
                         {category === "SPORT" || category === "ALL" ?
-                        <label className="header">
-                            Sport
+                        <React.Fragment>
+                            <label className="header select-header">Sport</label>
                             <Select 
                                 onChange={(sport) => {
                                     setSport(sport.value)
@@ -81,13 +112,14 @@ function SortingFiltering(props) {
                                 }}
                                 options={SPORT_SEARCH}
                                 placeholder="All"
+                                className="input-fields"
                             />
-                        </label>
+                        </React.Fragment>
                         :
                         null}
                         {category === "BOARD" ?
-                        <label className="header">
-                            Game
+                        <React.Fragment>
+                            <label className="header select-header">Game</label>
                             <Select 
                                 onChange={(sport) => {
                                     setSport(sport.value)
@@ -97,13 +129,14 @@ function SortingFiltering(props) {
                                 }}
                                 options={BOARD_SEARCH}
                                 placeholder="All"
+                                className="input-fields"
                             />
-                        </label>
+                        </React.Fragment>
                         :
                         null}
                         {category === "CARD" ?
-                        <label className="header">
-                            Game
+                        <React.Fragment>
+                            <label className="header select-header">Game</label>
                             <Select 
                                 onChange={(sport) => {
                                     setSport(sport.value)
@@ -113,13 +146,14 @@ function SortingFiltering(props) {
                                 }}
                                 options={CARD_SEARCH}
                                 placeholder="All"
+                                className="input-fields"
                             />
-                        </label>
+                        </React.Fragment>
                         :
                         null}
                         {category === "VIDEO" ?
-                        <label className="header">
-                            Game
+                        <React.Fragment>
+                            <label className="header select-header">Game</label>
                             <Select 
                                 onChange={(sport) => {
                                     setSport(sport.value)
@@ -129,25 +163,23 @@ function SortingFiltering(props) {
                                 }}
                                 options={VIDEO_SEARCH}
                                 placeholder="All"
+                                className="input-fields"
                             />
-                        </label>
+                        </React.Fragment>
                         :
                         null}
                         {showWriteIn ?
-                        <label className="header">
-                            What will you be playing
-                            <input
-                                onChange={(e) => setSport(e.target.value)} 
-                                type="text" 
-                                className="input-fields"
-                                placeholder="What game will you be playing"
-                            />
-                        </label>
+                        <input
+                            onChange={(e) => setSport(e.target.value)} 
+                            type="text" 
+                            className="input-fields"
+                            placeholder="What will you be playing"
+                        />
                         :
                         null}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group half-group">
                         <label className="header">Starting Date</label>
                         <select 
                             onChange={e => setStartDate(e.target.value)} 
@@ -163,7 +195,7 @@ function SortingFiltering(props) {
                         </select>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group half-group">
                         <label className="header">Min Open Spots</label>
                         <input 
                             type="number"
@@ -181,17 +213,63 @@ function SortingFiltering(props) {
                 .game-feed-container {
                     display: flex;
                     width: 100%;
-                    padding-right: 
                     height: auto; 
                     padding: 1.2em 1.2em 0 0.5em;
-                    overflow: hidden;
+                    overflow-x: hidden;
+                }
+
+                .view-select-container {
+                    display: none;
+                    box-sizing: border-box;
+                    position: absolute;
+                    z-index: 5;
+                    transform: translate(-50%, -50%);
+                    left: 50%;
+                    top: 13%;
+                }
+
+                .view-button {
+                    position: absolute;
+                    left: -9999em;
+                    top: -9999em;
+                }
+
+                .view-select-container > label {
+                    display: inline-block;
+                    font-size: 1em;
+                    font-weight: bold;
+                    text-align: center;
+                    width: 75px;
+                    cursor: pointer;
+                    padding: 0.25em;
+                    border: 2px solid var(--darkermatter);
+                    margin-right: -1px;
+                }
+    
+                .view-select-container > label:first-of-type {
+                    border-radius: 4px 0 0 4px;
+                }
+    
+                .view-select-container > label:last-of-type {
+                    border-radius: 0 4px 4px 0;
+                }
+
+                .unchecked {
+                    color: var(--darkermatter);
+                    background-color: var(--greyapple);
+                }
+    
+                .checked {
+                    color: white;
+                    background-color: var(--darkermatter);
                 }
 
                 .sort-toggle-button {
                     position: absolute;
-                    top: 35%;
-                    right: 0%;
-                    height: 15em;
+                    transform: translate(0%, -50%);
+                    top: 50%;
+                    right: 0;
+                    height: 300px;
                     background-color: var(--greenapple);
                     color: white;
                     text-align: center;
@@ -203,12 +281,13 @@ function SortingFiltering(props) {
                     border-style: none;
                     cursor: pointer;
                     outline: none;
+                    z-index: 6;
                 }
 
                 .btn-left {
                     animation-duration: 1.5s;
                     animation-name: slide-left;
-                    right: 20%;
+                    right: 395px;
                 }
 
                 .btn-right {
@@ -217,17 +296,21 @@ function SortingFiltering(props) {
                 }
 
                 aside {
-                    position: relative;
-                    top: -97%;
-                    right: -100%;
-                    // height: auto;
+                    position: absolute;
+                    // float: right;
+                    right: 0;
+                    top: 100px;
                     height: 80vh;
-                    width: 20vw;
+                    min-height: max-content;
+                    width: 0px;
                     overflow: hidden;
+                    z-index: 6;
                 }
 
                 .aside-in {
-                    right: -75%;
+                    // right: -75%;
+                    width: 400px;
+                    // right: 0px;
                     animation-duration: 1.5s;
                     animation-name: slidein;   
                 }
@@ -239,41 +322,41 @@ function SortingFiltering(props) {
 
                 @keyframes slide-left {
                     from {
-                        right: 0%;
+                        right: 0;
                     } 
                     
                     to {
-                        right: 20%;
+                        right: 395px;
                     }
                 }
 
                 @keyframes slide-right {
                     from {
-                        right: 20%;
+                        right: 395px;
                     } 
                     
                     to {
-                        right: 0%;
+                        right: 0;
                     }
                 }
 
                 @keyframes slidein {
                     from {
-                        right: -100%;
+                        width: 0;
                     } 
                     
                     to {
-                        right: -75%;
+                        width: 400px;
                     }
                 }
 
                 @keyframes slideout {
                     from {
-                        right: -75%;
+                        width: 400px;
                     } 
                     
                     to {
-                        right: -100%;
+                        width: 0;
                     }
                 }
 
@@ -285,19 +368,14 @@ function SortingFiltering(props) {
                     background-color: var(--greenapple);
                     border-top-left-radius: 15px;
                     border-bottom-left-radius: 15px;
+                    word-break: keep-all;
+                    white-space: nowrap;
+                    overflow: hidden;
                 }
 
                 .form-group {
                     vertical-align: middle;
                     padding: 5px 0 5px 0;
-                }
-
-                h2 {
-                    text-align: center;
-                    color: white;
-                    text-decoration: underline;
-                    margin-bottom: 0.75em;
-                    margin-top: 0.75em;
                 }
 
                 .header {
@@ -306,6 +384,10 @@ function SortingFiltering(props) {
                     text-align: center;
                     font-weight: 500;
                     font-weight: bold;
+                }
+
+                .select-header {
+                    padding-bottom: 5px;
                 }
 
                 .input-fields {
@@ -318,8 +400,168 @@ function SortingFiltering(props) {
                     border: 1px solid #ccc;
                     border-radius: 4px;
                     box-sizing: border-box;
+                    height: 38px;
                 }
 
+                @media only screen and (max-width: 768px) {
+                    .game-feed-container {
+                        padding: 20px 40px;
+                        padding-right: 0;
+                    }
+                }
+
+                @media only screen and (max-width: 600px) {
+                    .game-feed-container {
+                        padding: 0;
+                        padding-right: 0;
+                    }
+
+                    .view-select-container {
+                        display: block;
+                    }
+
+                    .sort-toggle-button {
+                        height: 200px;
+                    }
+
+                    .btn-left {
+                        right: 330px;
+                    }
+
+                    @keyframes slide-left {
+                        from {
+                            right: 0;
+                        } 
+                        
+                        to {
+                            right: 330px;
+                        }
+                    }
+    
+                    @keyframes slide-right {
+                        from {
+                            right: 330px;
+                        } 
+                        
+                        to {
+                            right: 0;
+                        }
+                    }
+
+                    aside {
+                        top: 60px;
+                        height: 100%;
+                    }
+
+                    .aside-in {
+                        width: 335px;
+                    }
+
+                    @keyframes slidein {
+                        from {
+                            width: 0;
+                        } 
+                        
+                        to {
+                            width: 335px;
+                        }
+                    }
+    
+                    @keyframes slideout {
+                        from {
+                            width: 335px;
+                        } 
+                        
+                        to {
+                            width: 0;
+                        }
+                    }
+                }
+
+                @media only screen and (max-width: 320px) {
+                    .btn-left {
+                        right: 285px;
+                    }
+
+                    @keyframes slide-left {
+                        from {
+                            right: 0;
+                        } 
+                        
+                        to {
+                            right: 285px;
+                        }
+                    }
+    
+                    @keyframes slide-right {
+                        from {
+                            right: 285px;
+                        } 
+                        
+                        to {
+                            right: 0;
+                        }
+                    }
+
+                    aside {
+                        top: 50px;
+                    }
+
+                    .aside-in {
+                        width: 290px;
+                    }
+
+                    @keyframes slidein {
+                        from {
+                            width: 0;
+                        } 
+                        
+                        to {
+                            width: 290px;
+                        }
+                    }
+    
+                    @keyframes slideout {
+                        from {
+                            width: 290px;
+                        } 
+                        
+                        to {
+                            width: 0;
+                        }
+                    }
+                }
+
+                @media only screen and (min-height: 730px) {
+                    .view-select-container {
+                        top: 10%;
+                    }
+                }
+
+                @media only screen and (max-height: 425px) {
+                    .game-feed-container {
+                        padding: 0;
+                    }
+
+                    .view-select-container {
+                        display: block;
+                        top: 20%;
+                    }
+
+                    .sort-toggle-button {
+                        height: 150px;
+                    }
+
+                    .aside {
+                        top: 10%;
+                    }
+
+                    .half-group {
+                        display: inline-block;
+                        width: 50%;
+                        padding-right: 10px;
+                    }
+                }
             `}</style>
         </React.Fragment>
     );  
