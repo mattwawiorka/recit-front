@@ -173,12 +173,18 @@ function GameList(props) {
           color: #111;
         }
 
+        /******************
+        *     Laptop      *
+        *******************/
         @media only screen and (max-width: 1600px) {
           .list-container {
             width: 400px;
           }
         }
 
+        /******************
+        *     Tablet      *
+        *******************/
         @media only screen and (max-width: 768px) {
           .list-container {
             width: 300px;
@@ -186,6 +192,9 @@ function GameList(props) {
           }
         }
 
+        /******************
+        *     Mobile      *
+        *******************/
         @media only screen and (max-width: 600px) {
           .list-container {
             width: 100%;
@@ -197,6 +206,9 @@ function GameList(props) {
           }
         }
 
+        /******************
+        *    Landscape    *
+        *******************/
         @media only screen and (max-height: 425px) {
           .list-container {
             width: 100%;

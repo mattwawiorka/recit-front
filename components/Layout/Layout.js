@@ -93,12 +93,31 @@ function GamesLayout(props) {
                     // overflow: auto;
                 }
 
+                /******************
+                *  Laptop/tablet  *
+                *******************/
                 @media only screen and (max-width: 1024px) {
                     .container-two-parts {
                         grid-template-columns: 0vw 100vw;
                     }
+
+                    .container-three-parts {
+                        grid-template-columns: 10vw 80vw 10vw;
+                    }
                 }
 
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px) {
+                    .container-three-parts {
+                        grid-template-columns: 0 100vw 0;
+                    }
+                }
+
+                /******************
+                *    Landscape    *
+                *******************/
                 @media only screen and (max-height: 425px) {
                     .container-two-parts {
                         grid-template-columns: 0vw 100vw;

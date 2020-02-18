@@ -83,7 +83,7 @@ function Navigation(props) {
                 height: 120px;
                 background-color: var(--greenapple);
                 text-align: center;
-                z-index: 6;     // Needs to be higher than view button
+                z-index: 7;     // Needs to be higher than view button
             }
 
             .show {
@@ -102,7 +102,7 @@ function Navigation(props) {
                 background-color: var(--greyapple);
             }
 
-            @media only screen and (max-width: 700px) {
+            @media only screen and (max-width: 768px) {
                 nav .content .menu { display: initial; }
                 nav .content .links { display: none; }
             }

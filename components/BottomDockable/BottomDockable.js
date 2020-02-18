@@ -104,13 +104,19 @@ function BottomDockable(props) {
                     to {bottom: 0; opacity: 0;}
                 }
 
+                /******************
+                *      Tablet     *
+                *******************/
                 @media only screen and (max-width: 768px) {
                     .bottom-button {
                         width: 60vw;
                     }
                 }
 
-                @media only screen and (max-width: 425px) {
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px) {
                     .bottom-button {
                         width: 100%;
                         border-radius: 0;

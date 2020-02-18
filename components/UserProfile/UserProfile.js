@@ -338,41 +338,39 @@ function UserProfile(props) {
 
                 <section className="pic-gallery">
                     <div className="pic-carousel">
-
-                    
-                    <div className="gallery-pic">
-                        <img 
-                            src={pic1Preview ? pic1Preview : props.user.pic1}
-                            className="image-round"
-                            onClick={() => {
-                                setPicMode(true);
-                                setViewerPic(pic1Preview ? pic1Preview : props.user.pic1);
-                                setViewing('pic1');
-                            }}
-                        />
-                    </div>
-                    <div className="gallery-pic">
-                        <img 
-                            src={pic2Preview ? pic2Preview :  props.user.pic2}
-                            className="image-round"
-                            onClick={() => {
-                                setPicMode(true);
-                                setViewerPic(pic2Preview ? pic2Preview : props.user.pic2)
-                                setViewing('pic2');
-                            }}
-                        />
-                    </div>
-                    <div className="gallery-pic">
-                        <img 
-                            src={pic3Preview ? pic3Preview : props.user.pic3}
-                            className="image-round"
-                            onClick={() => {
-                                setPicMode(true);
-                                setViewerPic(pic3Preview ? pic3Preview : props.user.pic3)
-                                setViewing('pic3');
-                            }}
-                        />
-                    </div>
+                        <div className="gallery-pic">
+                            <img 
+                                src={pic1Preview ? pic1Preview : props.user.pic1}
+                                className="image-round"
+                                onClick={() => {
+                                    setPicMode(true);
+                                    setViewerPic(pic1Preview ? pic1Preview : props.user.pic1);
+                                    setViewing('pic1');
+                                }}
+                            />
+                        </div>
+                        <div className="gallery-pic">
+                            <img 
+                                src={pic2Preview ? pic2Preview :  props.user.pic2}
+                                className="image-round"
+                                onClick={() => {
+                                    setPicMode(true);
+                                    setViewerPic(pic2Preview ? pic2Preview : props.user.pic2)
+                                    setViewing('pic2');
+                                }}
+                            />
+                        </div>
+                        <div className="gallery-pic">
+                            <img 
+                                src={pic3Preview ? pic3Preview : props.user.pic3}
+                                className="image-round"
+                                onClick={() => {
+                                    setPicMode(true);
+                                    setViewerPic(pic3Preview ? pic3Preview : props.user.pic3)
+                                    setViewing('pic3');
+                                }}
+                            />
+                        </div>
                     </div>
                 </section>
 

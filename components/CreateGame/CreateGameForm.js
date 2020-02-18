@@ -214,7 +214,7 @@ function CreateGameForm(props) {
                 </div>
             </article>
 
-            <article className="sidebar">
+            <article className="sidebar sport-spots">
                 <div className="form-group sport-select">
                     {category === "SPORT" ?
                     <React.Fragment>
@@ -419,7 +419,8 @@ function CreateGameForm(props) {
             </article>
             </div>
 
-            {(title && sport && spots && description && address && date && time && endDate && endTime)?
+            {(!props.id && title && sport && spots && description && address && date && time && endDate && endTime) ||
+             (props.id && (title != props.title || isPublic != props.isPublic || category != props.category || sport != props.sport || spots != props.spots || spotsReserved != props.spotsReserved || description != props.description || address != props.address || date != props.date || time != props.time || endDate != props.endDate || endTime != props.endTime)) ?
             <button className="btn-submit-game"
                 onClick={() => {
                     let gameInput = {
@@ -461,7 +462,15 @@ function CreateGameForm(props) {
             >{props.id ? "Update Game" : "Create Game!"}
             </button>
             :
-            <button onClick={() => setErrors([{ message: "Please fill in all required fields" }])} className="btn-submit-game incomplete">{props.id ? "Update Game" : "Create Game!"}</button>}
+            <button className="btn-submit-game incomplete" 
+                onClick={() => {
+                    if (props.id) {
+                        setErrors([{ message: "Make a change to update game" }])
+                    } else {
+                        setErrors([{ message: "Please fill in all required fields" }])
+                    }
+                }}
+            >{props.id ? "Update Game" : "Create Game!"}</button>}
         </div>
         <style jsx>{`
             .create-game-container {
@@ -577,7 +586,7 @@ function CreateGameForm(props) {
             }
 
             .sport-select {
-                width: 250px;
+                width: 300px;
             }
 
             .spots {
@@ -640,7 +649,6 @@ function CreateGameForm(props) {
                 color: white;
                 padding: 14px 20px;
                 margin: 12px auto;
-                padding-bottom: 0;
                 margin-bottom: 0;
                 border: none;
                 cursor: pointer;
@@ -696,6 +704,9 @@ function CreateGameForm(props) {
                 font-style: italic;
             }
 
+            /******************
+            *  Laptop/tablet  *
+            *******************/
             @media only screen and (max-width: 1024px) {
                 .create {
                     width: 600px;
@@ -716,11 +727,17 @@ function CreateGameForm(props) {
                 }
             }
 
+            /******************
+            *     Mobile      *
+            *******************/
             @media only screen and (max-width: 600px) {
                 .create {
                     width: 100%;
-                    height: 500px;
-                    padding-bottom: 0;
+                    height: calc(100% - 70px);
+                    transform: translate(0%, 0%);
+                    top: 0%;
+                    left: 0%;
+                    bottom: 70px;
                 }
 
                 .title {
@@ -735,24 +752,26 @@ function CreateGameForm(props) {
 
                 .sidebar {
                     display: inline-block;
-                    width: 50%;
+                    width: max-content;
                     vertical-align: top;
                 }
 
                 .category-select {
-                    width: 100px;
+                    width: 120px;
+                }
+
+                .sport-spots {
+                    padding-left: 10px;
                 }
 
                 .sport-select {
-                    margin: 0;
-                    margin-left: -10px;
-                    width: 190px;
+                    display: block;
+                    width: 200px;
                 }
 
                 .spots {
                     width: 70px;
                     padding: 10px 0;
-                    margin-left: -10px;
                 }
 
                 .spots > label {
@@ -764,7 +783,7 @@ function CreateGameForm(props) {
                 }
 
                 .address {
-                    width: 300px;
+                    width: 100%;
                 }
 
                 .datetime {
@@ -792,6 +811,7 @@ function CreateGameForm(props) {
 
                 .btn-submit-game {
                     position: sticky;
+                    // top: calc(100% - 70px);
                     bottom: 0;
                 }
 
@@ -800,12 +820,15 @@ function CreateGameForm(props) {
                 }
             }
 
+            /******************
+            *    Landscape    *
+            *******************/
             @media only screen and (max-height: 425px) {
                 .create {
                     position: absolute;
-                    transform: translate(-50%, 0%);
+                    // transform: translate(0%, 0%);
                     width: 100%;
-                    height: 300px;
+                    height: calc(100% - 70px);
                     top: 0; 
                 }
 
@@ -820,13 +843,25 @@ function CreateGameForm(props) {
                 }
             }
 
-            @media only screen and (max-height: 320px) {
+            /******************
+            *      Small      *
+            *******************/
+            @media only screen and (max-width: 320px), (max-height: 320px) {
                 .create {
-                    position: absolute;
-                    transform: translate(-50%, 0%);
+                    // position: absolute;
+                    transform: translate(0%, 0%);
                     width: 100%;
-                    height: 250px;
+                    bottom: 70px;
+                    // height: 250px;
                     top: 0;
+                }
+
+                .category-select {
+                    width: 250px;
+                }
+
+                .sport-spots {
+                    padding-left: 0;
                 }
             }
         `}</style>
