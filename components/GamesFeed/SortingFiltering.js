@@ -92,79 +92,89 @@ function SortingFiltering(props) {
                 <form className='sorting-filtering'>
                     <div className="form-group">
                         <label className="header select-header">Category</label>
-                        <Select 
-                            onChange={category => setCategory(category.value)} 
-                            options={CATEGORIES}
-                            placeholder="All"
-                            className="input-fields"
-                        />
+                        <div className="select-container">
+                            <Select 
+                                onChange={category => setCategory(category.value)} 
+                                options={CATEGORIES}
+                                placeholder="All"
+                                className="input-fields"
+                            />
+                        </div>
                     </div>
                     <div className="form-group">
                         {category === "SPORT" || category === "ALL" ?
                         <React.Fragment>
                             <label className="header select-header">Sport</label>
-                            <Select 
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={SPORT_SEARCH}
-                                placeholder="All"
-                                className="input-fields"
-                            />
+                            <div className="select-container">
+                                <Select 
+                                    onChange={(sport) => {
+                                        setSport(sport.value)
+                                        if (sport.value === "OTHER") {
+                                            setShowWriteIn(true)
+                                        }
+                                    }}
+                                    options={SPORT_SEARCH}
+                                    placeholder="All"
+                                    className="input-fields"
+                                />
+                            </div>
                         </React.Fragment>
                         :
                         null}
                         {category === "BOARD" ?
                         <React.Fragment>
                             <label className="header select-header">Game</label>
-                            <Select 
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={BOARD_SEARCH}
-                                placeholder="All"
-                                className="input-fields"
-                            />
+                            <div className="select-container">
+                                <Select 
+                                    onChange={(sport) => {
+                                        setSport(sport.value)
+                                        if (sport.value === "OTHER") {
+                                            setShowWriteIn(true)
+                                        }
+                                    }}
+                                    options={BOARD_SEARCH}
+                                    placeholder="All"
+                                    className="input-fields"
+                                />
+                            </div>
                         </React.Fragment>
                         :
                         null}
                         {category === "CARD" ?
                         <React.Fragment>
                             <label className="header select-header">Game</label>
-                            <Select 
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={CARD_SEARCH}
-                                placeholder="All"
-                                className="input-fields"
-                            />
+                            <div className="select-container">
+                                <Select 
+                                    onChange={(sport) => {
+                                        setSport(sport.value)
+                                        if (sport.value === "OTHER") {
+                                            setShowWriteIn(true)
+                                        }
+                                    }}
+                                    options={CARD_SEARCH}
+                                    placeholder="All"
+                                    className="input-fields"
+                                />
+                            </div>
                         </React.Fragment>
                         :
                         null}
                         {category === "VIDEO" ?
                         <React.Fragment>
                             <label className="header select-header">Game</label>
-                            <Select 
-                                onChange={(sport) => {
-                                    setSport(sport.value)
-                                    if (sport.value === "OTHER") {
-                                        setShowWriteIn(true)
-                                    }
-                                }}
-                                options={VIDEO_SEARCH}
-                                placeholder="All"
-                                className="input-fields"
-                            />
+                            <div className="select-container">
+                                <Select 
+                                    onChange={(sport) => {
+                                        setSport(sport.value)
+                                        if (sport.value === "OTHER") {
+                                            setShowWriteIn(true)
+                                        }
+                                    }}
+                                    options={VIDEO_SEARCH}
+                                    placeholder="All"
+                                    className="input-fields"
+                                />
+                            </div>
                         </React.Fragment>
                         :
                         null}
@@ -376,6 +386,12 @@ function SortingFiltering(props) {
                 .form-group {
                     vertical-align: middle;
                     padding: 5px 0 5px 0;
+                }
+
+                .select-container {
+                    // height: 38px;
+                    // max-height: auto;
+                    // overflow: hidden;
                 }
 
                 .header {

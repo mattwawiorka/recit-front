@@ -477,9 +477,6 @@ function CreateGameForm(props) {
                 z-index: 11;
                 display: block;
                 position: relative;
-                // min-height: 650px;
-                max-height: 770px;
-                // padding: 10px 20px;
                 overflow-x: hidden;
                 background-color: white;
                 border-radius: 10px;
@@ -823,10 +820,11 @@ function CreateGameForm(props) {
             /******************
             *    Landscape    *
             *******************/
-            @media only screen and (max-height: 425px) {
+            @media only screen and (max-width: 800px) and (max-height: 425px) {
                 .create {
                     position: absolute;
-                    // transform: translate(0%, 0%);
+                    transform: translate(0%, 0%);
+                    left: 0%;
                     width: 100%;
                     height: calc(100% - 70px);
                     top: 0; 
@@ -844,12 +842,47 @@ function CreateGameForm(props) {
             }
 
             /******************
+            *Lndscpe Xtra Wide*
+            *******************/
+            @media only screen and (min-width: 800px) and (max-height: 600px) {
+                .create {
+                    position: absolute;
+                    transform: translate(-50%, 0%);
+                    width: 50%;
+                    height: calc(100% - 70px);
+                    top: 0; 
+                }
+
+                .title {
+                    width: 400px;
+                    padding-right: 20px;
+                }
+
+                .btn-submit-game {
+                    position: sticky;
+                    bottom: 0;
+                }
+            }
+
+            /******************
+            *      Tall       *
+            *******************/
+            @media only screen and (max-width: 600px) and (min-height: 700px) {
+                .create {
+                    height: calc(100% - 70px - 15%);
+                    top: 15%;
+                    bottom: 70px;
+                }
+            }
+
+            /******************
             *      Small      *
             *******************/
             @media only screen and (max-width: 320px), (max-height: 320px) {
                 .create {
                     // position: absolute;
                     transform: translate(0%, 0%);
+                    left: 0%;
                     width: 100%;
                     bottom: 70px;
                     // height: 250px;

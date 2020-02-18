@@ -7,8 +7,10 @@ import NotificationSource from '../Navigation/NotificationSource';
 function GamesLayout(props) {
 
     let containerClass = classNames({
-        'container-two-parts': props.main,
-        'container-three-parts': !props.main
+        'container': true,
+        'home': props.main,
+        'page': !props.main,
+        'three-part': props.threeway
     })
 
     return (
@@ -39,32 +41,32 @@ function GamesLayout(props) {
             </div>
 
             <style jsx>{`
-                .container-two-parts {
+                .container {
                     width: 100vw;
                     height: 100vh;
                     display: grid;
                     grid-template-columns: 20vw 80vw;
-                    grid-template-rows: 50px minmax(82vh, max-content);
+                    grid-template-rows: 50px max-content;
                     grid-template-areas:
-                        "header header header"
-                        "sidebar1 main sidebar2";
-                    overflow-y: hidden;
+                        "header header"
+                        "sidebar1 main";
                     overflow-x: hidden; 
                     background-color: var(--greyapple);
                 }
 
-                .container-three-parts {
-                    width: 100vw;
-                    height: 100vh;
-                    display: grid;
+                .home {
+                    overflow-y: hidden;
+                }
+
+                .page {
+                    overflow-y: auto;
+                }
+
+                .three-part {
                     grid-template-columns: 20vw 60vw 20vw;
-                    grid-template-rows: 50px minmax(82vh, max-content);
                     grid-template-areas:
                         "header header header"
                         "sidebar1 main sidebar2";
-                    overflow-y: auto;
-                    overflow-x: hidden; 
-                    background-color: var(--greyapple);
                 }
 
                 header {
@@ -76,7 +78,6 @@ function GamesLayout(props) {
                 aside:nth-of-type(1) {
                     grid-area: sidebar1;
                     background-color: var(--greyapple);
-                    // overflow: auto;
                 }
 
                 main {
@@ -84,25 +85,19 @@ function GamesLayout(props) {
                     justify-items: center;
                     align-items: center;
                     background-color: var(--greyapple);
-                    // overflow: auto;
                 }
 
                 aside:nth-of-type(2) {
                     grid-area: sidebar2;
                     background-color: var(--greyapple);
-                    // overflow: auto;
                 }
 
                 /******************
                 *  Laptop/tablet  *
                 *******************/
                 @media only screen and (max-width: 1024px) {
-                    .container-two-parts {
+                    .home {
                         grid-template-columns: 0vw 100vw;
-                    }
-
-                    .container-three-parts {
-                        grid-template-columns: 10vw 80vw 10vw;
                     }
                 }
 
@@ -110,7 +105,7 @@ function GamesLayout(props) {
                 *     Mobile      *
                 *******************/
                 @media only screen and (max-width: 600px) {
-                    .container-three-parts {
+                    .three-part {
                         grid-template-columns: 0 100vw 0;
                     }
                 }
@@ -119,7 +114,7 @@ function GamesLayout(props) {
                 *    Landscape    *
                 *******************/
                 @media only screen and (max-height: 425px) {
-                    .container-two-parts {
+                    .home {
                         grid-template-columns: 0vw 100vw;
                     }
                 }

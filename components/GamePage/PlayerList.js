@@ -13,6 +13,7 @@ function PlayerList(props) {
   const [joinButton, setJoinButton] = useState(null);
   const [interestButton, setInterestButton] = useState(null);
   const [inviteButton, setInviteButton] = useState(null);
+  const [showRest, setShowRest] = useState(false);
 
   const btnStyle = 
     <style jsx="true">{`
@@ -37,8 +38,8 @@ function PlayerList(props) {
   const playerStyle = 
     <style jsx="true">{`
       .player {
-        display: block;
-        width: 100%;
+        display: inline-block;
+        width: 50%;
         height: 3em;
         margin-bottom: 0.5em;
         overflow: hidden;
@@ -102,8 +103,6 @@ function PlayerList(props) {
   useEffect(() => {
     const openSpots = Math.max(props.spots - props.players.length, 0);
     let playersDisplay = [];
-
-    console.log(props)
 
     // Determine Players
     for (i = 0; i < props.spots; i++) {
@@ -320,7 +319,19 @@ function PlayerList(props) {
         </div>
 
         <div className="players">
-          {players}
+          {players.length <= 16 ?
+          players
+          :
+          <React.Fragment>
+            {players.slice(0,16)}
+            {showRest ?
+            players.slice(16, 33) 
+            :
+            null
+            }
+            <strong onClick={() => setShowRest(!showRest)}>+</strong>
+          </React.Fragment>
+          }
         </div>
 
         <div className="spots">
@@ -344,7 +355,6 @@ function PlayerList(props) {
           align-items: center;
           background-color: var(--greenapple); 
           color: white;
-          max-width: 20vw;
           width: 100%;
           height: auto;
           // height: 85%;

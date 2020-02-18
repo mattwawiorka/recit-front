@@ -81,7 +81,7 @@ function GameContainer(props) {
     <React.Fragment>
     {(inviteMode || cancelMode) ? <div className="overlay"></div> : null}
     <div className="game-container">
-      <div className="gameInfo">
+      <div className="info">
         {editMode ? 
         <CreateGameForm 
           id={props.gameId}
@@ -120,27 +120,9 @@ function GameContainer(props) {
             })
           }}
         />
-        }
-        <div className="discussion">
-          <Discussion 
-            isOver={isOver}
-            conversationId={data.game.conversationId} 
-            gameId={props.gameId}
-            currentUser={data.whoAmI}
-          />
-        </div>
+        } 
       </div>
 
-      {inviteMode ?
-      <Invite
-        gameId={props.gameId}
-        conversationId={data.game.conversationId}
-        location={data.game.location.coordinates}
-        exit={() => setInviteMode(false)}
-      />
-      :
-      null}
-      
       <div className="players">
         <Players 
           gameId={props.gameId}
@@ -152,25 +134,28 @@ function GameContainer(props) {
           toggleInvite={() => setInviteMode(true)}
         />
       </div>
-      
+
+      <div className="discussion">
+        <Discussion 
+          isOver={isOver}
+          conversationId={data.game.conversationId} 
+          gameId={props.gameId}
+          currentUser={data.whoAmI}
+        />
+      </div>
+
+      {inviteMode ?
+      <Invite
+        gameId={props.gameId}
+        conversationId={data.game.conversationId}
+        location={data.game.location.coordinates}
+        exit={() => setInviteMode(false)}
+      />
+      :
+      null}
     </div>
 
     <style jsx>{`
-      .game-container {
-        // display: grid;
-        // display: flex;
-        width: 60vw;
-        // max-height: 82vh;
-        // justify-items: center;
-        // grid-template-columns: 43vw 17vw;
-        // grid-template-rows: minmax(min-content, max-content) minmax(min-content, auto);
-        // grid-template-areas:
-        //   "gameInfo players"
-        //   "discussion discussion";
-        animation-duration: .75s;
-        animation-name: fadein;
-      }
-
       .overlay {
         position: absolute;
         top: 0;
@@ -183,24 +168,30 @@ function GameContainer(props) {
         animation-name: fadein;
       }
 
-      .gameInfo {
+      .game-container {
+        display: block;
+        width: 100%;
+        animation-duration: .75s;
+        animation-name: fadein;
+      }
+
+      .info {
         display: inline-block;
         vertical-align: top;
-        width: 70%;
+        width: 750px;
         height: auto;
-        // grid-area: gameInfo;
       }
 
       .players {
-        display: inline-block;
-        width: 30%;
-        height: 100%;
-        grid-area: players;
-        overflow: hidden;
+        float: right;
+        padding-right: 300px;
+        width: 700px;
       }
 
       .discussion {
-        margin-top: 1em;
+        display: inline-block;
+        width: 750px;
+        padding-top: 1em;
       }
 
       @keyframes fadein {

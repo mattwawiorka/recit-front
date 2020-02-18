@@ -78,7 +78,8 @@ function Login(props) {
                     return;
                 }
                 else if (response.data.loginFb) {
-                    cookie.set('token', response.data.loginFb)
+                    // Login Token expires in 60 days, this is to coincide with FB permissions needing refresh
+                    cookie.set('token', response.data.loginFb, { expires: 60 });
                     Router.push('/');
                 }
             }) 
@@ -91,7 +92,7 @@ function Login(props) {
                     return;
                 }
                 else if (response.data.verifyUserPhone) {
-                    cookie.set('token', response.data.verifyUserPhone)
+                    cookie.set('token', response.data.verifyUserPhone, { expires: 60 })
                     Router.push('/');
                 }
             }) 
