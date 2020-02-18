@@ -33,6 +33,16 @@ function PlayerList(props) {
         background-color: var(--greyapple);
         color: var(--darkmatter);
       }
+
+      /******************
+      *     Tablet      *
+      *******************/
+      @media only screen and (max-width: 850px) {
+        .btn {
+          width: 80%;
+          height: 50px;
+        }
+      }
     `}</style>
 
   const playerStyle = 
@@ -40,8 +50,8 @@ function PlayerList(props) {
       .player {
         display: inline-block;
         width: 50%;
-        height: 3em;
-        margin-bottom: 0.5em;
+        height: 48px;
+        margin-bottom: 8px;
         overflow: hidden;
       }
 
@@ -53,36 +63,28 @@ function PlayerList(props) {
       }
 
       .player-pic-round {
-        width: 3em;
-        height: 3em;
+        width: 48px;
+        height: 48px;
         border-style: hidden;
         border-radius: 50%;
         border: 0;
       }
 
-      .reserved-spot {
-        margin: auto;
-        background-color: var(--darkermatter);
-        font-style: italic;
-      }
-
       .open-spot {
-        // transform(-50%, 0%);
         margin: auto;
         background-color: var(--greyapple);
-        font-style: italic;
       }
 
       .player-name-container {
         display: inline-block;
-        height: 3em;
+        height: 48px;
         width: 70%;
+        padding-left: 5%;
         text-align: left;
       }
 
       .player-name {
         display: inline-block;
-        margin-left: 0.25em;
         vertical-align: -50%;
         transform(0%, -50%);
         font-size: 1.2em;
@@ -91,7 +93,15 @@ function PlayerList(props) {
       .player:hover {
         cursor: pointer;
         transform: scale(0.95);
-        border-radius: 15px;
+      }
+
+      /******************
+      *     Mobile      *
+      *******************/
+      @media only screen and (max-width: 600px) {
+        .player-name {
+          font-size: 1em;
+        }
       }
     `}</style>
 
@@ -329,7 +339,7 @@ function PlayerList(props) {
             :
             null
             }
-            <strong onClick={() => setShowRest(!showRest)}>+</strong>
+            <button className="show-more" onClick={() => setShowRest(!showRest)}>{showRest ? "Show Less" : "Show More"}</button>
           </React.Fragment>
           }
         </div>
@@ -338,7 +348,7 @@ function PlayerList(props) {
           {spotsMessage}
         </div>
 
-        <div className="spots">
+        <div className="interested">
           {interestedMessage}
         </div>
 
@@ -361,7 +371,7 @@ function PlayerList(props) {
           border-radius: 15px;
           margin: auto;
           margin-top: 2em;
-          padding: 1em;
+          padding: 10px;
           justify-items: center;
           // overflow: auto;
           border-bottom-style: groove;
@@ -377,6 +387,12 @@ function PlayerList(props) {
           margin-bottom: 1.5em;
         }
 
+        .show-more {
+          cursor: pointer;
+          background: none;
+          color: var(--darkermatter);
+        }
+
         .spots {
           padding-top: 1em;
           text-align: center;
@@ -386,11 +402,17 @@ function PlayerList(props) {
           font-style: italic;
         }
 
+        .interested {
+          text-align: center;
+        }
+
         .buttons {
           display: inline-block;
           width: 100%;
           text-align: center;
         }
+
+        
       `}</style>
     </React.Fragment>
   );

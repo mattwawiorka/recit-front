@@ -233,6 +233,7 @@ function Discussion(props) {
                     font-weight: bold;
                     font-size: 1.5em;
                     margin-bottom: 0.5em;
+                    color: var(--darkermatter);
                 }
 
             `}</style>

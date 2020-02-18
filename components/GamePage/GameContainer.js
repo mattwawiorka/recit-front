@@ -79,31 +79,35 @@ function GameContainer(props) {
 
   return (
     <React.Fragment>
-    {(inviteMode || cancelMode) ? <div className="overlay"></div> : null}
+    {(inviteMode || cancelMode || editMode) ? <div className="overlay"></div> : null}
+
+    {editMode ? 
+    <CreateGameForm 
+      id={props.gameId}
+      title={data.game.title}
+      isPublic={data.game.public}
+      date={d.getFullYear().toString() + '-' + ((d.getMonth() + 1) < 10 ? '0' + (d.getMonth() + 1).toString() : (d.getMonth() + 1).toString()) + '-' +  (d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate().toString())}
+      time={time}
+      endDate={endD.getFullYear().toString() + '-' + ((endD.getMonth() + 1) < 10 ? '0' + (endD.getMonth() + 1).toString() : (endD.getMonth() + 1).toString()) + '-' +  (endD.getDate() < 10 ? '0' + endD.getDate().toString() : endD.getDate().toString())}
+      endTime={endTime}
+      category={data.game.category}
+      sport={data.game.sport}
+      spots={data.game.spots}
+      spotsReserved={data.game.spotsReserved}
+      playersCount={data.game.players}
+      venue={data.game.venue}
+      address={data.game.address}
+      coords={data.game.location.coordinates}
+      description={data.game.description}
+      exitFunc={() => setEditMode(false)}
+      refetch={refetch}
+    />
+    :
+    null 
+    }
+
     <div className="game-container">
-      <div className="info">
-        {editMode ? 
-        <CreateGameForm 
-          id={props.gameId}
-          title={data.game.title}
-          isPublic={data.game.public}
-          date={d.getFullYear().toString() + '-' + ((d.getMonth() + 1) < 10 ? '0' + (d.getMonth() + 1).toString() : (d.getMonth() + 1).toString()) + '-' +  (d.getDate() < 10 ? '0' + d.getDate().toString() : d.getDate().toString())}
-          time={time}
-          endDate={endD.getFullYear().toString() + '-' + ((endD.getMonth() + 1) < 10 ? '0' + (endD.getMonth() + 1).toString() : (endD.getMonth() + 1).toString()) + '-' +  (endD.getDate() < 10 ? '0' + endD.getDate().toString() : endD.getDate().toString())}
-          endTime={endTime}
-          category={data.game.category}
-          sport={data.game.sport}
-          spots={data.game.spots}
-          spotsReserved={data.game.spotsReserved}
-          playersCount={data.game.players}
-          venue={data.game.venue}
-          address={data.game.address}
-          coords={data.game.location.coordinates}
-          description={data.game.description}
-          exitFunc={() => setEditMode(false)}
-          refetch={refetch}
-        />
-        :
+      <div className="info"> 
         <GameInfo 
           game={data.game} 
           isOver={isOver}
@@ -120,7 +124,6 @@ function GameContainer(props) {
             })
           }}
         />
-        } 
       </div>
 
       <div className="players">
@@ -169,29 +172,40 @@ function GameContainer(props) {
       }
 
       .game-container {
-        display: block;
+        display: grid;
+        grid-template-columns: 60% 40%;
+        grid-template-rows: max-content;
+        grid-template-areas:
+            "info players"
+            "discussion players";
         width: 100%;
         animation-duration: .75s;
         animation-name: fadein;
       }
 
       .info {
-        display: inline-block;
+        grid-area: info;
         vertical-align: top;
-        width: 750px;
+        display: inline-block;
         height: auto;
-      }
-
-      .players {
-        float: right;
-        padding-right: 300px;
-        width: 700px;
+        padding: 0 40px;
       }
 
       .discussion {
+        grid-area: discussion;
         display: inline-block;
-        width: 750px;
-        padding-top: 1em;
+        padding: 1em 0;
+      }
+
+      .players {
+        grid-area: players;
+        padding-right: 100px;
+      }
+
+      .right-space {
+        width: 200px;
+        height: 0px;
+        float: right;
       }
 
       @keyframes fadein {
@@ -201,6 +215,46 @@ function GameContainer(props) {
         
         to {
             opacity: 1;
+        }
+      }
+
+      /******************
+      *     Laptop      *
+      *******************/
+      @media only screen and (max-width: 1440px) {
+        .players {
+          padding-right: 10px;
+        }
+      }
+
+      /******************
+      *     Tablet      *
+      *******************/
+      @media only screen and (max-width: 850px) {
+        .game-container {
+          display: block;
+        }
+
+        .info, .players, .discussion {
+          width: 100%;
+          padding: 0 10px;
+        }
+
+        .players {
+          padding: 0 10%;
+        }
+
+        .discussion {
+          padding: 2.5em 0;
+        }
+      }
+
+      /******************
+      *     Mobile      *
+      *******************/
+      @media only screen and (max-width: 600px) {
+        .players {
+          padding: 0 3%;
         }
       }
 

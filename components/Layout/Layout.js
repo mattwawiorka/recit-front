@@ -72,7 +72,10 @@ function GamesLayout(props) {
                 header {
                     grid-area: header;
                     background-color: var(--greenapple);
-                    overflow: hidden;
+                    position: sticky;
+                    z-index: 9;
+                    top: 0;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
                 }
 
                 aside:nth-of-type(1) {
@@ -97,6 +100,10 @@ function GamesLayout(props) {
                 *******************/
                 @media only screen and (max-width: 1024px) {
                     .home {
+                        grid-template-columns: 0vw 100vw;
+                    }
+
+                    .page {
                         grid-template-columns: 0vw 100vw;
                     }
                 }

@@ -1,4 +1,5 @@
 import dateTool from '../../lib/dateTool';
+import _ from '../../lib/dateTool';
 
 function GameInfo(props) {
 
@@ -7,24 +8,24 @@ function GameInfo(props) {
   return (
     <React.Fragment>
     <div className="game-info-container">
-      <div className="section heading">
-        <div className="titleSport">
-          <h2 style={{ textAlign: 'left', fontSize: "2em" }}>{game.title}</h2>
+      <div className="section">
+        <div className="heading-info">
+          <h2>{game.title}</h2>
           <div id="customBorder"></div>
-          <h4 style={{ display: 'inline-block', width: '100%',  }}>{game.sport + " - " + (game.public ? "PUBLIC" : "PRIVATE")}</h4>
+          <h4>{game.sport + " - " + (game.public ? "PUBLIC" : "PRIVATE")}</h4>
+          <div className="heading-actions">
+            {(isHost && !props.isOver) ?
+              <>
+                <button onClick={toggleEditing} className="btn">Edit</button>
+                <button onClick={toggleCancel} className="btn">Cancel</button>
+              </>
+            : null}
+          </div>
         </div>
-        <div className="sport-image">
-          <img src={game.image} alt={game.sport} className="image" />
-        </div>
-      </div>
 
-      <div className="section actions">
-        {(isHost && !props.isOver) ?
-          <>
-            <button onClick={toggleEditing} className="btn">Edit</button>
-            <button onClick={toggleCancel} className="btn">Cancel</button>
-          </>
-        : null}
+        <div className="heading-image">
+          <img src={game.image} alt={game.sport} className="sport-image" />
+        </div>
       </div>
 
       {cancelMode ? 
@@ -43,10 +44,10 @@ function GameInfo(props) {
       </div>
 
       <div className="section">
-        <img src="/time-icon.svg" alt="Time" className="icon icon-section"/>
+        <i className="material-icons">calendar_today</i>
         <div className="dateTime">
           <p>{dateTool.getDateTime(parseInt(game.dateTime), true, true) + " - " + dateTool.getTime((parseInt(game.endDateTime)))}</p>
-         </div>
+        </div>
       </div>
 
       <div className="section">
@@ -55,7 +56,7 @@ function GameInfo(props) {
           href={`https://www.google.com/maps/dir/?api=1&destination=${game.address}`}
           className="directions"
         >
-          <img src="/pin.svg" alt="Location" className="icon icon-section"  />
+          <i className="material-icons">public</i>
           <div className="location">
             <h3>{game.venue}</h3>
             <h3>{game.address}</h3>
@@ -69,7 +70,6 @@ function GameInfo(props) {
         display: block;
         background-color: var(--greenapple); /* Orange */
         height: auto;
-        width: 90%;
         color: white;
         margin: auto;
         margin-top: 2em;
@@ -85,31 +85,29 @@ function GameInfo(props) {
         width: 100%;
         padding: 5px 0 5px 0;
       }
+
+      .heading-info {
+        display: inline-block;
+        width: 85%;
+      }
+
+      .heading-info > h2 {
+        font-size: 2em;
+        word-break: break-all;
+      }
+
+      .heading-image {
+        display: inline-block;
+        float: right;
+        width: 15%;
+        height: 100%;
+      }
       
-      .image {
+      .sport-image {
         width: 100%; 
         height: 100%; 
         max-height: 4em;
         max-width: 4em; 
-      }
-
-      .heading {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-      }
-
-      .titleSport {
-        flex: 4;
-        margin-right: 10px;
-        margin-top: -0.5em;
-      }
-
-      .sport-image {
-        flex: 1;
-        float: right;
-        width: 100%;
-        height: 100%;
       }
 
       #customBorder {
@@ -120,7 +118,7 @@ function GameInfo(props) {
       }
 
       .sport {
-        display: inline-block;
+        display: -block;
         text-align: center;
         width: 100%;
         border-bottom-style: groove;
@@ -129,10 +127,8 @@ function GameInfo(props) {
         font-weight: bold;
       }
 
-      .actions {
-        position: relative;
-        top: -0.5em;
-        padding-top: 0em;
+      .heading-actions {
+        padding: 10px 0;
         vertical-align: top;
       }
 
@@ -148,9 +144,7 @@ function GameInfo(props) {
 
       .description {
         width: 100%;
-        padding: 0.5em;
-        padding-left: 10%;
-        padding-left: 10%;
+        padding: 8px 16px;
         text-align: justify;
         word-wrap: break-word;
         white-space: pre-wrap;
@@ -162,17 +156,8 @@ function GameInfo(props) {
         margin-bottom: 1em;
       }
 
-      .icon {
-        width: 2.5em;
-        height: 2.5em; 
-        borderRadius: 10px;
-        max-height: 3em;
-        max-width: 3em;
-      }
-
-      .icon-section {
-        display: inline-block;
-        padding-left: 10px;
+      i {
+        vertical-align: top;
       }
 
       .dateTime {
@@ -231,14 +216,14 @@ function GameInfo(props) {
         }
       }
 
-      @media only screen and (max-width: 700px) {
-        .dateTime {
-          // font-size: 0.9em;
-          // display: flex;
-          // justify-content: center;
-          // width: 50%;
+      /******************
+      *     Mobile      *
+      *******************/
+      @media only screen and (max-width: 600px) {
+        i {
+          display: none;
         }
-    }
+      }
     `}</style>
     </React.Fragment>
   );

@@ -124,11 +124,6 @@ function CreateGameForm(props) {
         "btn-public": true,
         "private": !isPublic
     })
-    const containerClass = classNames({
-        "create-game-container": true,
-        "create": typeof props.id === 'undefined',
-        "update": !(typeof props.id === 'undefined')
-    })
     const titleClass = classNames({
         "input-fields": true,
         "needs-input": needsInput && title == ""
@@ -167,7 +162,7 @@ function CreateGameForm(props) {
 
     return (
         <React.Fragment>
-        <div className={containerClass}>
+        <div className="create-game-container">
             <span 
                 className="alert"
             >
@@ -474,29 +469,24 @@ function CreateGameForm(props) {
         </div>
         <style jsx>{`
             .create-game-container {
-                z-index: 11;
                 display: block;
-                position: relative;
+                position: absolute;
+                z-index: 11;
+                transform: translate(-50%, -50%);
+                top: 50%;
+                left: 50%;
+                width: 700px;
+                max-height: 800px;
                 overflow-x: hidden;
                 background-color: white;
                 border-radius: 10px;
                 animation-duration: 1.5s;
                 animation-name: fadein;
-            }
-
-            .create {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 700px;
                 box-shadow: 0 2px 26px rgba(0, 0, 0, .3), 0 0 0 1px rgba(0, 0, 0, .1);
             }
 
-            .update {
-                display: block;
-                margin-top: 2em;
-                width: 40vw;
+            *::-webkit-scrollbar {
+                display: none;
             }
 
             .form {
@@ -640,6 +630,8 @@ function CreateGameForm(props) {
             .btn-submit-game {
                 display: block;
                 width: 100%;
+                position: sticky;
+                bottom: 0;
                 height: 70px;
                 font-size: 1.5em;
                 background-color: var(--darkermatter);
@@ -705,12 +697,12 @@ function CreateGameForm(props) {
             *  Laptop/tablet  *
             *******************/
             @media only screen and (max-width: 1024px) {
-                .create {
+                .create-game-container {
                     width: 600px;
                 }
 
                 .title {
-                    width: 340px;
+                    width: 320px;
                 }
 
                 .toggle-endtime:after {  
@@ -728,7 +720,7 @@ function CreateGameForm(props) {
             *     Mobile      *
             *******************/
             @media only screen and (max-width: 600px) {
-                .create {
+                .create-game-container {
                     width: 100%;
                     height: calc(100% - 70px);
                     transform: translate(0%, 0%);
@@ -821,7 +813,7 @@ function CreateGameForm(props) {
             *    Landscape    *
             *******************/
             @media only screen and (max-width: 800px) and (max-height: 425px) {
-                .create {
+                .create-game-container {
                     position: absolute;
                     transform: translate(0%, 0%);
                     left: 0%;
@@ -845,7 +837,7 @@ function CreateGameForm(props) {
             *Lndscpe Xtra Wide*
             *******************/
             @media only screen and (min-width: 800px) and (max-height: 600px) {
-                .create {
+                .create-game-container {
                     position: absolute;
                     transform: translate(-50%, 0%);
                     width: 50%;
@@ -868,7 +860,7 @@ function CreateGameForm(props) {
             *      Tall       *
             *******************/
             @media only screen and (max-width: 600px) and (min-height: 700px) {
-                .create {
+                .create-game-container {
                     height: calc(100% - 70px - 15%);
                     top: 15%;
                     bottom: 70px;
@@ -879,7 +871,7 @@ function CreateGameForm(props) {
             *      Small      *
             *******************/
             @media only screen and (max-width: 320px), (max-height: 320px) {
-                .create {
+                .create-game-container {
                     // position: absolute;
                     transform: translate(0%, 0%);
                     left: 0%;
