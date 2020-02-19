@@ -185,14 +185,13 @@ function GameInfo(props) {
 
       .cancel-box {
         position: absolute;
-        top: 25%;
+        top: 35%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 11;
         display: block;
-        height: min-content;
-        width: min-content;
-        min-width: 20em;
+        height: 120px;
+        width: 250px;
         color: white;
         background-color: var(--greenapple);
         border-radius: 10px;
@@ -202,7 +201,7 @@ function GameInfo(props) {
       }
 
       .cancel-btn {
-        margin: 1em auto;
+        margin: 16px auto;
         display: inline-block;
       }
 

@@ -48,8 +48,9 @@ function Invite(props) {
         if (searchValue === "") {
             searchResults = null;
         } else {
+            console.log('in here')
             searchResults = data.findUser.edges.map( (user, index) => {
-                if (players.filter(p => p.name === user.node.name).length > 0) return
+                if (players.filter(p => p.id === user.node.id).length > 0) return
                 return (
                     <React.Fragment key={user.node.id}>
                         <div 
@@ -68,6 +69,7 @@ function Invite(props) {
                                 background-color: white;
                                 color: black;
                                 font-size: 1.2em;
+                                height: 35px;
                                 cursor: pointer;
                             }
 
@@ -81,12 +83,33 @@ function Invite(props) {
                             .search-result:hover {
                                 color: var(--greenapple);
                             }
+
+                            /******************
+                            *  Laptop/tablet  *
+                            *******************/
+                            @media only screen and (max-width: 1024px) {
+                                .search-result {
+                                    font-size: 1.4em;
+                                    height: 45px;
+                                }
+                            }
+
+                            /******************
+                            *     Mobile      *
+                            *******************/
+                            @media only screen and (max-width: 600px) {
+                                .invite-container {
+
+                                }
+                            }
                         `}</style>
                     </React.Fragment>
                 );
             })
         }
     }
+
+    console.log(searchResults)
 
     const copyText = useCallback((e) => {
         link.current.select();
@@ -97,15 +120,14 @@ function Invite(props) {
     return (
         <React.Fragment>
             <div className="invite-container">
-                <div className="section header">
-                    <button 
-                        onClick={props.exit} 
-                        className="exit-btn" 
-                        type="button"
-                    >X</button>
-                </div>
 
-                <div className="section player-select">
+                <button 
+                    onClick={props.exit} 
+                    className="exit-btn" 
+                    type="button"
+                >X</button>
+
+                <section className="player-select">
                     <div className="player-search">
                         <input 
                             type="text" 
@@ -166,37 +188,33 @@ function Invite(props) {
                         </button>
                         :
                         null}
-                    </div>
-                    
-                </div>
+                    </div>  
+                </section>
                 
-                <div className="section link-invite">
+                <section className="link-invite">
                     <h3>Shareable Link</h3>
-                    <div className="link-copy">
-                        <input 
-                            type="text"
-                            ref={link} 
-                            className="game-link" 
-                            readOnly
-                            value={URL}
-                        />
-                        <button onClick={(e) => copyText(e)}>Copy</button>
-                    </div>
-                </div>
+                    <input 
+                        type="text"
+                        ref={link} 
+                        readOnly
+                        value={URL}
+                    />
+                    <button onClick={(e) => copyText(e)}>Copy</button>
+                </section>
                 
             </div>
 
             <style jsx>{`
                 .invite-container {
                     position: absolute;
+                    transform: translate(-50%, -50%);
                     top: 35%;
                     left: 50%;
-                    transform: translate(-50%, -50%);
                     z-index: 11;
                     display: block;
-                    min-height: 30vh;
-                    max-height: 75vh;
-                    width: 35vw;
+                    min-height: 400px;
+                    max-height: 800px;
+                    width: 550px;
                     color: white;
                     background-color: var(--greenapple);
                     border-radius: 10px;
@@ -206,32 +224,34 @@ function Invite(props) {
                     overflow: auto;
                 }
 
-                .section {
+                section {
                     display: block
                     width: 100%;
                 }
 
-                .header {
-                    height: 2vh;
-                }
-
                 .player-select {
-                    min-height: 21vh;
-                }
-
-                .link-invite {
-                    height: 7vh;
+                    min-height: 350px;
+                    padding-top: 20px;
                 }
 
                 .exit-btn {
-                    float: right;
+                    position: absolute;
+                    top: 10px;
+                    right: 12px;
                     background: none;
                     border: none;
                     text-align: center;
                     outline: none;
+                    font-size: 1.2em;
                     font-weight: bold;
                     color: #4b4f56;
+                    color: var(--darkermatter);
                     cursor: pointer;
+                    float: right;
+                }
+    
+                .exit-btn:hover {
+                    color: var(--darkmatter);
                 }
 
                 .player-search {
@@ -253,13 +273,12 @@ function Invite(props) {
 
                 .players-selected {
                     display: inline-block;
-                    position: relative;
                     width: 50%;
                 }
 
-                .players-selected>h3 {
+                .players-selected > h3 {
                     text-align: center;
-                    margin-bottom: 1em;
+                    padding-bottom: 16px;
                 }
 
                 .selected-player {
@@ -267,35 +286,39 @@ function Invite(props) {
                     text-align: center;
                     font-size: 1.5em;
                     cursor: pointer;
+                    border-left: 1px solid var(--greyapple);
                 }
 
                 .btn-send-invites {
-                    height: 1.75em;
-                    width: 7.5em;
-                    margin-top: 1em;
-                    position: absolute;
+                    height: 26px;
+                    width: 96px;
+                    position: relative;
                     transform: translate(-50%);
-                    // bottom: 0;
                     left: 50%;
+                    margin: 16px 0;
                     animation-duration: 0.75s;
                     animation-name: fadein;
                 }
 
-                .link-invite > h3 {
-                    text-align: center;
-                    margin-top: 1em;
+                .link-invite {
+                    border-top: 1px solid var(--greyapple);
+                    padding: 8px;
+                    height: max-content;
                 }
 
-                .link-copy {
-                    display: inline-block;
+                section > h3 {
+                    text-align: center;
+                }
+
+                .link-invite {
+                    display: block;
+                    padding: 8px;
+                }
+
+                .link-invite > input {
                     width: 100%;
+                    padding: 10px 0;
                     text-align: center;
-                }
-
-                .game-link {
-                    text-align: center;
-                    min-width: 50%;
-                    margin-top: 0.5em;
                     resize: none;
                     overflow: hidden;
                     border: none;
@@ -307,10 +330,12 @@ function Invite(props) {
                     background-color: var(--greenapple);
                 } 
 
-                .link-copy > button {
-                    vertical-align: middle;
-                    height: 2em;
-                    width: 4em;
+                .link-invite > button {
+                    position: relative;
+                    transform: translate(-50%);
+                    left: 50%;
+                    height: 22px;
+                    width: 48px;
                 }
 
                 @keyframes fadein {
@@ -320,6 +345,63 @@ function Invite(props) {
                     
                     to {
                         opacity: 1;
+                    }
+                }
+
+                /******************
+                *  Laptop/tablet  *
+                *******************/
+                @media only screen and (max-width: 1024px) {
+                    .btn-send-invites {
+                        height: 32px;
+                        width: 112px;
+                    }
+
+                    .link-copy > button {
+                        height: 32px;
+                        width: 64px;
+                    }
+                }
+
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px) {
+                    .invite-container {
+                        width: 100%;
+                        top: 40%;
+                    }
+                }
+
+                /******************
+                *     Short       *
+                *******************/
+                @media only screen and (max-height: 600px) {
+                    .invite-container {
+                        transform: translate(-50%, 0%);
+                        top: 0%;
+                        min-height: 0;
+                        height: calc(100% - 70px);
+                    }
+
+                    .player-select {
+                        min-height: 0;
+                        height: 200px;
+                    }
+
+                    .link-invite > input {
+                        display: inline-block;
+                        width: 80%;
+                    }
+
+                    .link-invite > button {
+                        display: inline-block;
+                        width: 20%;
+                        position: relative;
+                        transform: translate(0%);
+                        left: 0%;
+                        height: 22px;
+                        width: 48px;
                     }
                 }
             `}</style>

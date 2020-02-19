@@ -20,7 +20,7 @@ function PlayerList(props) {
       .btn {
         width: 55%;
         // width: 7em;
-        height: 2em;
+        height: 32px;
         margin-top: 1em;
       }
 
