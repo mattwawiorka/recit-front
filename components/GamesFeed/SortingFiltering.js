@@ -226,6 +226,12 @@ function SortingFiltering(props) {
                     height: auto; 
                     padding: 1.2em 1.2em 0 0.5em;
                     overflow-x: hidden;
+                    animation: fadein 0.75s;
+                }
+
+                @keyframes fadein {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
 
                 .view-select-container {
@@ -411,7 +417,7 @@ function SortingFiltering(props) {
                     background-color: white;
                     margin : 0 auto;
                     width: 100%;
-                    padding: 12px 20px;
+                    padding: 6px 20px;
                     margin: 8px 0;
                     border: 1px solid #ccc;
                     border-radius: 4px;

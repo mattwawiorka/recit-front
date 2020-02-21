@@ -31,6 +31,7 @@ function GameMarker(props) {
                         width: 4em;
                         height: 4em;
                         background: none;
+                        animation: bounce 1s;
                     }
 
                     .icon {
@@ -41,6 +42,14 @@ function GameMarker(props) {
                     .hovered {
                         transform: scale(1.5);
                         cursor: pointer;
+                    }
+
+                    @keyframes bounce {
+                        0% { transform: translate(0, 0px); }
+                        25% { transform: translate(0, -10px); }
+                        50% { transform: translate(0, 0px); }
+                        75% { transform: translate(0, -5px); }
+                        100% { transform: translate(0, 0px); }
                     }
 
                 `}</style>
@@ -58,6 +67,7 @@ function GameMarker(props) {
                         width: 2.5em;
                         height: 2.5em;
                         background: none;
+                        animation: bounce 1s;
                     }
 
                     .icon {
@@ -68,6 +78,14 @@ function GameMarker(props) {
                     .hovered {
                         transform: scale(1.5);
                         cursor: pointer;
+                    }
+
+                    @keyframes bounce {
+                        0% { transform: translate(0, 0px); }
+                        25% { transform: translate(0, -10px); }
+                        50% { transform: translate(0, 0px); }
+                        75% { transform: translate(0, -5px); }
+                        100% { transform: translate(0, 0px); }
                     }
 
                 `}</style>

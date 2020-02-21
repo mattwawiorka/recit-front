@@ -28,16 +28,15 @@ function GamesLayout(props) {
                     {props.children[1]}
                 </main>
                 {
-                props.main ?
-                null
-                :
+                props.threeway ?
                 <aside>
                     {props.children[2]}
                 </aside>
+                :
+                null
                 }
 
                 <BottomDockable show={props.showGamesButton} startGame={props.startGame} submitGame={props.submitGame} clickEvent={props.clickEvent} />
-
             </div>
 
             <style jsx>{`

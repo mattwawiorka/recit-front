@@ -436,6 +436,8 @@ function UserProfile(props) {
                 .profile-container {
                     width: 100%;
                     padding: 24px;
+                    animation-duration: .75s;
+                    animation-name: fadein;
                 }
 
                 section {
@@ -658,6 +660,16 @@ function UserProfile(props) {
                 .gallery-pic > img {
                     width: 175px;
                     height: 175px;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
                 }
 
                 /******************

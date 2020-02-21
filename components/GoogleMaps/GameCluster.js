@@ -28,6 +28,7 @@ function GameCluster(props) {
                     height: 4em;
                     width: min-content;
                     background: none;
+                    animation: bounce 1s;
                 }
 
                 .icon {
@@ -74,6 +75,14 @@ function GameCluster(props) {
                 .hovered {
                     transform: scale(1.5);
                     cursor: pointer;
+                }
+
+                @keyframes bounce {
+                    0% { transform: translate(0, 0px); }
+                    25% { transform: translate(0, -10px); }
+                    50% { transform: translate(0, 0px); }
+                    75% { transform: translate(0, -5px); }
+                    100% { transform: translate(0, 0px); }
                 }
 
             `}</style>

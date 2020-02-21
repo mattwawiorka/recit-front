@@ -293,6 +293,7 @@ function Signup(props) {
                     margin: auto;
                     margin-top: 2em;
                     text-align: center;
+                    animation: fadein 0.75s;
                     // border: 1px solid #ccc;
                     // border-radius: 4px;
                 }

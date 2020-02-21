@@ -57,7 +57,7 @@ function GameRow(props) {
     }
 
     .hovered {
-      background-color: #d3d3d3;
+      // background-color: #d3d3d3;
       transform: scale(0.97);
       cursor: pointer;
     }
@@ -72,6 +72,7 @@ function GameRow(props) {
     .sportImage {
       width: 40px;
       height: 40px;
+      animation: spin 10s linear infinite;
     }
 
     .dateTime {

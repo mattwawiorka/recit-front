@@ -83,6 +83,11 @@ function BottomDockable(props) {
                     animation: fadein 0.5s, fadeout 0.5s 2.5s;
                 }
 
+                @keyframes fadein {
+                    from {bottom: 0; opacity: 0;}
+                    to {bottom: 10vh; opacity: 1;}
+                }
+
                 /* Animations to fade the login warning in and out */
                 @-webkit-keyframes fadein {
                     from {bottom: 0; opacity: 0;}

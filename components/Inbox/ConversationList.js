@@ -26,10 +26,22 @@ function ConversationList(props) {
                     padding-top: 0.5em;
                     border-radius: 15px;
                     border-bottom-style: groove;
+                    animation-duration: .75s;
+                    animation-name: fadein;
                 }
 
                 .inbox-heading {
                     margin-bottom: 0.5em;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
                 }
 
                 /******************
