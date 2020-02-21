@@ -24,7 +24,8 @@ function GameList(props) {
   // For view select on mobile
   const listClass = classNames({
     "list-container": true,
-    "hide": props.viewMode
+    "hide": props.viewMode,
+    "extra-margin": props.myGames < 1
   })
 
   let today, tomorrow, thisWeek, nextWeek, later;
@@ -63,7 +64,7 @@ function GameList(props) {
       //border-radius: 2px; 
       padding: 8px;
       margin: 1em auto 0.75em auto;
-      width:85%;
+      width: 85%;
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       border-radius: 4px; 
@@ -197,12 +198,26 @@ function GameList(props) {
         *******************/
         @media only screen and (max-width: 600px) {
           .list-container {
-            width: 100%;
+            width: 350px;
             height: max-content;
+            margin-top: 16px;
+          }
+
+          .extra-margin {
+            margin-top: 60px;
           }
 
           .hide {
             display: none;
+          }
+        }
+
+        /******************
+        *     Small       *
+        *******************/
+        @media only screen and (max-width: 320px) {
+          .list-container {
+            width: 250px;
           }
         }
 

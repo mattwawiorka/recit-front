@@ -117,6 +117,18 @@ function GamesLayout(props) {
                 *     Mobile      *
                 *******************/
                 @media only screen and (max-width: 600px) {
+                    // Bring header to footer?
+                    // .container {
+                    //     grid-template-rows: max-content 50px;
+                    //     grid-template-areas:
+                    //         "sidebar1 main"
+                    //         "header header";
+                    // }
+
+                    // header {
+                    //     top calc(100% - 50px);
+                    // }
+
                     .three-part {
                         grid-template-columns: 0 100vw 0;
                     }

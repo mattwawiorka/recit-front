@@ -80,7 +80,7 @@ function Navigation(props) {
                 display: none;
                 position: absolute;
                 width: 100%;
-                height: 120px;
+                height: max-content;
                 background-color: var(--greenapple);
                 text-align: center;
                 z-index: 7;     // Needs to be higher than view button

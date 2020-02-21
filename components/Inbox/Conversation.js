@@ -22,7 +22,7 @@ function Conversation(props) {
                             {conversation.conversation}
                         </div>
                         <div className="date-time">
-                            {dateTool.getDateTime(parseInt(message.createdAt))} 
+                            {dateTool.getDateTime(parseInt(message.createdAt), true, false, true)} 
                         </div>
                     </span>
                     <span className="conversation-content">

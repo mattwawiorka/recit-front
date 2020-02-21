@@ -727,6 +727,8 @@ function CreateGameForm(props) {
                     top: 0%;
                     left: 0%;
                     bottom: 70px;
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
                 }
 
                 .title {

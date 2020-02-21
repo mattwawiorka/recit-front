@@ -238,6 +238,7 @@ function GamesPrep(props) {
                     scroll={scroll}
                     scrollTo={scrollHeight}
                     viewMode={props.viewMode}
+                    myGames={props.activeCount}
                 />
             </div>
         </>

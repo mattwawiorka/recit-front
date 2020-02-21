@@ -786,25 +786,47 @@ function UserProfile(props) {
                         width: 100%;
                         margin: 0;
                     }
+                }
 
-                    /******************
-                    *     Small       *
-                    *******************/
-                    @media only screen and (max-width: 350px) {
-                        .pic-viewer {
-                            width: 100%;
-                            height: auto;
-                        }
-
-                        .name {
-                            font-size: 1em;
-                        }
-
-                        .membership-info-mobile {
-                            padding: 12px 8px 8px 8px;
-                            font-size: 0.7em;
-                        }
+                /******************
+                *    Landscape    *
+                *******************/
+                @media only screen and (max-height: 600px) {
+                    .pic-viewer {
+                        width: 350px;
+                        height: 350px;
+                        top: 5%;
                     }
+                }
+
+                /******************
+                *      Short      *
+                *******************/
+                @media only screen and (max-height: 350px) {
+                    .pic-viewer {
+                        top: 0;
+                        height: 100%;
+                    }
+                }
+
+                /******************
+                *     Small       *
+                *******************/
+                @media only screen and (max-width: 350px) {
+                    .pic-viewer {
+                        width: 100%;
+                        height: auto;
+                    }
+
+                    .name {
+                        font-size: 1em;
+                    }
+
+                    .membership-info-mobile {
+                        padding: 12px 8px 8px 8px;
+                        font-size: 0.7em;
+                    }
+                }
                 }
             `}</style>
         </React.Fragment>

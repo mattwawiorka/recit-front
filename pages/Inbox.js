@@ -77,10 +77,6 @@ function Inbox(props) {
         return <p>Error</p>
     }
 
-    console.log(data)
-
-    
-
     if (waiting) return <Loading />
 
     data.inbox.edges.map( (conversation, index) => {

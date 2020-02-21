@@ -144,20 +144,20 @@ function GameRow(props) {
   } else {
     return (
       <React.Fragment>
-          <li className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
+          <div className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
             <div className="sport">
               <img src={game.image} alt={game.sport} className="sportImage"/>
             </div>
-            <div className="dateTime">
+            {/* <div className="dateTime">
               <h3>{dateFormat}</h3>
-            </div>
+            </div> */}
             <div className="title">
               <h3>{game.title.length > 25 ? game.title.substr(0, 25) + "..." : game.title}</h3>
             </div>
             <div className="spots">
-              <h3>{game.players + " / " + game.spots}</h3> 
+              <h3>{level ? involvement : (game.players + game.spotsReserved) + " / " + game.spots}</h3>
             </div>
-          </li>
+          </div>
   
         {style}
       </React.Fragment>

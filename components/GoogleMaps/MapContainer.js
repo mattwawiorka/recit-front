@@ -62,6 +62,7 @@ function MapContainer(props) {
       .map-container {
         height: 85vh;
         width: 55vw;
+        max-width: 840px;
       }
 
       @media only screen and (max-width: 768px) {

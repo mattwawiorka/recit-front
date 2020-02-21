@@ -6,7 +6,7 @@ function ConversationList(props) {
 
     return (
         <React.Fragment>
-            <Layout main={false}>
+            <Layout threeway={true} >
                 <br />
                 <div className="inbox-container">
                     <h1 className="inbox-heading">Conversations</h1>
@@ -30,6 +30,15 @@ function ConversationList(props) {
 
                 .inbox-heading {
                     margin-bottom: 0.5em;
+                }
+
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px) {
+                    .inbox-container {
+                        width: 100%;
+                    }
                 }
             `}</style>
         </React.Fragment>

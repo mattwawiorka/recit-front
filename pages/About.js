@@ -3,7 +3,7 @@ import Layout from '../components/Layout/Layout';
 function About() {
 
     return (
-        <Layout>
+        <Layout threeway={true}>
             <br />
             <div>
                 <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>About page</h1>

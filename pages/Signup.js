@@ -127,7 +127,7 @@ function Signup(props) {
 
     return (
         <React.Fragment>
-            <Layout>
+            <Layout threeway={true}>
                 <br />
 
                 <div className="signup-container">
@@ -136,6 +136,15 @@ function Signup(props) {
                     <span className="alert">
                         {errorDisplay}
                     </span>
+
+                    <section className="signup-reasons">
+                        <h2>Start Playing Today!</h2>
+                        <p><i className="material-icons">calendar_today</i>Easily organize games with your friends</p>
+                        <p><i className="material-icons">public</i>Engage with your community through public games</p>
+                        <p><i className="material-icons">emoji_people</i>Find new players for your favorite sports and games</p>
+                        <p><i className="material-icons">thumb_up</i>It's totally free</p>
+                        <p className="learn-more">Learn more at our <Link href="/About"><a><u>About Page</u></a></Link></p>
+                    </section>
 
                     <section className="signup-actions">
                         {!smsSent ?
@@ -268,15 +277,6 @@ function Signup(props) {
 
                         <p>By clicking "Sign up" you agree to our terms of service, privacy policy, and cookie policy</p>
                     </section>
-
-                    <section className="signup-reasons">
-                        <h2>Start Playing Today!</h2>
-                        <p><i className="material-icons">calendar_today</i>Easily organize games with your friends</p>
-                        <p><i className="material-icons">public</i>Engage with your community through public games</p>
-                        <p><i className="material-icons">emoji_people</i>Find new players for your favorite sports and games</p>
-                        <p><i className="material-icons">thumb_up</i>It's totally free</p>
-                        <p className="learn-more">Learn more at our <Link href="/About"><a><u>About Page</u></a></Link></p>
-                    </section>
         
                     <div className="login-link">
                         <p>Already have an Account? <Link href="/Login"><a><u>Log in!</u></a></Link></p>
@@ -311,10 +311,6 @@ function Signup(props) {
 
                 section {
                     display: inline-block;
-                    // border-radius: 4px;
-                    // width: 50%;
-                    // padding: 12px 20px;
-                    
                 }
 
                 .signup-reasons {
@@ -349,12 +345,13 @@ function Signup(props) {
 
                 .signup-actions {
                     position: relative;
-                    float: right;
+                    vertical-align: top;
                     width: 40%;
                     height: 420px;
                     padding: 12px;
                     padding-top: 20px;
                     background-color: white;
+                    // border: 2px solid #ccc;
                     border-radius: 15px;
                     box-shadow: 0 10px 25px rgba(0,0,0,0.05), 0 20px 48px rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.1);
                 }
@@ -447,9 +444,68 @@ function Signup(props) {
                     text-align: center;
                 }
 
-                @media only screen and (max-width: 700px) {
-                    .container {
-                        grid-template-columns: .25fr 1fr .25fr;
+                /******************
+                *     Tablet      *
+                *******************/
+                @media only screen and (max-width: 768px) {
+                    .signup-container {
+                        width: 100%;
+                    }
+
+                    .signup-reasons {
+                        width: 40%;
+                        height: max-content;
+                        padding: 25px 8px 0px 8px;
+                    }
+
+                    .signup-reasons > p {
+                        padding-left: 0px;
+                    }
+
+                    .signup-actions {
+                        float: none;
+                        width: 50%;
+                        margin-right: 8px;
+                    }
+                }
+
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px) {
+                    .signup-reasons {
+                        display: none;
+                    }
+
+                    .signup-actions {
+                        width: 100%;
+                        float: clear;
+                    }
+
+                    h1 {
+                        font-size: 1.6em;
+                        margin-bottom: 16px;
+                    }
+
+                    .login-link {
+                        position: absolute;
+                        bottom: 20px;
+                        height: 20px;
+                    }
+                }
+
+                /******************
+                *    Landscape    *
+                *******************/
+                @media only screen and (max-height: 600px) {
+                    .signup-container {
+                        margin-top: 8px;
+                    }
+
+                    .login-link {
+                        position: relative;
+                        bottom: 20px;
+                        height: 20px;
                     }
                 }
             `}</style>      

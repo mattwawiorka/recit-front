@@ -101,7 +101,7 @@ function Login(props) {
 
     return (
         <React.Fragment>
-            <Layout>
+            <Layout threeway={true}>
                 <br />
 
                 <div className="login-container">
@@ -317,9 +317,27 @@ function Login(props) {
                     text-align: center;
                 }
 
-                @media only screen and (max-width: 700px) {
-                    .container {
-                        grid-template-columns: .25fr 1fr .25fr;
+
+                @media only screen and (max-width: 768px) {
+                    .login-actions {
+                        width: 60%;
+                    }
+                }
+
+                @media only screen and (max-width: 600px) {
+                    .login-actions {
+                        width: 100%;
+                    }
+                }
+
+                @media only screen and (max-height: 375px) {
+                    .login-container { 
+                        margin-top: 12px;
+                    }
+
+                    .login-actions {
+                        height: 250px;
+                        padding-top: 20px;
                     }
                 }
             `}</style>      
