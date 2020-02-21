@@ -102,8 +102,26 @@ function ProfilePage(props) {
     const joinDate = new Date(parseInt(data.user.node.createdAt));
     const joinString = dateTool.getMonth(joinDate.getMonth()) + " " + joinDate.getFullYear();
     
+    const userPics = {
+        pic1_small : data.user.node.pic1.split('.')[0] + '_SMALL.' + data.user.node.pic1.split('.')[1],
+        pic1_large : data.user.node.pic1.split('.')[0] + '_LARGE.' + data.user.node.pic1.split('.')[1],
+        pic2_small : data.user.node.pic2.split('.')[0] + '_SMALL.' + data.user.node.pic2.split('.')[1],
+        pic2_large : data.user.node.pic2.split('.')[0] + '_LARGE.' + data.user.node.pic2.split('.')[1],
+        pic3_small : data.user.node.pic3.split('.')[0] + '_SMALL.' + data.user.node.pic3.split('.')[1],
+        pic3_large : data.user.node.pic3.split('.')[0] + '_LARGE.' + data.user.node.pic3.split('.')[1]
+    };
+
+    // If we are hosting the profile pic grab the appropriate size, otherwise use Facebooks
+    if (data.user.node.profilePic.includes("http://localhost")) {
+        userPics.profile_medium = data.user.node.profilePic.split('.')[0] + '_MEDIUM.' + data.user.node.profilePic.split('.')[1];
+        userPics.profile_large = data.user.node.profilePic.split('.')[0] + '_LARGE.' + data.user.node.profilePic.split('.')[1];
+    } else {
+        userPics.profile_medium = data.user.node.profilePic;
+        userPics.profile_large = data.user.node.profilePic;
+    }
+    
     return (
-        <Layout main={false} showLogout={data.user.isMe}>
+        <Layout main={false} threeway={true} showLogout={data.user.isMe}>
             <br />
             <UserProfile 
                 refetch={refetch} 
@@ -112,6 +130,7 @@ function ProfilePage(props) {
                 age={age} 
                 joinDate={joinString} 
                 userId={user} 
+                userPics={userPics}
                 updateProfile={updateProfile}
                 pastGames={data.userGames.edges}
                 gamesPlayed={data.userGames.totalCount || 0}

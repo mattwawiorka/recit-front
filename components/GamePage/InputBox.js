@@ -31,7 +31,7 @@ function InputBox(props) {
             <div className="new-comment">
                 <div className="user-pic-round">
                     <img 
-                        src={props.currentUser.profilePic}
+                        src={props.currentUser.profilePic.split('.')[0] + '_THUMB.' + props.currentUser.profilePic.split('.')[1]}
                         className="user-pic"
                     />
                 </div>

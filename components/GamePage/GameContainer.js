@@ -202,12 +202,6 @@ function GameContainer(props) {
         padding-right: 100px;
       }
 
-      .right-space {
-        width: 200px;
-        height: 0px;
-        float: right;
-      }
-
       @keyframes fadein {
         from {
             opacity: 0;

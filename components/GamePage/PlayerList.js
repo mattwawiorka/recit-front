@@ -129,7 +129,7 @@ function PlayerList(props) {
               <div className="player">
                 <span className="player-pic">
                   <img 
-                    src={player.profilePic} 
+                    src={player.profilePic.split('.')[0] + '_THUMB.' + player.profilePic.split('.')[1]} 
                     className="player-pic-round"
                   />
                 </span>

@@ -96,14 +96,19 @@ function GamesLayout(props) {
                 }
 
                 /******************
+                *     Laptop      *
+                *******************/
+                @media only screen and (max-width: 1440px) {
+                    .three-part {
+                        grid-template-columns: 20vw 80vw 0;
+                    }
+                }
+
+                /******************
                 *  Laptop/tablet  *
                 *******************/
                 @media only screen and (max-width: 1024px) {
-                    .home {
-                        grid-template-columns: 0vw 100vw;
-                    }
-
-                    .page {
+                    .container{
                         grid-template-columns: 0vw 100vw;
                     }
                 }

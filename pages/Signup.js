@@ -199,6 +199,7 @@ function Signup(props) {
                                     onChange={(e) => setFirstName(e.target.value)} 
                                     type="text" 
                                     className="input-fields"
+                                    maxLength="25"
                                     placeholder="First name"
                                 />
                             </div>
@@ -208,6 +209,7 @@ function Signup(props) {
                                     onChange={(e) => setLastName(e.target.value)} 
                                     type="text" 
                                     className="input-fields"
+                                    maxLength="25"
                                     placeholder="Last name"
                                 />
                             </div>

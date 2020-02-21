@@ -27,7 +27,7 @@ function Comment(props) {
                         <div className="user-pic-round">
                             <Link href='/Profile/[user]' as={`/Profile/${comment.userId}`}>
                                 <img 
-                                    src={userPic}
+                                    src={userPic.split('.')[0] + '_THUMB.' + userPic.split('.')[1]}
                                     className="user-pic"
                                 />
                             </Link> 

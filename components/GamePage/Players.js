@@ -110,6 +110,8 @@ function Players(props) {
     return <h4>ERROR!!!</h4>
   }
 
+  console.log(data)
+
   let joined = data.players.some(p => {
     return p.userId == props.currentUser.id;
   });
