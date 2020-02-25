@@ -112,7 +112,7 @@ function ProfilePage(props) {
     };
 
     // If we are hosting the profile pic grab the appropriate size, otherwise use Facebooks
-    if (data.user.node.profilePic.includes("http://localhost")) {
+    if (data.user.node.profilePic.includes("https://localhost")) {
         userPics.profile_medium = data.user.node.profilePic.split('.')[0] + '_MEDIUM.' + data.user.node.profilePic.split('.')[1];
         userPics.profile_large = data.user.node.profilePic.split('.')[0] + '_LARGE.' + data.user.node.profilePic.split('.')[1];
     } else {

@@ -163,9 +163,7 @@ function CreateGameForm(props) {
     return (
         <React.Fragment>
         <div className="create-game-container">
-            <span 
-                className="alert"
-            >
+            <span className="error">
                 {errorsDisplay}
             </span>
 
@@ -657,6 +655,7 @@ function CreateGameForm(props) {
 
             .error {
                 text-align: center;
+                padding: 12px;
             }
 
             .exit-btn {

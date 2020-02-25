@@ -10,7 +10,8 @@ function GamesLayout(props) {
         'container': true,
         'home': props.main,
         'page': !props.main,
-        'three-part': props.threeway
+        'three-part': props.threeway,
+        'simple': props.simple
     })
 
     return (
@@ -68,6 +69,13 @@ function GamesLayout(props) {
                         "sidebar1 main sidebar2";
                 }
 
+                .simple {
+                    grid-template-columns: 100vw;
+                    grid-template-areas:
+                        "header"
+                        "main";
+                }
+
                 header {
                     grid-area: header;
                     background-color: var(--greenapple);
@@ -107,15 +115,22 @@ function GamesLayout(props) {
                 *  Laptop/tablet  *
                 *******************/
                 @media only screen and (max-width: 1024px) {
-                    .container{
+                    .container {
                         grid-template-columns: 0vw 100vw;
+                    }
+
+                    .simple {
+                        grid-template-columns: 100vw;
+                        grid-template-areas:
+                            "header"
+                            "main";
                     }
                 }
 
                 /******************
                 *     Mobile      *
                 *******************/
-                @media only screen and (max-width: 600px) {
+                @media only screen and (max-width: 600px), (max-height: 600px) {
                     // Bring header to footer?
                     // .container {
                     //     grid-template-rows: max-content 50px;
@@ -130,6 +145,10 @@ function GamesLayout(props) {
 
                     .three-part {
                         grid-template-columns: 0 100vw 0;
+                    }
+
+                    .home {
+                        grid-template-columns: 0vw 100vw;
                     }
                 }
 

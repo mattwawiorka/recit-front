@@ -32,11 +32,9 @@ function GameList(props) {
   const chronStyle = 
   <style jsx="true">{`
     .chronology {
-      padding: 0.5em;
+      padding: 12px 20px;
       text-align: left;
       color: #616770;
-      font-style: italic;
-      text-decoration: underline;
     }
 
     .section {
@@ -80,6 +78,16 @@ function GameList(props) {
     @keyframes fadein {
       from {opacity: 0;}
       to {opacity: 1;}
+    }
+
+    /******************
+    *     Laptop      *
+    *******************/
+    @media only screen and (max-width: 1300px) {
+      // .chronology {
+      //   font-style: normal;
+      //   text-decoration: none;
+      // }
     }
   `}</style>
 
@@ -157,49 +165,37 @@ function GameList(props) {
       <style jsx>{`
         .list-container {
           display: block;
-          width: 570px;
-          height: min-content;
-          max-height: 85vh;
+          // width: 550px;
+          width: 95%;
           text-align: center;
           background-color: white;
           border-radius: 15px;
-          margin: 0 15px;
-          // overflow: hidden;
+          // margin-left: 16px;
+          margin: 0 auto;
         }
 
         .list-title {
           margin: auto;
           border-bottom-style: groove;
-          width: 50%;
+          width: 60%;
           color: #111;
         }
 
         /******************
         *     Laptop      *
         *******************/
-        @media only screen and (max-width: 1600px) {
-          .list-container {
-            width: 400px;
-          }
-        }
-
-        /******************
-        *     Tablet      *
-        *******************/
-        @media only screen and (max-width: 768px) {
-          .list-container {
-            width: 300px;
-            margin: 0;
+        @media only screen and (max-width: 1300px) {
+          .list-title {
+            width: 100%;
+            font-size: 0.9em;
           }
         }
 
         /******************
         *     Mobile      *
         *******************/
-        @media only screen and (max-width: 600px) {
+        @media only screen and (max-width: 600px), (max-height: 600px) {
           .list-container {
-            width: 350px;
-            height: max-content;
             margin-top: 16px;
           }
 
@@ -210,28 +206,10 @@ function GameList(props) {
           .hide {
             display: none;
           }
-        }
 
-        /******************
-        *     Small       *
-        *******************/
-        @media only screen and (max-width: 320px) {
-          .list-container {
-            width: 250px;
-          }
-        }
-
-        /******************
-        *    Landscape    *
-        *******************/
-        @media only screen and (max-height: 425px) {
-          .list-container {
-            width: 100%;
-            height: max-content;
-          }
-
-          .hide {
-            display: none;
+          .list-title {
+            text-align: center;
+            width: 80%;
           }
         }
       `}</style>

@@ -54,7 +54,7 @@ function BottomDockable(props) {
                     bottom: 0;
                     left: 50%;
                     transform: translate(-50%);
-                    width: 40vw;
+                    width: 600px;
                     height: 70px;
                     border-top-left-radius: 110px; 
                     border-top-right-radius: 110px;
@@ -66,10 +66,10 @@ function BottomDockable(props) {
                 .login-warning {
                     visibility: hidden;
                     position: fixed;
-                    bottom: 10vh;
-                    left: 30vw;
-                    right: 30vw;
-                    width: 40vw;
+                    bottom: 90px;
+                    width: 400px;
+                    left: 50%;
+                    transform: translate(-50%);
                     background-color: #333;
                     color: #fff;
                     text-align: center; 
@@ -85,37 +85,28 @@ function BottomDockable(props) {
 
                 @keyframes fadein {
                     from {bottom: 0; opacity: 0;}
-                    to {bottom: 10vh; opacity: 1;}
+                    to {bottom: 90px; opacity: 1;}
                 }
 
                 /* Animations to fade the login warning in and out */
                 @-webkit-keyframes fadein {
                     from {bottom: 0; opacity: 0;}
-                    to {bottom: 10vh; opacity: 1;}
+                    to {bottom: 90px; opacity: 1;}
                 }
 
                 @keyframes fadein {
                     from {bottom: 0; opacity: 0;}
-                    to {bottom: 10vh; opacity: 1;}
+                    to {bottom: 90px; opacity: 1;}
                 }
 
                 @-webkit-keyframes fadeout {
-                    from {bottom: 10vh; opacity: 1;}
+                    from {bottom: 90px; opacity: 1;}
                     to {bottom: 0; opacity: 0;}
                 }
 
                 @keyframes fadeout {
-                    from {bottom: 10vh; opacity: 1;}
+                    from {bottom: 90px; opacity: 1;}
                     to {bottom: 0; opacity: 0;}
-                }
-
-                /******************
-                *      Tablet     *
-                *******************/
-                @media only screen and (max-width: 768px) {
-                    .bottom-button {
-                        width: 60vw;
-                    }
                 }
 
                 /******************
@@ -125,6 +116,33 @@ function BottomDockable(props) {
                     .bottom-button {
                         width: 100%;
                         border-radius: 0;
+                    }
+
+                    .login-warning {
+                        width: 250px;
+                    }
+                }
+
+                /******************
+                *      Tablet     *
+                *******************/
+                // @media only screen and (max-width: 768px) {
+                //     .bottom-button {
+                //         width: 60vw;
+                //     }
+                // }
+
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px) {
+                    .bottom-button {
+                        width: 100%;
+                        border-radius: 0;
+                    }
+
+                    .login-warning {
+                        width: 250px;
                     }
                 }
 

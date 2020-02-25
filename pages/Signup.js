@@ -127,13 +127,13 @@ function Signup(props) {
 
     return (
         <React.Fragment>
-            <Layout threeway={true}>
+            <Layout simple={true}>
                 <br />
 
                 <div className="signup-container">
                     <h1>Create your Rec-it Account</h1>
 
-                    <span className="alert">
+                    <span className="error">
                         {errorDisplay}
                     </span>
 
@@ -289,13 +289,13 @@ function Signup(props) {
             <style jsx>{`
                 .signup-container {
                     display: block;
-                    width: 90%;
+                    width: 100%;
+                    height: 100%;
+                    padding: 0 10%;
                     margin: auto;
                     margin-top: 2em;
                     text-align: center;
                     animation: fadein 0.75s;
-                    // border: 1px solid #ccc;
-                    // border-radius: 4px;
                 }
 
                 a > u {
@@ -305,7 +305,7 @@ function Signup(props) {
                 }
 
                 h1 {
-                    margin-bottom: 1em;
+                    margin-bottom: 16px;
                     font-weight: 200;
                     color: #0c0d0e;
                 }
@@ -315,7 +315,7 @@ function Signup(props) {
                 }
 
                 .signup-reasons {
-                    width: 60%;
+                    width: 520px;
                     height: 300px;
                     padding-top: 25px;
                     text-align: left;
@@ -328,31 +328,28 @@ function Signup(props) {
                 }
 
                 i {
-                    margin-right: 1em;
+                    margin-right: 18px;
                     vertical-align: middle;
                 }
 
                 .signup-reasons > p {
-                    padding-left: 100px;
                     line-height: 2.5em;
                     font-size: 1.1em;
-                    // font-style: italic;
                 }
 
                 .learn-more {
-                    margin-top: 0.2em;
+                    margin-top: 4px;
                     color: #616770;
                 }
 
                 .signup-actions {
                     position: relative;
                     vertical-align: top;
-                    width: 40%;
+                    width: 500px;
                     height: 420px;
                     padding: 12px;
                     padding-top: 20px;
                     background-color: white;
-                    // border: 2px solid #ccc;
                     border-radius: 15px;
                     box-shadow: 0 10px 25px rgba(0,0,0,0.05), 0 20px 48px rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.1);
                 }
@@ -360,7 +357,6 @@ function Signup(props) {
                 h4 {
                     margin: 3em;
                     color: #616770;
-                    // text-align: left;
                 }
 
                 .text-muted {
@@ -404,16 +400,6 @@ function Signup(props) {
                     animation-name: fadein;
                 }
 
-                @keyframes fadein {
-                    from {
-                        opacity: 0;
-                    } 
-                    
-                    to {
-                        opacity: 1;
-                    }
-                }
-
                 .back-arrow {
                     margin: 0;
                     float: left;
@@ -439,34 +425,41 @@ function Signup(props) {
                     font-size: 1.2em;
                 }
 
-                .alert {
-                    color: black;
-                    margin-bottom: 15px;
+                .error {
                     text-align: center;
+                    padding: 12px;
+                }
+
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                /******************
+                *     Laptop      *
+                *******************/
+                @media only screen and (max-width: 1280px) {
+                    .signup-container {
+                        padding: 0;
+                    }
+
+                    .signup-reasons {
+                        width: 265px;
+                        margin-right: 32px;
+                    }
                 }
 
                 /******************
                 *     Tablet      *
                 *******************/
-                @media only screen and (max-width: 768px) {
-                    .signup-container {
-                        width: 100%;
-                    }
-
+                @media only screen and (max-width: 800px) {
                     .signup-reasons {
-                        width: 40%;
-                        height: max-content;
-                        padding: 25px 8px 0px 8px;
-                    }
-
-                    .signup-reasons > p {
-                        padding-left: 0px;
-                    }
-
-                    .signup-actions {
-                        float: none;
-                        width: 50%;
-                        margin-right: 8px;
+                        display: none;
                     }
                 }
 

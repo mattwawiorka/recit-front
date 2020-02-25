@@ -12,6 +12,7 @@ function MyGames(props) {
         "hide": props.viewMode
     })
     const buttonClass = classNames({
+        "btn-my-games": true,
         "btn-expand-list": true,
         "hide": props.viewMode
     })
@@ -28,7 +29,7 @@ function MyGames(props) {
                 </div>
 
                 {(showList && props.hasMore) ?
-                <button className="btn-expand-list btn-load-more" onClick={props.loadMore}>
+                <button className="btn-my-games btn-load-more" onClick={props.loadMore}>
                     Load more
                 </button>
                 :
@@ -36,41 +37,39 @@ function MyGames(props) {
             </div>
 
             {moreGames ?
-            <button 
-                className={buttonClass}
-                onClick={() => setShowList(!showList)} 
-            >
-                {showList ? "Less" : "Show More"}
-            </button>
+            <React.Fragment>
+                <button 
+                    className={buttonClass}
+                    onClick={() => setShowList(!showList)} 
+                >
+                    {showList ? "Less" : "Show More"}
+                </button>
+                <div className="spacing" />
+            </React.Fragment>
             :
-            <br />}
+            <div className="spacing" />}
 
             <style jsx>{`
                 .list-container {
-                    display: inline-block;
-                    width: 570px;
-                    height: min-content;
-                    // max-height: 80vh;
+                    display: block;
                     text-align: center;
                     background-color: white;
                     border-radius: 15px;
-                    // overflow: auto;
                     padding-top: 0.5em;
-                    margin: 0 15px;
+                    width: 95%;
+                    margin: 0 auto;
                 }
         
                 .list-title {
-                    width: 65%;
+                    width: 85%;
                     margin: auto;
                     border-bottom-style: groove;
                     color: #111;
+                    margin-bottom: 12px;
                 }
 
-                .btn-expand-list {
-                    transform: translate(-50%);
-                    margin-left: 50%;
-                    width: 10em;
-                    margin-bottom: 1em;
+                .btn-my-games {
+                    width: 160px;
                     background-color: white;
                     color: #616770;
                     text-align: center;
@@ -82,38 +81,33 @@ function MyGames(props) {
                 }
 
                 .btn-load-more {
-                    transform: translate(0%);
-                    margin-left: 0%;
-                    margin-top: 0.5em;
+                    padding: 12px 0;
                 }
 
-                @media only screen and (max-width: 1600px) {
-                    .list-container {
-                      width: 400px;
-                    }
-                }
-        
-                @media only screen and (max-width: 768px) {
-                    .list-container {
-                    width: 300px;
-                    margin: 0;
-                    }
+                .btn-expand-list {
+                    transform: translate(-50%);
+                    margin-left: 50%;
                 }
 
-                @media only screen and (max-width: 600px) {
-                    .list-container {
+                .spacing {
+                    margin-bottom: 16px;
+                }
+
+                /******************
+                *     Laptop      *
+                *******************/
+                @media only screen and (max-width: 1300px) {
+                    .list-title {
                         width: 100%;
-                        margin-top: 55px;
-                    }
-
-                    .hide {
-                        display: none;
+                        font-size: 0.9em;
                     }
                 }
 
-                @media only screen and (max-height: 425px) {
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px), (max-height: 600px) {
                     .list-container {
-                        width: 100%;
                         margin-top: 55px;
                     }
 

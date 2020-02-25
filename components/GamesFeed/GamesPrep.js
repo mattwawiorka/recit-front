@@ -210,14 +210,14 @@ function GamesPrep(props) {
     })
 
     return (
-        <>
+        <React.Fragment>
             <MapContainer 
                 currentLoc={props.currentLoc}
                 markers={markers}
                 getMapBounds={props.getMapBounds}
                 viewMode={props.viewMode}
             />
-            <div style={{ maxHeight: "86vh", overflowX: "hidden", margin: "0 auto" }}>
+            <div className="lists">
                 {myGames.length > 0 ?
                 <MyGames 
                     myGames={myGames}
@@ -241,7 +241,58 @@ function GamesPrep(props) {
                     myGames={props.activeCount}
                 />
             </div>
-        </>
+
+            <style jsx>{`
+                .lists {
+                    vertical-align: top;
+                    max-height: 86vh;
+                    display: inline-block;
+                    width: calc(80vw - 900px);
+                    max-width: 850px;
+                    height: max-content;
+                    margin-bottom: 16px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                }
+
+                /******************
+                *  Laptop/Tablet  *
+                *******************/
+                @media only screen and (max-width: 1600px) {
+                    .lists {
+                        width: calc(80vw - 700px);
+                    }
+                }
+
+                @media only screen and (max-width: 1300px) {
+                    .lists {
+                        width: calc(80vw - 600px);
+                    }
+                }
+
+                @media only screen and (max-width: 1024px) {
+                    .lists {
+                        width: calc(100vw - 600px);
+                    }
+                }
+
+                @media only screen and (max-width: 768px) {
+                    .lists {
+                        width: calc(100vw - 425px);
+                    }
+                }
+
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px), (max-height: 600px) {
+                    .lists {
+                        width: 90%;
+                        margin: 0 5%;
+                    }
+                }
+            `}</style>
+        </React.Fragment>
     );
 }
 

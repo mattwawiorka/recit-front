@@ -54,6 +54,7 @@ function GameRow(props) {
       padding: 6px 8px;
       overflow: hidden;
       background-color: white;
+      border-radius: 15px;
     }
 
     .hovered {
@@ -105,9 +106,14 @@ function GameRow(props) {
       font-weight: bold;
     }
 
-    @media only screen and (max-width: 1024px) {
+    @media only screen and (max-width: 1300px) {
       .title {
         display: none;
+      }
+
+      .game-row {
+        padding: 6px 0;
+        // padding-right: 32px;
       }
     }
 

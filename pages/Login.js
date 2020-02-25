@@ -101,7 +101,7 @@ function Login(props) {
 
     return (
         <React.Fragment>
-            <Layout threeway={true}>
+            <Layout simple={true}>
                 <br />
 
                 <div className="login-container">
@@ -123,7 +123,7 @@ function Login(props) {
                                 callback={responseFacebook}
                             />
 
-                            <div className="form-group reduced-width">
+                            <div className="form-group phone-number">
                                 <label className="text-muted title">Phone Number</label>
                                 <MaskedInput 
                                     mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
@@ -161,7 +161,7 @@ function Login(props) {
                             null}
                         </React.Fragment>
                         :
-                        <div className="info-form">
+                        <div className="sms-form">
 
                             <div className="form-group reduced-width">
                                 <label className="text-muted">SMS Code</label>
@@ -198,9 +198,10 @@ function Login(props) {
             <style jsx>{`
                 .login-container {
                     display: block;
-                    width: 90%;
-                    margin: auto;
-                    margin-top: 2em;
+                    // width: 100%;
+                    margin: 0 auto;
+                    // margin: auto;
+                    margin-top: 32px;
                     text-align: center;
                     animation: fadein 0.75s;
                     // border: 1px solid #ccc;
@@ -227,7 +228,6 @@ function Login(props) {
                     
                 }
 
-
                 h2 {
                     text-align: center;
                     font-weight: 500;
@@ -241,7 +241,7 @@ function Login(props) {
 
                 .login-actions {
                     position: relative;
-                    width: 40%;
+                    width: 420px;
                     height: 300px;
                     padding: 12px;
                     padding-top: 20px;
@@ -275,14 +275,14 @@ function Login(props) {
                 }
 
                 .form-button {
-                    width: 80%;
+                    width: 300px;
                     height: 2.5em;
                     margin-top: 0.5em;
                     animation-duration: 1s;
                     animation-name: fadein;
                 }
 
-                .info-form { 
+                .sms-form { 
                     animation-duration: 1s;
                     animation-name: fadein;
                 }
@@ -297,11 +297,12 @@ function Login(props) {
                     }
                 }
 
-
-                .reduced-width { 
-                    display: inline-block;
-                    width: 80%;
-                    margin-top: 2.5em;
+                .phone-number { 
+                    position: absolute;
+                    bottom: 64px;
+                    display: block;
+                    width: 300px;
+                    margin: 0 60px;
                 }
 
                 .login-link {
@@ -318,16 +319,14 @@ function Login(props) {
                     text-align: center;
                 }
 
-
-                @media only screen and (max-width: 768px) {
-                    .login-actions {
-                        width: 60%;
-                    }
-                }
-
-                @media only screen and (max-width: 600px) {
+                @media only screen and (max-width: 420px) {
                     .login-actions {
                         width: 100%;
+                    }
+
+                    .phone-number { 
+                        width: 90%;
+                        margin: 0;
                     }
                 }
 
