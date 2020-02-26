@@ -172,7 +172,8 @@ function GameInfo(props) {
         display: inline-block;
         height: 100%;
         padding-left: 15px;
-        font-weight: bold;
+        font-size: 0.9em;
+        // font-weight: bold;
       }
 
       .location>a {

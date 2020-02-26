@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import dateTool from '../../lib/dateTool';
 import cookie from 'js-cookie';
-import classNames from 'classnames';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function UserProfile(props) {
     let pastGames = []; 
@@ -113,11 +113,6 @@ function UserProfile(props) {
             })
         }
     }, [picMode])
-
-    const statusClass = classNames({
-        "status-input": true,
-        "outline": editMode
-    })
 
     return (
         <React.Fragment>
@@ -336,34 +331,27 @@ function UserProfile(props) {
                     </div>
 
                     <article className="status">
-                        <textarea
-                            className={statusClass}
+                        <TextareaAutosize 
+                            style={{ 
+                                resize: "none",
+                                width: "100%",
+                                border: "none",
+                                outline: editMode ? "default" : "none",
+                                fontSize: "1.1em",
+                                backgroundColor: editMode ? "white" : "var(--greenapple)",
+                                color: "var(--darkermatter)",
+                                fontWeight: "bold"
+                            }}
                             readOnly={!props.owner || !editMode}
-                            defaultValue={props.user.status}    
+                            defaultValue={props.user.status}  
                             autoComplete="off"
-                            maxLength="250"
-                            onChange={e => {
-                                if (e.target.value.split('\n').length > 17) {
-                                    return;
-                                }
+                            minRows="1"
+                            maxRows="17"
+                            onChange={ e => {
                                 setStatus(e.target.value)
                             }}
                         />
                     </article>
-                </section>
-
-                <section className="player-history">
-                    <div className="stats">
-                        <p className="stats-title">Games played: <span className="stat">{props.gamesPlayed}</span></p>
-                        <p className="stats-title">Top sport: <span className="stat">{props.topSport.charAt(0) + props.topSport.substring(1).toLowerCase()}</span></p>
-                    </div>
-                    {pastGames}
-                    {props.hasMore ?
-                    <button className="btn-load-more" onClick={props.loadMore}>
-                         + Load more
-                    </button>
-                    :
-                    null}
                 </section>
 
                 <section className="pic-gallery">
@@ -403,6 +391,20 @@ function UserProfile(props) {
                         </div>
                     </div>
                 </section>
+
+                <section className="player-history">
+                    <div className="stats">
+                        <p className="stats-title">Games played: <span className="stat">{props.gamesPlayed}</span></p>
+                        <p className="stats-title">Top sport: <span className="stat">{props.topSport.charAt(0) + props.topSport.substring(1).toLowerCase()}</span></p>
+                    </div>
+                    {pastGames}
+                    {props.hasMore ?
+                    <button className="btn-load-more" onClick={props.loadMore}>
+                         + Load more
+                    </button>
+                    :
+                    null}
+                </section>
             </div>
                 
             <style jsx>{`
@@ -435,6 +437,7 @@ function UserProfile(props) {
 
                 .profile-container {
                     width: 100%;
+                    height: 350px;
                     padding: 24px;
                     animation-duration: .75s;
                     animation-name: fadein;
@@ -457,8 +460,7 @@ function UserProfile(props) {
                 
                 .main-info {
                     vertical-align: top;
-                    min-height: 350px;
-                    height: max-content;
+                    height: 350px;
                     width: calc(100% - 350px);
                     border-top-left-radius: 0;
                     border-bottom-left-radius: 0;
@@ -472,6 +474,7 @@ function UserProfile(props) {
                 }
 
                 .pic-gallery {
+                    float: right;
                     width: calc(100% - 382px);
                     vertical-align: top;
                     margin-left: 32px;
@@ -545,16 +548,6 @@ function UserProfile(props) {
                     animation-name: fadein;
                 }
 
-                @keyframes fadein {
-                    from {
-                        opacity: 0;
-                    } 
-                    
-                    to {
-                        opacity: 1;
-                    }
-                }
-
                 .demographics {
                     display: inline-block;
                     padding: 12px 8px 12px 12px;
@@ -591,22 +584,8 @@ function UserProfile(props) {
                     display: inline-block;
                     vertical-align: top;
                     width: calc(100% - 250px);
-                    height: 300px;
+                    // height: 300px;
                     overflow: hidden;
-                }
-
-                .status-input {
-                    width: 95%;
-                    height: 95%;
-                    resize: none;
-                    overflow-y: auto;
-                    border: none;
-                    outline: none;
-                    font-size: 1.1em;
-                    font-weight: bold;
-                    font-style: italic;
-                    color: var(--darkermatter);
-                    background-color: var(--greenapple);
                 }
 
                 .outline {
@@ -673,44 +652,15 @@ function UserProfile(props) {
                 }
 
                 /******************
-                *     Tablet      *
+                *     Laptop      *
                 *******************/
-                @media only screen and (max-width: 768px) {
-                    .main-info {
-                        border-bottom-left-radius: 15px;
-                    }
-
-                    .demographics {
-                        width: 150px;
-                    }  
-
-                    .status {
-                        width: 100%;
-                    }
-
-                    .status-input {
-                        height: 100%;
-                    }
-
-                    .player-history {
-                        position: relative;
-                        top: -250px;
-                        width: 340px;
+                @media only screen and (max-width: 1024px) {
+                    .profile-container {
+                        padding: 24px 128px;
                     }
 
                     .pic-gallery {
-                        float: right;
-                        // width: 350px;
-                    }
-                }
-
-                /******************
-                *     Mobile      *
-                *******************/
-                @media only screen and (max-width: 600px) {
-                    .pic-viewer {
-                        width: 350px;
-                        height: 350px;
+                        float: none;
                     }
 
                     section {
@@ -737,7 +687,6 @@ function UserProfile(props) {
 
                     .heading-mobile {
                         display: inline-block;
-                        width: calc(100% - 175px);
                         vertical-align: top;
                         padding-top: 8px;
                     }
@@ -745,30 +694,24 @@ function UserProfile(props) {
                     .user-heading {
                         display: none;
                     }
-
-                    .name {
-                        font-size: 1.2em;
-                        padding-left: 8px;
-                    }
     
                     .jersey-number {
-                        display: block;
-                        font-size: 0.8em;
-                        padding: 2px 8px;
+                        font-size: 1.2em;
+                        padding-left: 16px;
+                    }
+
+                    .membership-info-mobile {
+                        padding: 28px 16px;
                     }
 
                     .membership-info {
                         display: none;
                     }
-
-                    .membership-info-mobile {
-                        padding: 28px 8px 8px 8px;
-                        font-size: 0.8em;
-                    }
                     
                     .main-info {
                         width: 100%;
                         border-radius: 15px;
+                        height: min-content;
                     }
 
                     .col-1 {
@@ -801,13 +744,53 @@ function UserProfile(props) {
                 }
 
                 /******************
-                *    Landscape    *
+                *     Tablet      *
                 *******************/
-                @media only screen and (max-height: 600px) {
+                @media only screen and (max-width: 768px) {
+                    .profile-container {
+                        padding: 24px 48px;
+                    }
+                }
+
+                /******************
+                *     Mobile      *
+                *******************/
+                @media only screen and (max-width: 600px), (max-height: 600px) {
+                    .profile-container {
+                        padding: 24px 16px;
+                    }
+
                     .pic-viewer {
                         width: 350px;
                         height: 350px;
                         top: 5%;
+                    }
+
+                    .heading-mobile {
+                        display: inline-block;
+                        width: calc(100% - 175px);
+                        vertical-align: top;
+                        padding-top: 8px;
+                    }
+    
+                    .user-heading {
+                        display: none;
+                    }
+
+                    .name {
+                        font-size: 1.2em;
+                        padding-left: 8px;
+                    }
+    
+                    .jersey-number {
+                        display: block;
+                        font-size: 0.8em;
+                        padding: 2px 8px;
+                    }
+
+                    .membership-info-mobile {
+                        padding: 28px 8px 8px 8px;
+                        font-size: 0.8em;
                     }
                 }
 
@@ -838,7 +821,6 @@ function UserProfile(props) {
                         padding: 12px 8px 8px 8px;
                         font-size: 0.7em;
                     }
-                }
                 }
             `}</style>
         </React.Fragment>

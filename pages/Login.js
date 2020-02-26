@@ -146,7 +146,6 @@ function Login(props) {
                                 onClick={() => {
                                     sendSMS({ variables: { phoneNumber: phoneNumber }  })
                                     .then(response => {
-                                        console.log(response)
                                         if (response.errors) {
                                             setErrors(response.errors)
                                             return;
@@ -162,8 +161,7 @@ function Login(props) {
                         </React.Fragment>
                         :
                         <div className="sms-form">
-
-                            <div className="form-group reduced-width">
+                            <div className="form-group phone-number">
                                 <label className="text-muted">SMS Code</label>
                                 <input 
                                     onChange={(e) => setPhoneCode(e.target.value)} 
@@ -275,14 +273,19 @@ function Login(props) {
                 }
 
                 .form-button {
+                    display: block;
                     width: 300px;
-                    height: 2.5em;
-                    margin-top: 0.5em;
+                    height: 32px;
+                    position: absolute;
+                    bottom: 24px;
+                    margin: 0 60px;
                     animation-duration: 1s;
                     animation-name: fadein;
                 }
 
                 .sms-form { 
+                    position: absolute;
+                    bottom: 80px;
                     animation-duration: 1s;
                     animation-name: fadein;
                 }
