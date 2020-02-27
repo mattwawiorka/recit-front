@@ -317,6 +317,7 @@ function PlayerList(props) {
       );
     }
 
+    console.log('this happens')
   }, [props.players, props.watchers])
 
   if (loading) return <Loading />

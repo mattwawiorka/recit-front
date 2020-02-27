@@ -5,3 +5,4 @@ api.json
 server.crt
 server.key
 scratch.txt
+.env

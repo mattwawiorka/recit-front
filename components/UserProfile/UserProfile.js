@@ -221,34 +221,46 @@ function UserProfile(props) {
                                             data.append('file', newPic2);
                                             data.append('file', newPic3);
 
-                                            fetch(`http://localhost:8080/post-image?user=${props.userId}`, {
-                                                method: 'POST',
-                                                headers: {
-                                                    Authorization: 'Bearer ' + cookie.get('token')
-                                                },
-                                                body: data
-                                            })
-                                            .then( response => {
-                                                props.updateProfile({ variables: {
-                                                    userId: props.userId,
-                                                    userInput: {
-                                                        profilePic: newProfile ? "http://localhost:8080/images/" + props.user.id + "/" + newProfile.name : null,
-                                                        pic1: newPic1 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic1.name : null,
-                                                        pic2: newPic2 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic2.name : null,
-                                                        pic3: newPic3 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic3.name : null,
-                                                        name: name,
-                                                        dob: dob,
-                                                        gender: gender,
-                                                        status: status.trim()
-                                                    }
-                                                }})
-                                                .then( response => {
-                                                    setNewProfile(null);
-                                                    setNewPic1(null);
-                                                    setNewPic2(null);
-                                                    setNewPic3(null);
-                                                    setEditMode(false);
+                                            if (newProfile) {
+                                                fetch(`http://localhost:8080/post-image?user=${props.userId}`, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        Authorization: 'Bearer ' + cookie.get('token')
+                                                    },
+                                                    body: data
                                                 })
+                                            }
+
+                                            if (newPic1 || newPic2 || newPic3) {
+                                                fetch(`http://localhost:8080/post-images?user=${props.userId}`, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        Authorization: 'Bearer ' + cookie.get('token')
+                                                    },
+                                                    body: data
+                                                })
+                                            }
+                                            
+                                            props.updateProfile({ variables: {
+                                                userId: props.userId,
+                                                userInput: {
+                                                    profilePic: newProfile ? "http://localhost:8080/images/" + props.user.id + "/" + newProfile.name : null,
+                                                    pic1: newPic1 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic1.name : null,
+                                                    pic2: newPic2 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic2.name : null,
+                                                    pic3: newPic3 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic3.name : null,
+                                                    name: name,
+                                                    dob: dob,
+                                                    gender: gender,
+                                                    status: status.trim()
+                                                }
+                                            }})
+                                            .then( response => {
+                                                setNewProfile(null);
+                                                setNewPic1(null);
+                                                setNewPic2(null);
+                                                setNewPic3(null);
+                                                setEditMode(false);
+                                                props.refetch();
                                             })
                                         } else {
                                             props.updateProfile({ variables: {
@@ -345,8 +357,8 @@ function UserProfile(props) {
                             readOnly={!props.owner || !editMode}
                             defaultValue={props.user.status}  
                             autoComplete="off"
-                            minRows="1"
-                            maxRows="17"
+                            minRows={1}
+                            maxRows={17}
                             onChange={ e => {
                                 setStatus(e.target.value)
                             }}
@@ -437,7 +449,6 @@ function UserProfile(props) {
 
                 .profile-container {
                     width: 100%;
-                    height: 350px;
                     padding: 24px;
                     animation-duration: .75s;
                     animation-name: fadein;
@@ -483,6 +494,10 @@ function UserProfile(props) {
 
                 article {
                     display: inline-block;
+                }
+
+                .profile-pic-container {
+                    height: 350px;
                 }
 
                 .image-round {
