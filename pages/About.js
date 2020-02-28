@@ -8,7 +8,7 @@ function About() {
                 <br />
                 <div className="about-container">
                     <div className="logo">
-                        <img src="REC-BOARD.png" />
+                        <img src="/REC-BOARD.png" />
                     </div>
                     <div className="about">
                         <p> Rec-board is an app meant for connecting people through sports and recreation. Our goal is to make it easier for people to coordinate games and to develop a medium that promotes people to play more with each other.</p>

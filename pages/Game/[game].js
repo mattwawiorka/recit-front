@@ -15,7 +15,7 @@ function GamePage(props) {
         router.replace('/','/game/' + router.query.game)
     }
     
-    return <Loading />
+    return null;
   }
 
   return (

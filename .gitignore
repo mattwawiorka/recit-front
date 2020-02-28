@@ -1,7 +1,7 @@
 node_modules
 .next
 next.config.js
+out
 README.md
-api.json
 server.crt
 server.key

@@ -1,7 +1,7 @@
 export default function Meta() {
 
     return (
-        <style jsx>{`
+        <style jsx="true">{`
             @charset "UTF-8";
             @import url("https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,700&display=swap");
             @import url('https://fonts.googleapis.com/css?family=Bitter:700&display=swap');
