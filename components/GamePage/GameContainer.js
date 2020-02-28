@@ -51,6 +51,7 @@ const CANCEL_GAME = gql`
   `;
 
 function GameContainer(props) {
+  const debug = require('debug')('GameContainer');
 
   const [editMode, setEditMode] = useState(false);
   const [inviteMode, setInviteMode] = useState(false);
@@ -65,8 +66,10 @@ function GameContainer(props) {
   const [cancelGame] = useMutation(CANCEL_GAME, { variables: { gameId: props.gameId } });
   if (loading) return <Loading />
   if (error) {
-    props.redirect(true);
-    return null;
+    debug(error);
+    props.redirect();
+    alert('The game you were looking for may not exist or may not be visibile to you');
+    return <Loading />
   }
 
   const isOver = Date.now() > data.game.dateTime;

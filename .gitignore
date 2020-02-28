@@ -1,8 +1,7 @@
 node_modules
 .next
+next.config.js
 README.md
 api.json
 server.crt
 server.key
-scratch.txt
-.env

@@ -34,6 +34,8 @@ const INBOX = gql`
 `;
 
 function Inbox(props) {
+    const debug = require('debug')('Inbox');
+    
     let conversations = [];
 
     const [waiting, setWaiting] = useState(true);
@@ -73,8 +75,8 @@ function Inbox(props) {
 
     if (loading) return <Loading />
     if (error) {
-        console.log(error)
-        return <p>Error</p>
+        debug(error);
+        return <Loading />
     }
 
     if (waiting) return <Loading />

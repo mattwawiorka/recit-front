@@ -34,7 +34,7 @@ function Invite(props) {
 
     const router = useRouter();
 
-    const URL = "https://localhost:3000" + router.asPath;
+    const URL = process.env.DOMAIN + router.asPath;
 
     const [searchValue, setSearchValue] = useState("");
     const [players, setPlayers] = useState([]);
@@ -48,7 +48,6 @@ function Invite(props) {
         if (searchValue === "") {
             searchResults = null;
         } else {
-            console.log('in here')
             searchResults = data.findUser.edges.map( (user, index) => {
                 if (players.filter(p => p.id === user.node.id).length > 0) return
                 return (
@@ -108,8 +107,6 @@ function Invite(props) {
             })
         }
     }
-
-    console.log(searchResults)
 
     const copyText = useCallback((e) => {
         link.current.select();

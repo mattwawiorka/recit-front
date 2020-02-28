@@ -27,7 +27,7 @@ function Comment(props) {
                         <div className="user-pic-round">
                             <Link href='/Profile/[user]' as={`/Profile/${comment.userId}`}>
                                 <img 
-                                    src={userPic.split('.')[0] + '_THUMB.' + userPic.split('.')[1]}
+                                    src={userPic}
                                     className="user-pic"
                                 />
                             </Link> 
@@ -107,11 +107,11 @@ function Comment(props) {
                             onClick={() => {
                                 props.updateComment({ variables: { id: comment.id, content: content } })
                                 .then(response => {
-                                    console.log(response)
+                                    setShowSave(false); 
+                                    setEditMode(false);
+                                    setShowActions(false);
                                 })
-                                setShowSave(false); 
-                                setEditMode(false);
-                                setShowActions(false);
+                                
                             }} 
                             className="btn save-edit"
                         >Save</button> 

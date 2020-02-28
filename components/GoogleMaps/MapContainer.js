@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import API from '../../api.json';
 import Map from 'google-map-react';
 import mapStyles from './mapStyles.json';
 import classNames from 'classnames';
@@ -37,7 +36,7 @@ function MapContainer(props) {
     <React.Fragment>
     <div className={mapClass}>
       <Map
-          bootstrapURLKeys={{ key: API.key }}
+          bootstrapURLKeys={{ key: process.env.GOOGLE_KEY }}
           defaultCenter={ 
               {
                   lat: props.currentLoc[0],

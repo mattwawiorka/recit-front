@@ -93,6 +93,7 @@ const PARTICIPANT_LEFT = gql`
 `;
 
 function Players(props) {
+  const debug = require('debug')('Players');
 
   let variables = { 
     gameId: props.gameId,
@@ -106,11 +107,9 @@ function Players(props) {
   const [unsubscribe] = useMutation(UNSUBSCRIBE, { variables: variables });
   if (loading) return <Loading />
   if (error) {
-    console.log(error)
-    return <h4>ERROR!!!</h4>
+    debug(error)
+    return <Loading />
   }
-
-  console.log(data)
 
   let joined = data.players.some(p => {
     return p.userId == props.currentUser.id;
@@ -186,7 +185,6 @@ function Players(props) {
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData.data.participantLeft) return prev;
             else if (subscriptionData.data.participantLeft.player) {
-              console.log(subscriptionData)
               let players, index;
               players = prev.players.slice();
               index = players.findIndex((player) => {

@@ -19,7 +19,7 @@ function GameMarker(props) {
 
     if (cookie.get('token')) {
         return (
-            <>
+            <React.Fragment>
                 <Link href='/Game/[game]' as={`/Game/${id}`} >
                     <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} shallow="true" >
                         <img src={image} alt={sport} className="icon"/>
@@ -53,7 +53,7 @@ function GameMarker(props) {
                     }
 
                 `}</style>
-            </>
+            </React.Fragment>
         );
     } else {
         return (

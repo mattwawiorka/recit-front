@@ -52,7 +52,7 @@ function UserProfile(props) {
 
         if (err !== '') { // if message not same old that mean has error 
             e.target.value = null // discard selected file
-            console.log(err)
+            alert(err);
             return false;
         }
 
@@ -217,12 +217,9 @@ function UserProfile(props) {
                                         if (newProfile || newPic1 || newPic2 || newPic3) {
                                             const data = new FormData();
                                             data.append('file', newProfile);
-                                            data.append('file', newPic1);
-                                            data.append('file', newPic2);
-                                            data.append('file', newPic3);
 
                                             if (newProfile) {
-                                                fetch(`http://localhost:8080/post-image?user=${props.userId}`, {
+                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -231,8 +228,12 @@ function UserProfile(props) {
                                                 })
                                             }
 
+                                            data.append('file', newPic1);
+                                            data.append('file', newPic2);
+                                            data.append('file', newPic3);
+
                                             if (newPic1 || newPic2 || newPic3) {
-                                                fetch(`http://localhost:8080/post-images?user=${props.userId}`, {
+                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -244,10 +245,10 @@ function UserProfile(props) {
                                             props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
-                                                    profilePic: newProfile ? "http://localhost:8080/images/" + props.user.id + "/" + newProfile.name : null,
-                                                    pic1: newPic1 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic1.name : null,
-                                                    pic2: newPic2 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic2.name : null,
-                                                    pic3: newPic3 ? "http://localhost:8080/images/" + props.user.id + '/' + newPic3.name : null,
+                                                    profilePic: newProfile ? newProfile.name : null,
+                                                    pic1: newPic1 ? newPic1.name : null,
+                                                    pic2: newPic2 ? newPic2.name : null,
+                                                    pic3: newPic3 ? newPic3.name : null,
                                                     name: name,
                                                     dob: dob,
                                                     gender: gender,

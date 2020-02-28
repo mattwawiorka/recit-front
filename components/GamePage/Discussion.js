@@ -103,6 +103,7 @@ const COMMENT_DELETED = gql`
 `;
 
 function Discussion(props) {
+    const debug = require('debug')('Discussion');
 
     const [reply, setReply] = useState({});
     
@@ -112,7 +113,10 @@ function Discussion(props) {
     const [deleteComment] = useMutation(DELETE_COMMENT);
     const [invite] = useMutation(INVITE);
     if (loading) return <Loading />
-    if (error) return <h4>ERROR!!!</h4>
+    if (error) {
+        debug(error);
+        return <Loading />
+    }
 
     return (
         <React.Fragment>
@@ -165,7 +169,7 @@ function Discussion(props) {
                             updateQuery: (prev, { subscriptionData }) => {
                                 if (!subscriptionData.data.messageAdded) return prev;
                                 const newComment = subscriptionData.data.messageAdded;
-                                newComment.node.createdAt = Date.parse(newComment.node.createdAt)
+                                newComment.node.createdAt = Date.parse(newComment.node.createdAt);
                                 const newComments = Object.assign({}, prev, { messages: {
                                     edges: [newComment, ...prev.messages.edges],
                                     pageInfo: {

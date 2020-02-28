@@ -1,6 +1,5 @@
 import React, { useCallback, useRef } from 'react';
 import Script from 'react-load-script';
-import API from '../../api.json';
 import classNames from 'classnames';
 
 function PlaceSearch(props) {
@@ -30,14 +29,14 @@ function PlaceSearch(props) {
 
 
     return (
-        <>
+        <React.Fragment>
         <input 
             ref={searchBar}
             type="text" 
             className={addressInput}
             placeholder={props.prevPlace}
         />
-        <Script url={`https://maps.googleapis.com/maps/api/js?key=${API.key}&libraries=places`}
+        <Script url={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_KEY}&libraries=places`}
             onLoad={handleScriptLoad}
         />
 
@@ -64,7 +63,7 @@ function PlaceSearch(props) {
                 font-style: italic;
             }
         `}</style>
-        </>
+        </React.Fragment>
     );
 }
 

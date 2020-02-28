@@ -6,8 +6,8 @@ import Loading from '../Loading/Loading';
 import cookie from 'js-cookie';
 
 const GET_GAMES = gql`
-query Games($cursor: String, $category: String, $sport: String, $startDate: String, $openSpots: String, $bounds: [Float], $sortOrder: String) {
-  games(cursor: $cursor, category: $category, sport: $sport, startDate: $startDate, openSpots: $openSpots, bounds: $bounds, sortOrder: $sortOrder) @connection(key: "GameFeed") {
+query Games($cursor: String, $category: String, $sport: String, $startDate: String, $openSpots: String, $bounds: [Float]) {
+  games(cursor: $cursor, category: $category, sport: $sport, startDate: $startDate, openSpots: $openSpots, bounds: $bounds) @connection(key: "GameFeed") {
     edges {
       node {
         id
@@ -87,6 +87,7 @@ const GAME_DELETED = gql`
 `;
 
 function GameSource(props) {
+  const debug = require('debug')('GameSource');
   
   let variables = {
     category: props.category,
@@ -111,9 +112,11 @@ function GameSource(props) {
   if (loading) return <Loading />
   if (loading_myGames) return <Loading />
   if (error) {
-    console.log(error)
-    return <p>Error</p>
+    debug(error);
+    return <Loading />
   }
+
+  debug(data)
 
   return (
     <>

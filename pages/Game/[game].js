@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout/Layout'
 import GameContainer from '../../components/GamePage/GameContainer';
-import Announcements from '../../components/Announcements/Announcements';
 import { withApollo } from '../../lib/apollo';
 import cookie from 'js-cookie';
+import Loading from '../../components/Loading/Loading';
 
 function GamePage(props) {
   const router = useRouter();
@@ -15,7 +15,7 @@ function GamePage(props) {
         router.replace('/','/game/' + router.query.game)
     }
     
-    return null
+    return <Loading />
   }
 
   return (
@@ -26,14 +26,11 @@ function GamePage(props) {
       submitGame={true} 
       clickEvent={() => router.push('/')}
     >
-      <Announcements />
+      <br />
       <GameContainer 
         gameId={game} 
-        redirect={(keepURL) => {
+        redirect={() => {
           router.push('/');
-          if (keepURL) {
-            router.replace('/','/game/' + router.query.game);
-          }
         }}
       />
       <br />

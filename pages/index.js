@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import SortingFiltering from '../components/GamesFeed/SortingFiltering';
 import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
-import Announcements from '../components/Announcements/Announcements';
 import { withApollo } from '../lib/apollo';
 import Loading from '../components/Loading/Loading';
 
 function Index(props) {
+    const debug = require('debug')('Index');
 
     const [loading, setLoading] = useState(true);
     const [currentLoc, setCurrentLoc] = useState([47.621354, -122.333289]);
@@ -15,10 +15,15 @@ function Index(props) {
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((position) => {
             setCurrentLoc([position.coords.latitude, position.coords.longitude]);
+        },
+        (error) => {
+            debug('Could not get user location');
+            if (error.code == error.PERMISSION_DENIED) {
+                alert("If you want Rec-board to show games in your area, allow location access");
+            }
         });
 
         setLoading(false);
-        
     }, [])
 
     if (loading) return <Loading />
@@ -32,7 +37,7 @@ function Index(props) {
                 startGame={!createGame} 
                 clickEvent={() => setCreateGame(!createGame)} 
             >
-                <Announcements />
+                <br />
                 <React.Fragment>
                     {createGame ? 
                         <CreateGameForm 

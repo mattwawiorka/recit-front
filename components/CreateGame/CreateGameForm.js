@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import dateTool from '../../lib/dateTool';
 import { SPORT, BOARD, CARD, VIDEO } from '../../lib/lists';
 import CategorySelect from './CategorySelect';
-// import SportSelect from './SportSelect';
 
 const CREATE_GAME = gql`
     mutation CreateGame($gameInput: gameInput) {
@@ -28,7 +27,7 @@ const UPDATE_GAME = gql`
 `;
 
 function CreateGameForm(props) {
-    
+    const debug = require('debug')('CreateGameForm');
 
     const [title, setTitle] = useState(props.title || "");
     const [isPublic, setIsPublic] = useState(props.isPublic === false ? false : true);
@@ -436,6 +435,7 @@ function CreateGameForm(props) {
                     createGame({ variables: variables })
                     .then(response => {
                         if (response.errors) {
+                            debug(response);
                             setErrors(response.errors)
                             return;
                         }
@@ -449,7 +449,7 @@ function CreateGameForm(props) {
                         }
                     })
                     .catch(error => {
-                        console.log(error);
+                        debug(error);
                     }); 
                 }}
             >{props.id ? "Update Game" : "Create Game!"}

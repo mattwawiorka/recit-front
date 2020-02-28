@@ -7,7 +7,6 @@ import { useMutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
 import cookie from 'js-cookie';
-import API from '../api.json';
 import FacebookLogin from 'react-facebook-login';
 
 const LOGIN_FB = gql`
@@ -29,6 +28,7 @@ const LOGIN_PHONE = gql`
 `;
 
 function Login(props) {
+    const debug = require('debug')('Login');
 
     const [location, setLocation] = useState([47.621354, -122.333289]);
     const [userInput, setUserInput] = useState(null);
@@ -74,7 +74,8 @@ function Login(props) {
             loginUserFb({ variables: { userInput: userInput } })
             .then(response => {
                 if (response.errors) {
-                    setErrors(response.errors)
+                    debug(response);
+                    setErrors(response.errors);
                     return;
                 }
                 else if (response.data.loginFb) {
@@ -88,7 +89,8 @@ function Login(props) {
             loginPhone({ variables: { userInput: userInput } })
             .then(response => {
                 if (response.errors) {
-                    setErrors(response.errors)
+                    debug(response);
+                    setErrors(response.errors);
                     return;
                 }
                 else if (response.data.verifyUserPhone) {
@@ -114,7 +116,7 @@ function Login(props) {
                     {!smsSent ?
                         <React.Fragment>
                             <FacebookLogin
-                                appId={API.facebook}
+                                appId={process.env.FACEBOOK_KEY}
                                 autoLoad={false}
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"
@@ -186,7 +188,7 @@ function Login(props) {
                     </section>
         
                     <div className="login-link">
-                        <p>New to Rec-it? <Link href="/Signup"><a><u>Signup Today!</u></a></Link></p>
+                        <p>New to Rec-Board? <Link href="/Signup"><a><u>Signup Today!</u></a></Link></p>
                     </div> 
                 </div>
 

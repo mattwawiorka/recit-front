@@ -129,7 +129,9 @@ function PlayerList(props) {
               <div className="player">
                 <span className="player-pic">
                   <img 
-                    src={player.profilePic.split('.')[0] + '_THUMB.' + player.profilePic.split('.')[1]} 
+                    src={player.profilePic.includes(process.env.API_URI) ? 
+                          player.profilePic.split('.')[0] + '_THUMB.' + player.profilePic.split('.')[1] : 
+                          player.profilePic} 
                     className="player-pic-round"
                   />
                 </span>
@@ -238,11 +240,7 @@ function PlayerList(props) {
         <React.Fragment key="join"> 
           <button 
             onClick={() => {
-              console.log('joining')
-              props.joinGame()
-              .then(response => {
-                // refetch();
-              }) 
+              props.joinGame();
             }} 
             className="btn"
           >Join Game</button>
@@ -255,10 +253,7 @@ function PlayerList(props) {
         <React.Fragment key="join"> 
           <button 
             onClick={() => {
-              props.joinGame()
-              .then(response => {
-                // refetch();
-              }) 
+              props.joinGame();
             }} 
             className="btn"
           >Join Game</button>
@@ -276,10 +271,7 @@ function PlayerList(props) {
         <React.Fragment key="subscribe"> 
           <button 
             onClick={() => {
-              props.subscribe()
-              .then(response => {
-                console.log(response)
-              }) 
+              props.subscribe();
             }} 
             className="btn"
           >Interested</button>
@@ -292,10 +284,7 @@ function PlayerList(props) {
         <React.Fragment key="unsubscribe"> 
           <button 
             onClick={() => {
-              props.unsubscribe()
-              .then(response => {
-                // refetch();
-              }) 
+              props.unsubscribe();
             }} 
             className="btn btn-opposite"
           >Not Interested</button>
@@ -316,8 +305,6 @@ function PlayerList(props) {
           </React.Fragment>
       );
     }
-
-    console.log('this happens')
   }, [props.players, props.watchers])
 
   if (loading) return <Loading />

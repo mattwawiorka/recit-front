@@ -7,10 +7,8 @@ import { useMutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
 import cookie from 'js-cookie';
-import API from '../api.json';
 import FacebookLogin from 'react-facebook-login';
 import classNames from 'classnames';
-
 
 const SIGNUP_FB = gql`
     mutation CreateUserFb($userInput: userInput) {
@@ -37,6 +35,7 @@ const SIGNUP_PHONE = gql`
 `;
 
 function Signup(props) {
+    const debug = require('debug')('Signup');
 
     const [location, setLocation] = useState([47.621354, -122.333289]);
     const [userInput, setUserInput] = useState(null);
@@ -90,7 +89,8 @@ function Signup(props) {
             signupFb({ variables: { userInput: userInput } })
             .then(response => {
                 if (response.errors) {
-                    setErrors(response.errors)
+                    debug(response);
+                    setErrors(response.errors);
                     return;
                 }
                 else if (response.data.createUserFb) {
@@ -107,9 +107,9 @@ function Signup(props) {
         else if (userInput.phoneCode) {
             signupPhone({ variables: { userInput: userInput } })
             .then(response => {
-                console.log(response)
                 if (response.errors) {
-                    setErrors(response.errors)
+                    debug(response);
+                    setErrors(response.errors);
                     return;
                 }
                 else if (response.data.verifyUserPhone) {
@@ -131,7 +131,7 @@ function Signup(props) {
                 <br />
 
                 <div className="signup-container">
-                    <h1>Create your Rec-it Account</h1>
+                    <h1>Create your Rec-Board Account</h1>
 
                     <span className="error">
                         {errorDisplay}
@@ -150,7 +150,7 @@ function Signup(props) {
                         {!smsSent ?
                         <React.Fragment>
                             <FacebookLogin
-                                appId={API.facebook}
+                                appId={process.env.FACEBOOK_KEY}
                                 autoLoad={false}
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"

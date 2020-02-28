@@ -150,7 +150,7 @@ function Navigation(props) {
                 <div className="content">
                     <Link href="/">
                         <div className="nav-title">
-                            <img src="/rec-it.png" alt="Recit"
+                            <img src="/REC-BOARD.png" alt="Recit"
                             style={{ width: '42px', height: '42px', borderRadius: '10px'}}/>
                         </div>
                     </Link>

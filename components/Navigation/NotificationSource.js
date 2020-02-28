@@ -30,6 +30,7 @@ const NOTIFICATION_MESSAGE = gql`
 `;
 
 function NotificationSource(props) {
+    const debug = require('debug')('NotificationSource');
 
     if (!cookie.get('token')) {
         return <Navigation />
@@ -44,7 +45,7 @@ function NotificationSource(props) {
     if (loading) return <Loading />
 
     if (error) {
-        console.log(error)
+        debug(error);
         return <Navigation />
     }
 

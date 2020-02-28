@@ -61,6 +61,7 @@ const UPDATE_USER = gql`
 `;
 
 function ProfilePage(props) {
+    const debug = require('debug')('Profile');
 
     const router = useRouter();
 
@@ -88,14 +89,17 @@ function ProfilePage(props) {
 
     if (loading) return <Loading />
     if (error) {
-        console.log(error)
-        return <h1>ERROR</h1>
+        debug(error);
+        router.push('/');
+        alert("Could not find user");
+        return <Loading />
     } 
 
     if (!data) {
-        router.push('/')
-        router.replace('/','/profile/' + router.query.user)
-        return null
+        debug(error);
+        router.push('/');
+        alert("Could not find user");
+        return <Loading />
     }
 
     const age = dateTool.getAge(data.user.node.dob);
@@ -112,7 +116,7 @@ function ProfilePage(props) {
     };
 
     // If we are hosting the profile pic grab the appropriate size, otherwise use Facebooks
-    if (data.user.node.profilePic.includes("http://localhost")) {
+    if (data.user.node.profilePic.includes(process.env.API_URI)) {
         userPics.profile_medium = data.user.node.profilePic.split('.')[0] + '_MEDIUM.' + data.user.node.profilePic.split('.')[1];
         userPics.profile_large = data.user.node.profilePic.split('.')[0] + '_LARGE.' + data.user.node.profilePic.split('.')[1];
     } else {
