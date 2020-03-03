@@ -4,11 +4,11 @@ function Header() {
 
     return (
         <Head>
-            <title>Recit</title>
+            <title>Rec-Board</title>
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta httpEquiv="X-UA-Compatiable" content="ie=edge" />
             <meta charSet="utf-8" />
-            <link rel="icon" href="/rec-board.png" />
+            <link rel="icon" href="/REC-BOARD.png" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         </Head> 
     );
