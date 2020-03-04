@@ -4,6 +4,7 @@ import { useQuery } from "react-apollo";
 import Navigation from './Navigation';
 import Loading from '../Loading/Loading';
 import cookie from 'js-cookie';
+import { withApollo } from '../../lib/apollo';
 
 const NOTIFICATIONS = gql`
     query {
@@ -90,4 +91,4 @@ function NotificationSource(props) {
     );
 }
 
-export default NotificationSource;
+export default withApollo(NotificationSource);

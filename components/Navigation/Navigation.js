@@ -111,6 +111,7 @@ function Navigation(props) {
     if (props.user) {
         links = 
         <React.Fragment>
+            <Link href="/About"><a>About</a></Link>
             <Link href='/Inbox'>
                 {props.unread > 0 ? <a>{"Inbox (" + props.unread + ")"}</a> : <a>Inbox</a>}
             </Link>
@@ -145,7 +146,7 @@ function Navigation(props) {
                     <Link href="/">
                         <div className="nav-title">
                             <img src="/REC-BOARD.png" alt="Recit"
-                            style={{ width: '42px', height: '42px', borderRadius: '10px'}}/>
+                                style={{ width: '42px', height: '42px', borderRadius: '10px'}}/>
                         </div>
                     </Link>
                     <div className="links">
