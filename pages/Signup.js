@@ -270,7 +270,7 @@ function Signup(props) {
                         </div>
                         }
 
-                        <p>By clicking "Sign up" you agree to our terms of service, privacy policy, and cookie policy</p>
+                        <p className="policy">By clicking "Sign up" you agree to our <Link href="/Policy"><a><u>privacy and cookie policy</u></a></Link></p>
                     </section>
         
                     <div className="login-link">
@@ -412,6 +412,11 @@ function Signup(props) {
                     text-align: center;
                     margin-top: 1.5em;
                     font-size: 1.2em;
+                }
+
+                .policy {
+                    width: 100%;
+                    text-align: center;
                 }
 
                 .error {

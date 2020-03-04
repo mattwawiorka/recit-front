@@ -9,6 +9,7 @@ export default function Meta() {
             :root {
                 --greyapple: #ecf0f1;
                 --greenapple: #2ecc71;
+                --recboard: #228B22;
                 --darkmatter: #34495e;
                 --darkermatter: #2c3e50;
                 --linkColor: #3399ff;

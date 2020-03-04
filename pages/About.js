@@ -18,7 +18,7 @@ function About() {
                     <br />
                     <br />
                     <br />
-                    <p className="feedback"> If you would like to get involved in the Rec-board project, give feedback, or just talk about sports and community engagement we would love to hear from you – contact us at <a href="mailto:business@wworks.us">business@wworks.us</a>.</p>
+                    <p className="feedback"> If you would like to get involved in the Rec-board project, give feedback, or just talk about sports and community engagement we would love to hear from you – contact us at <a href="mailto:business@wworks.us" target="_blank">business@wworks.us</a>.</p>
                     <br />
                     <br />
                     <p className="donation"> Rec-board is free and only requires a phone number or Facebook account to use. Our goal is to eventually release a Rec-board mobile app for iOS and Android. Although never required any donations to this end would be greatly appreciated!</p>
