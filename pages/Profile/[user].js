@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo';
 import Loading from '../../components/Loading/Loading';
 import dateTool from '../../lib/dateTool';
+import picTool from '../../lib/picTool';
 import cookie from 'js-cookie';
 
 const GET_USER = gql`
@@ -106,16 +107,7 @@ function ProfilePage(props) {
     const joinDate = new Date(parseInt(data.user.node.createdAt));
     const joinString = dateTool.getMonth(joinDate.getMonth()) + " " + joinDate.getFullYear();
     
-    const userPics = {
-        profile_medium : data.user.node.profilePic.split('.')[0] + '_MEDIUM.' + data.user.node.profilePic.split('.')[1],
-        profile_large : data.user.node.profilePic.split('.')[0] + '_LARGE.' + data.user.node.profilePic.split('.')[1],
-        pic1_small : data.user.node.pic1.split('.')[0] + '_SMALL.' + data.user.node.pic1.split('.')[1],
-        pic1_large : data.user.node.pic1.split('.')[0] + '_LARGE.' + data.user.node.pic1.split('.')[1],
-        pic2_small : data.user.node.pic2.split('.')[0] + '_SMALL.' + data.user.node.pic2.split('.')[1],
-        pic2_large : data.user.node.pic2.split('.')[0] + '_LARGE.' + data.user.node.pic2.split('.')[1],
-        pic3_small : data.user.node.pic3.split('.')[0] + '_SMALL.' + data.user.node.pic3.split('.')[1],
-        pic3_large : data.user.node.pic3.split('.')[0] + '_LARGE.' + data.user.node.pic3.split('.')[1]
-    };
+    const userPics = picTool.getProfilePics(data.user.node);
     
     return (
         <Layout main={false} threeway={true} showLogout={data.user.isMe}>

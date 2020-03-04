@@ -1,4 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
+import picTool from "../../lib/picTool";
 
 function InputBox(props) {
     const debug = require('debug')('InputBox');
@@ -32,9 +33,7 @@ function InputBox(props) {
             <div className="new-comment">
                 <div className="user-pic-round">
                     <img 
-                        src={props.currentUser.profilePic.includes(process.env.API_URI) ? 
-                            props.currentUser.profilePic.split('.')[0] + '_THUMB.' + props.currentUser.profilePic.split('.')[1] 
-                            : props.currentUser.profilePic}
+                        src={picTool.getThumb(props.currentUser.profilePic)}
                         className="user-pic"
                     />
                 </div>

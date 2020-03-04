@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import Comment from './Comment';
+import picTool from '../../lib/picTool';
 
 function CommentList(props) {
 
@@ -32,9 +33,7 @@ function CommentList(props) {
                         <Comment 
                             comment={comment.node}
                             currentUser={props.currentUser}
-                            userPic={comment.userPic.includes(process.env.API_URI) ?
-                                        comment.userPic.split('.')[0] + '_THUMB.' + comment.userPic.split('.')[1]
-                                        : comment.userPic}
+                            userPic={picTool.getThumb(comment.userPic)}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}
                             setReply={props.setReply}  
@@ -48,9 +47,7 @@ function CommentList(props) {
                         <Comment 
                             comment={comment.node}
                             currentUser={props.currentUser}
-                            userPic={comment.userPic.includes(process.env.API_URI) ?
-                                comment.userPic.split('.')[0] + '_THUMB.' + comment.userPic.split('.')[1]
-                                : comment.userPic}
+                            userPic={picTool.getThumb(comment.userPic)}
                             updateComment={props.updateComment} 
                             deleteComment={props.deleteComment}  
                             gameOver={props.gameOver}

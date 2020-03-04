@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
 import Link from 'next/link';
+import picTool from '../../lib/picTool';
 
 function PlayerList(props) {
   let i, j;
@@ -129,9 +130,7 @@ function PlayerList(props) {
               <div className="player">
                 <span className="player-pic">
                   <img 
-                    src={player.profilePic.includes(process.env.API_URI) ? 
-                          player.profilePic.split('.')[0] + '_THUMB.' + player.profilePic.split('.')[1] : 
-                          player.profilePic} 
+                    src={picTool.getThumb(player.profilePic)} 
                     className="player-pic-round"
                   />
                 </span>
@@ -151,7 +150,7 @@ function PlayerList(props) {
             <div className="player" onClick={() => { if (!props.joined && props.invited) props.joinGame() }}>
               <span className="player-pic">
                 <img 
-                  src={player.profilePic} 
+                  src={'/PROFILE-BLANK_THUMB.png'} 
                   className="player-pic-round"
                 />
               </span>
