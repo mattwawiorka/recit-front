@@ -28,8 +28,8 @@ function GameMarker(props) {
     
                 <style jsx>{`
                     .marker {
-                        width: 4em;
-                        height: 4em;
+                        width: 42px;
+                        height: 42px;
                         background: none;
                         animation: bounce 1s;
                     }
@@ -57,22 +57,22 @@ function GameMarker(props) {
         );
     } else {
         return (
-            <>
+            <React.Fragment>
                 <div className={markerClass} onMouseEnter={getHovered} onMouseLeave={clearHovered}>
                     <img src={image} alt={sport} className="icon" />
                 </div>
     
                 <style jsx>{`
                     .marker {
-                        width: 2.5em;
-                        height: 2.5em;
+                        width: 42px;
+                        height: 42px;
                         background: none;
                         animation: bounce 1s;
                     }
 
                     .icon {
-                        width: 4em;
-                        height: 4em;
+                        width: 42px;
+                        height: 42px;
                     }
 
                     .hovered {
@@ -89,7 +89,7 @@ function GameMarker(props) {
                     }
 
                 `}</style>
-            </>
+            </React.Fragment>
         );
     }
     

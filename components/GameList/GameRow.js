@@ -65,18 +65,17 @@ function GameRow(props) {
 
     .sport {
       vertical-align: middle;
-      text-align: justify; 
-      width: 2.5em;
-      height: 2.5em;
+      width: 42px;
+      height: 42px;
     }
 
-    .sportImage {
+    .sport-image {
       width: 42px;
       height: 42px;
       animation: spin 10s linear infinite;
     }
 
-    .dateTime {
+    .date-time {
       vertical-align: middle;
       text-align: justify; 
       width: 7em;
@@ -131,9 +130,9 @@ function GameRow(props) {
         <Link href='/Game/[game]' as={`/Game/${game.id}`} shallow={true} >
           <div className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
             <div className="sport">
-              <img src={game.image} alt={game.sport} className="sportImage"/>
+              <img src={game.image} alt={game.sport} className="sport-image"/>
             </div>
-            <div className="dateTime">
+            <div className="date-time">
               <h3>{dateFormat}</h3>
             </div>
             <div className="title">
@@ -153,11 +152,8 @@ function GameRow(props) {
       <React.Fragment>
           <div className={rowClass} onMouseEnter={getHovered} onMouseLeave={clearHovered} ref={row} >
             <div className="sport">
-              <img src={game.image} alt={game.sport} className="sportImage"/>
+              <img src={game.image} alt={game.sport} className="sport-image"/>
             </div>
-            {/* <div className="dateTime">
-              <h3>{dateFormat}</h3>
-            </div> */}
             <div className="title">
               <h3>{game.title.length > 25 ? game.title.substr(0, 25) + "..." : game.title}</h3>
             </div>

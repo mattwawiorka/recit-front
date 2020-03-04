@@ -32,28 +32,29 @@ function GameCluster(props) {
                 }
 
                 .icon {
-                    width: 4em;
-                    height: 4em;
+                    width: 42px;
+                    height: 42px;
                 }
 
                 .top {
                     z-index: 5;
                     position: relative;
-                    left: -3em;
+                    left: -32px;
                 }
 
                 .count {
                     z-index: 6;
                     position: relative;
-                    left: -6em;
-                    background-color: var(--greyapple);;
+                    left: -64px;
+                    background-color: var(--greyapple);
+                    border: 1px solid grey;
                     border-radius: 50%;
                     text-align: center;
                     overflow: hidden;
                 }
 
                 .football {
-                    left: -5.5em;
+                    left: -58px;
                 }
 
                 strong {
