@@ -106,8 +106,8 @@ function GameInfo(props) {
       .sport-image {
         width: 100%; 
         height: 100%; 
-        max-height: 4em;
-        max-width: 4em; 
+        max-height: 64px;
+        max-width: 64px; 
       }
 
       #customBorder {

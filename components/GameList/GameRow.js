@@ -71,8 +71,8 @@ function GameRow(props) {
     }
 
     .sportImage {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       animation: spin 10s linear infinite;
     }
 

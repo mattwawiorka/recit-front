@@ -35,8 +35,8 @@ function GameMarker(props) {
                     }
 
                     .icon {
-                        width: 4em;
-                        height: 4em;
+                        width: 42px;
+                        height: 42px;
                     }
 
                     .hovered {

@@ -213,6 +213,7 @@ function UserProfile(props) {
                                 <button 
                                     className="btn-edit btn-save"
                                     onClick={() => {
+
                                         // If uploading pics, make REST API request
                                         if (newProfile || newPic1 || newPic2 || newPic3) {
                                             const data = new FormData();

@@ -251,11 +251,6 @@ function Signup(props) {
                                 />
                             </div>
 
-                            {/* <i 
-                                className="material-icons back-arrow" 
-                                onClick={() => setSMSSent(false)} 
-                            >keyboard_backspace</i> */}
-
                             {(firstName && lastName && dob && gender && phoneCode) ?
                             <button 
                                 className="form-button"
@@ -400,12 +395,6 @@ function Signup(props) {
                     animation-name: fadein;
                 }
 
-                .back-arrow {
-                    margin: 0;
-                    float: left;
-                    cursor: pointer;
-                }
-
                 .reduced-width { 
                     display: inline-block;
                     width: 80%;
@@ -428,6 +417,7 @@ function Signup(props) {
                 .error {
                     text-align: center;
                     padding: 12px;
+                    margin-bottom: 12px;
                 }
 
                 @keyframes fadein {
