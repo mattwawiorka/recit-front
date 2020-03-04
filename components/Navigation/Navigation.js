@@ -130,15 +130,9 @@ function Navigation(props) {
     } else {
         links = 
         <React.Fragment>
-            <Link href="/About">
-                <a>About</a>
-            </Link>
-            <Link href="/Login">
-                <a>Login</a>
-            </Link>
-            <Link href="/Signup">
-                <a>Signup</a>
-            </Link>
+            <Link href="/About"><a>About</a></Link>
+            <Link href="/Login"><a>Login</a></Link>
+            <Link href="/Signup"><a>Signup</a></Link>
 
             {style}
         </React.Fragment>
