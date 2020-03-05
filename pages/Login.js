@@ -31,6 +31,7 @@ function Login(props) {
     const debug = require('debug')('Login');
 
     const [location, setLocation] = useState([47.621354, -122.333289]);
+    const [loginFB, setLoginFB] = useState(false);
     const [userInput, setUserInput] = useState(null);
     const [phoneNumber, setPhoneNumber] = useState("");
     const [phoneCode, setPhoneCode] = useState(null);
@@ -118,15 +119,22 @@ function Login(props) {
                     <section className="login-actions">
                     {!smsSent ?
                         <React.Fragment>
+                            <button onClick={() => setLoginFB(true)} className="btn-facebook">LOG IN WITH FACEBOOK</button>
+
+                            {loginFB ? 
                             <FacebookLogin
                                 appId={process.env.FACEBOOK_KEY}
-                                autoLoad={false}
+                                autoLoad
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
                                 textButton="Log in with Facebook"
                                 callback={(response) => responseFacebook(response)}
+                                cssClass="facebook"
                             />
+                            :
+                            null
+                            }
 
                             <div className="form-group phone-number">
                                 <label className="text-muted title">Phone Number</label>
@@ -251,6 +259,16 @@ function Login(props) {
                     background-color: white;
                     border-radius: 15px;
                     box-shadow: 0 10px 25px rgba(0,0,0,0.05), 0 20px 48px rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.1);
+                }
+
+                .btn-facebook {
+                    width: 320px;
+                    height: 55px;
+                    background-color: #4c69ba;
+                }
+
+                .facebook {
+                    visibility: hidden;
                 }
 
                 .text-muted {
