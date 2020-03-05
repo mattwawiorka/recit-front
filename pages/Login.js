@@ -126,7 +126,7 @@ function Login(props) {
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
                                 textButton="Log in with Facebook"
-                                callback={() => responseFacebook}
+                                callback={(response) => responseFacebook(response)}
                             />
 
                             <div className="form-group phone-number">
