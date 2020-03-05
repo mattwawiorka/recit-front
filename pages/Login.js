@@ -119,9 +119,11 @@ function Login(props) {
                         <React.Fragment>
                             <FacebookLogin
                                 appId={process.env.FACEBOOK_KEY}
+                                cookie={true}
+                                xfbml={true}
+                                version={"3.2"}
                                 autoLoad={false}
                                 isMobile={true}
-                                cookie={true}
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
