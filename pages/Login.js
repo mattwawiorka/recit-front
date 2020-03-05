@@ -142,7 +142,9 @@ function Login(props) {
                             <FacebookProvider appId={process.env.FACEBOOK_KEY}>
                                 <LoginButton
                                     scope="public_profile, user_birthday, user_gender"
+                                    fields="name, birthday, gender"
                                     onCompleted={responseFacebook}
+                                    onError={() => setErrors([{ message: "Facebook log in or permission error" }])}
                                 >
                                     <span className="btn-facebook">LOG IN WITH FACEBOOK</span>
                                 </LoginButton>
