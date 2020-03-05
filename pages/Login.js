@@ -61,6 +61,7 @@ function Login(props) {
     });
 
     const responseFacebook = useCallback((response) => {
+        console.log(response)
         if (!response) return;
         setUserInput({
             facebookId: response.id,

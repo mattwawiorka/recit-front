@@ -116,8 +116,6 @@ function GameSource(props) {
     return <Loading />
   }
 
-  debug(data)
-
   return (
     <>
     <GamesPrep 
