@@ -124,7 +124,7 @@ function Login(props) {
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
                                 textButton="Log in with Facebook"
-                                callback={responseFacebook}
+                                callback={() => responseFacebook}
                                 render={ renderProps => {
                                     <button onClick={renderProps.onClick}>Log in with Facebook</button>
                                 }}
