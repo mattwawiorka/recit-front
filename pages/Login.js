@@ -117,7 +117,7 @@ function Login(props) {
                         <React.Fragment>
                             <FacebookLogin
                                 appId={process.env.FACEBOOK_KEY}
-                                autoLoad={true}
+                                // autoLoad={true}
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
