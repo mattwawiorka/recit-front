@@ -14,6 +14,10 @@ function Navigation(props) {
         if (props.subscribeToNotifications) {
             props.subscribeToNotifications();
         }
+
+        if (props.user) {
+            document.title = "(" + props.unread + ") " + document.title
+        }
     }, [])
 
     let dropDownClass = classNames({
