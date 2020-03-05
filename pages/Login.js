@@ -43,6 +43,7 @@ function Login(props) {
         navigator.geolocation.getCurrentPosition((position) => {
             setLocation([position.coords.latitude, position.coords.longitude])
         })
+
     }, [])
 
     const [loginUserFb] = useMutation(LOGIN_FB);
@@ -119,19 +120,13 @@ function Login(props) {
                         <React.Fragment>
                             <FacebookLogin
                                 appId={process.env.FACEBOOK_KEY}
-                                cookie={true}
-                                xfbml={true}
-                                // version={"3.2"}
                                 autoLoad={false}
-                                isMobile={true}
+                                disableMobileRedirect={true}
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
                                 textButton="Log in with Facebook"
                                 callback={() => responseFacebook}
-                                render={ renderProps => {
-                                    <button onClick={renderProps.onClick}>Log in with Facebook</button>
-                                }}
                             />
 
                             <div className="form-group phone-number">
