@@ -8,6 +8,7 @@ import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
 import cookie from 'js-cookie';
 import FacebookLogin from 'react-facebook-login';
+import { FacebookProvider, LoginButton } from 'react-facebook';
 
 const LOGIN_FB = gql`
     mutation Login($userInput: userInput) {
@@ -75,6 +76,7 @@ function Login(props) {
         else if (userInput.facebookToken) {
             loginUserFb({ variables: { userInput: userInput } })
             .then(response => {
+                console.log(response)
                 if (response.errors) {
                     debug(response);
                     setErrors(response.errors);
@@ -119,10 +121,10 @@ function Login(props) {
                     <section className="login-actions">
                     {!smsSent ?
                         <React.Fragment>
-                            <button onClick={() => setLoginFB(true)} className="btn-facebook">LOG IN WITH FACEBOOK</button>
+                            {/* <button onClick={() => setLoginFB(true)} className="btn-facebook">LOG IN WITH FACEBOOK</button> */}
 
-                            {loginFB ? 
-                            <FacebookLogin
+                            {/* {loginFB ?  */}
+                            {/* <FacebookLogin
                                 appId={process.env.FACEBOOK_KEY}
                                 autoLoad
                                 scope="public_profile, email, user_birthday, user_gender"
@@ -132,9 +134,18 @@ function Login(props) {
                                 callback={(response) => responseFacebook(response)}
                                 cssClass="facebook"
                             />
-                            :
-                            null
-                            }
+                            // :
+                            // null
+                            // } */}
+
+                            <FacebookProvider appId={process.env.FACEBOOK_KEY}>
+                                <LoginButton
+                                    scope="public_profile"
+                                    onCompleted={responseFacebook}
+                                >
+                                    <span className="btn-facebook">LOG IN WITH FACEBOOK</span>
+                                </LoginButton>
+                            </FacebookProvider>
 
                             <div className="form-group phone-number">
                                 <label className="text-muted title">Phone Number</label>
