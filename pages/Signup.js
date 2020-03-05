@@ -7,7 +7,7 @@ import { useMutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
 import cookie from 'js-cookie';
-import FacebookLogin from 'react-facebook-login';
+import { FacebookProvider, LoginButton } from 'react-facebook';
 import classNames from 'classnames';
 
 const SIGNUP_FB = gql`
@@ -72,14 +72,14 @@ function Signup(props) {
     const responseFacebook = useCallback((response) => {
         if (!response) return;
         setUserInput({
-            facebookId: response.id,
-            facebookToken: response.accessToken,
-            name: response.name,
-            dob: response.birthday,
-            gender: response.gender,
+            facebookId: response.profile.id,
+            facebookToken: response.tokenDetail.accessToken,
+            name: response.profile.name,
+            dob: response.profile.birthday,
+            gender: response.profile.gender,
             loginLocation: location
         })
-    });
+    }, []);
 
     useEffect(() => {
         if (!userInput) {
@@ -149,15 +149,16 @@ function Signup(props) {
                     <section className="signup-actions">
                         {!smsSent ?
                         <React.Fragment>
-                            <FacebookLogin
-                                appId={process.env.FACEBOOK_KEY}
-                                autoLoad={false}
-                                scope="public_profile, email, user_birthday, user_gender"
-                                fields="name, email, picture, birthday, gender"
-                                icon="fa fa-facebook-square"
-                                textButton="Sign Up with Facebook"
-                                callback={responseFacebook}
-                            />
+                            <FacebookProvider appId={process.env.FACEBOOK_KEY}>
+                                <LoginButton
+                                    scope="public_profile, user_birthday, user_gender"
+                                    fields="name, birthday, gender"
+                                    onCompleted={responseFacebook}
+                                    onError={() => setErrors([{ message: "Facebook log in or permission error" }])}
+                                >
+                                    <button className="btn-facebook">SIGN UP WITH FACEBOOK</button>
+                                </LoginButton>
+                            </FacebookProvider>
 
                             <h4>OR</h4>
 
@@ -349,6 +350,12 @@ function Signup(props) {
                     box-shadow: 0 10px 25px rgba(0,0,0,0.05), 0 20px 48px rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.1);
                 }
 
+                .btn-facebook {
+                    width: 320px;
+                    height: 55px;
+                    background-color: #4c69ba;
+                }
+
                 h4 {
                     margin: 3em;
                     color: #616770;
@@ -421,7 +428,7 @@ function Signup(props) {
 
                 .error {
                     text-align: center;
-                    padding: 12px;
+                    padding: 12px 0;
                     margin-bottom: 12px;
                 }
 
@@ -469,6 +476,10 @@ function Signup(props) {
                     .signup-actions {
                         width: 100%;
                         float: clear;
+                    }
+
+                    .btn-facebook {
+                        width: 250px;
                     }
 
                     h1 {

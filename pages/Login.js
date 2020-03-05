@@ -7,7 +7,6 @@ import { useMutation } from 'react-apollo'
 import { withApollo } from '../lib/apollo';
 import gql from 'graphql-tag';
 import cookie from 'js-cookie';
-import FacebookLogin from 'react-facebook-login';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 
 const LOGIN_FB = gql`
@@ -61,7 +60,6 @@ function Login(props) {
     });
 
     const responseFacebook = useCallback((response) => {
-        console.log(response)
         if (!response) return;
         setUserInput({
             facebookId: response.profile.id,
@@ -77,7 +75,6 @@ function Login(props) {
         else if (userInput.facebookToken) {
             loginUserFb({ variables: { userInput: userInput } })
             .then(response => {
-                console.log(response)
                 if (response.errors) {
                     debug(response);
                     setErrors(response.errors);
@@ -122,23 +119,6 @@ function Login(props) {
                     <section className="login-actions">
                     {!smsSent ?
                         <React.Fragment>
-                            {/* <button onClick={() => setLoginFB(true)} className="btn-facebook">LOG IN WITH FACEBOOK</button> */}
-
-                            {/* {loginFB ?  */}
-                            {/* <FacebookLogin
-                                appId={process.env.FACEBOOK_KEY}
-                                autoLoad
-                                scope="public_profile, email, user_birthday, user_gender"
-                                fields="name, email, picture, birthday, gender"
-                                icon="fa fa-facebook-square"
-                                textButton="Log in with Facebook"
-                                callback={(response) => responseFacebook(response)}
-                                cssClass="facebook"
-                            />
-                            // :
-                            // null
-                            // } */}
-
                             <FacebookProvider appId={process.env.FACEBOOK_KEY}>
                                 <LoginButton
                                     scope="public_profile, user_birthday, user_gender"
@@ -146,7 +126,7 @@ function Login(props) {
                                     onCompleted={responseFacebook}
                                     onError={() => setErrors([{ message: "Facebook log in or permission error" }])}
                                 >
-                                    <span className="btn-facebook">LOG IN WITH FACEBOOK</span>
+                                    <button className="btn-facebook">LOG IN WITH FACEBOOK</button>
                                 </LoginButton>
                             </FacebookProvider>
 
@@ -223,18 +203,13 @@ function Login(props) {
             <style jsx>{`
                 .login-container {
                     display: block;
-                    // width: 100%;
                     margin: 0 auto;
-                    // margin: auto;
                     margin-top: 32px;
                     text-align: center;
                     animation: fadein 0.75s;
-                    // border: 1px solid #ccc;
-                    // border-radius: 4px;
                 }
 
                 a > u {
-                    // font-weight: bold;
                     font-size: 1.1em;
                     color: var(--greenapple);
                 }
@@ -247,10 +222,6 @@ function Login(props) {
 
                 section {
                     display: inline-block;
-                    // border-radius: 4px;
-                    // width: 50%;
-                    // padding: 12px 20px;
-                    
                 }
 
                 h2 {
@@ -279,10 +250,6 @@ function Login(props) {
                     width: 320px;
                     height: 55px;
                     background-color: #4c69ba;
-                }
-
-                .facebook {
-                    visibility: hidden;
                 }
 
                 .text-muted {
@@ -327,16 +294,6 @@ function Login(props) {
                     animation-name: fadein;
                 }
 
-                @keyframes fadein {
-                    from {
-                        opacity: 0;
-                    } 
-                    
-                    to {
-                        opacity: 1;
-                    }
-                }
-
                 .phone-number { 
                     position: absolute;
                     bottom: 64px;
@@ -359,9 +316,25 @@ function Login(props) {
                     text-align: center;
                 }
 
+                @keyframes fadein {
+                    from {
+                        opacity: 0;
+                    } 
+                    
+                    to {
+                        opacity: 1;
+                    }
+                }
+
                 @media only screen and (max-width: 420px) {
                     .login-actions {
                         width: 100%;
+                    }
+
+                    .btn-facebook {
+                        width: 250px;
+                        height: 55px;
+                        background-color: #4c69ba;
                     }
 
                     .phone-number { 
