@@ -121,7 +121,7 @@ function Login(props) {
                                 appId={process.env.FACEBOOK_KEY}
                                 cookie={true}
                                 xfbml={true}
-                                version={"3.2"}
+                                // version={"3.2"}
                                 autoLoad={false}
                                 isMobile={true}
                                 scope="public_profile, email, user_birthday, user_gender"
