@@ -64,8 +64,8 @@ function Login(props) {
         console.log(response)
         if (!response) return;
         setUserInput({
-            facebookId: response.id,
-            facebookToken: response.accessToken,
+            facebookId: response.profile.id,
+            facebookToken: response.tokenDetail.accessToken,
             loginLocation: location
         })
     }, []);
@@ -141,7 +141,7 @@ function Login(props) {
 
                             <FacebookProvider appId={process.env.FACEBOOK_KEY}>
                                 <LoginButton
-                                    scope="public_profile"
+                                    scope="public_profile, user_birthday, user_gender"
                                     onCompleted={responseFacebook}
                                 >
                                     <span className="btn-facebook">LOG IN WITH FACEBOOK</span>
