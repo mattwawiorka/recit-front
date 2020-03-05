@@ -64,7 +64,7 @@ function Login(props) {
             facebookToken: response.accessToken,
             loginLocation: location
         })
-    });
+    }, []);
 
     useEffect(() => {
         if (!userInput) {
@@ -117,7 +117,7 @@ function Login(props) {
                         <React.Fragment>
                             <FacebookLogin
                                 appId={process.env.FACEBOOK_KEY}
-                                autoLoad={false}
+                                autoLoad={true}
                                 scope="public_profile, email, user_birthday, user_gender"
                                 fields="name, email, picture, birthday, gender"
                                 icon="fa fa-facebook-square"
