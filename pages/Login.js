@@ -81,7 +81,9 @@ function Login(props) {
                 else if (response.data.loginFb) {
                     // Login Token expires in 60 days, this is to coincide with FB permissions needing refresh
                     cookie.set('token', response.data.loginFb, { expires: 60 });
-                    Router.push('/');
+                    if (cookie.get('token')) {
+                        Router.push('/');
+                    }
                 }
             }) 
         }
@@ -123,6 +125,9 @@ function Login(props) {
                                 icon="fa fa-facebook-square"
                                 textButton="Log in with Facebook"
                                 callback={responseFacebook}
+                                render={ renderProps => {
+                                    <button onClick={renderProps.onClick}>Log in with Facebook</button>
+                                }}
                             />
 
                             <div className="form-group phone-number">
