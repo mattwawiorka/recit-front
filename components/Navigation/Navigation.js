@@ -16,7 +16,9 @@ function Navigation(props) {
         }
 
         if (props.user) {
-            document.title = "(" + props.unread + ") " + document.title
+            if (props.unread && props.unread > 0) {
+                document.title = "(" + props.unread + ") " + document.title
+            }
         }
     }, [])
 
