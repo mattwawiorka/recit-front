@@ -265,8 +265,10 @@ function UserProfile(props) {
                                                 setNewPic2(null);
                                                 setNewPic3(null);
                                                 setEditMode(false);
-                                                props.refetch();
-                                                location.reload();
+                                                props.refetch()
+                                                .then(() => {
+                                                    location.reload();
+                                                }) 
                                             })
                                         } else {
                                             props.updateProfile({ variables: {
