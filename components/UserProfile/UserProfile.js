@@ -36,7 +36,7 @@ function UserProfile(props) {
             err = 'Only 1 image can be uploaded at a time\n'
         } 
 
-        let size = 5000000;
+        let size = 8000000;
         if (files[0].size > size) {
             err += files[0].type + ' is too large\n';
         }
@@ -766,6 +766,22 @@ function UserProfile(props) {
                 @media only screen and (max-width: 768px) {
                     .profile-container {
                         padding: 24px 48px;
+                    }
+
+                    .actions {
+                        margin: auto;
+                        position: absolute;
+                        width: min-content;
+                        transform: translate(-50%);
+                        left: 50%;
+                        bottom: 5%;
+                        z-index: 10;
+                    }
+
+                    .actions > button {
+                        width: 100px;
+                        height: 50px;
+                        font-size: 1.5em;
                     }
                 }
 
