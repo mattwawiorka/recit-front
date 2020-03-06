@@ -257,13 +257,15 @@ function UserProfile(props) {
                                                 }
                                             }})
                                             .then( response => {
+                                                if (response.errors) {
+                                                    alert(response.errors[0].message)
+                                                }
                                                 setNewProfile(null);
                                                 setNewPic1(null);
                                                 setNewPic2(null);
                                                 setNewPic3(null);
                                                 setEditMode(false);
                                                 props.refetch();
-                                                window.location.reload();
                                             })
                                         } else {
                                             props.updateProfile({ variables: {
@@ -276,6 +278,9 @@ function UserProfile(props) {
                                                 }
                                             }})
                                             .then( response => {
+                                                if (response.errors) {
+                                                    alert(response.errors[0].message)
+                                                }
                                                 setEditMode(false);
                                                 props.refetch();
                                             })

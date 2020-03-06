@@ -97,7 +97,7 @@ function Signup(props) {
                     loginFb({ variables: { userInput: userInput } })
                     .then(response => {
                         if (response.data.loginFb) {
-                            cookie.set('token', response.data.loginFb, { expires: 1 })
+                            cookie.set('token', response.data.loginFb, { expires: 60 })
                             Router.push('/');
                         }
                     })
@@ -113,7 +113,7 @@ function Signup(props) {
                     return;
                 }
                 else if (response.data.verifyUserPhone) {
-                    cookie.set('token', response.data.verifyUserPhone, { expires: 1 })
+                    cookie.set('token', response.data.verifyUserPhone, { expires: 60 })
                     Router.push('/');
                 }
             }) 
