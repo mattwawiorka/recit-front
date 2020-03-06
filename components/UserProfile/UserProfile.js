@@ -212,7 +212,7 @@ function UserProfile(props) {
                                 >Cancel</button>
                                 <button 
                                     className="btn-edit btn-save"
-                                    onClick={() => {
+                                    onClick={ async () => {
 
                                         // If uploading pics, make REST API request
                                         if (newProfile || newPic1 || newPic2 || newPic3) {
@@ -220,7 +220,7 @@ function UserProfile(props) {
                                             data.append('file', newProfile);
 
                                             if (newProfile) {
-                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}`, {
+                                                await fetch(process.env.API_URI + `/post-image?user=${props.userId}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -234,7 +234,7 @@ function UserProfile(props) {
                                             data.append('file', newPic3);
 
                                             if (newPic1 || newPic2 || newPic3) {
-                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}`, {
+                                                await fetch(process.env.API_URI + `/post-images?user=${props.userId}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -243,7 +243,7 @@ function UserProfile(props) {
                                                 })
                                             }
                                             
-                                            props.updateProfile({ variables: {
+                                            const response = await props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
                                                     profilePic: newProfile ? newProfile.name : null,
@@ -256,22 +256,19 @@ function UserProfile(props) {
                                                     status: status.trim()
                                                 }
                                             }})
-                                            .then( response => {
-                                                if (response.errors) {
-                                                    alert(response.errors[0].message)
-                                                }
-                                                setNewProfile(null);
-                                                setNewPic1(null);
-                                                setNewPic2(null);
-                                                setNewPic3(null);
-                                                setEditMode(false);
-                                                props.refetch()
-                                                .then(() => {
-                                                    location.reload();
-                                                }) 
-                                            })
+
+                                            if (response.errors) {
+                                                alert(response.errors[0].message)
+                                            }
+
+                                            setNewProfile(null);
+                                            setNewPic1(null);
+                                            setNewPic2(null);
+                                            setNewPic3(null);
+                                            setEditMode(false);
+                                            props.refetch()
                                         } else {
-                                            props.updateProfile({ variables: {
+                                            const response = await props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
                                                     name: name,
@@ -280,13 +277,12 @@ function UserProfile(props) {
                                                     status: status
                                                 }
                                             }})
-                                            .then( response => {
-                                                if (response.errors) {
-                                                    alert(response.errors[0].message)
-                                                }
-                                                setEditMode(false);
-                                                props.refetch();
-                                            })
+                                            if (response.errors) {
+                                                alert(response.errors[0].message)
+                                            }
+                                            
+                                            setEditMode(false);
+                                            props.refetch();
                                         }
                                     }}
                                 >Save</button>
