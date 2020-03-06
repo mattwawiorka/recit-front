@@ -219,8 +219,10 @@ function UserProfile(props) {
                                             const data = new FormData();
                                             data.append('file', newProfile);
 
+                                            let timestamp = Date.now();
+
                                             if (newProfile) {
-                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}`, {
+                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}?timestamp=${timestamp}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -238,7 +240,7 @@ function UserProfile(props) {
                                             data.append('file', newPic3);
 
                                             if (newPic1 || newPic2 || newPic3) {
-                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}`, {
+                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}?timestamp=${timestamp}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -256,10 +258,10 @@ function UserProfile(props) {
                                             props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
-                                                    profilePic: newProfile ? newProfile.name : null,
-                                                    pic1: newPic1 ? newPic1.name : null,
-                                                    pic2: newPic2 ? newPic2.name : null,
-                                                    pic3: newPic3 ? newPic3.name : null,
+                                                    profilePic: newProfile ? newProfile.name.split('.')[0] + timestamp + '.' + newProfile.name.split('.')[1] : null,
+                                                    pic1: newPic1 ? newPic1.name.split('.')[0] + timestamp + '.' + newPic1.name.split('.')[1]: null,
+                                                    pic2: newPic2 ? newPic2.name.split('.')[0] + timestamp + '.' + newPic2.name.split('.')[1] : null,
+                                                    pic3: newPic3 ? newPic3.name.split('.')[0] + timestamp + '.' + newPic3.name.split('.')[1] : null,
                                                     name: name,
                                                     dob: dob,
                                                     gender: gender,
