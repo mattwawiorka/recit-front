@@ -470,8 +470,8 @@ function CreateGameForm(props) {
                 display: block;
                 position: absolute;
                 z-index: 11;
-                transform: translate(-50%, -50%);
-                top: 50%;
+                transform: translate(-50%);
+                bottom: 150px;
                 left: 50%;
                 width: 700px;
                 max-height: 800px;
