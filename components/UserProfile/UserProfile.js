@@ -263,6 +263,7 @@ function UserProfile(props) {
                                                 setNewPic3(null);
                                                 setEditMode(false);
                                                 props.refetch();
+                                                window.location.reload();
                                             })
                                         } else {
                                             props.updateProfile({ variables: {
