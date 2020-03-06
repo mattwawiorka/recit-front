@@ -69,7 +69,6 @@ function ProfilePage(props) {
     if (!cookie.get('token')) {
         if (typeof window !== 'undefined') {
             router.push('/')
-            router.replace('/','/profile/' + router.query.user)
         } else {
             return null
         }
@@ -95,13 +94,6 @@ function ProfilePage(props) {
         alert("Could not find user");
         return <Loading />
     } 
-
-    if (!data) {
-        debug(error);
-        router.push('/');
-        alert("Could not find user");
-        return <Loading />
-    }
 
     const age = dateTool.getAge(data.user.node.dob);
     const joinDate = new Date(parseInt(data.user.node.createdAt));
