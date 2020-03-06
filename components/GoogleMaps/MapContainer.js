@@ -38,19 +38,25 @@ function MapContainer(props) {
       <Map
           bootstrapURLKeys={{ key: process.env.GOOGLE_KEY }}
           defaultCenter={ 
-              {
-                  lat: props.currentLoc[0],
-                  lng: props.currentLoc[1]
-              }
+            {
+              lat: props.currentLoc[0],
+              lng: props.currentLoc[1]
+            }
+          }
+          center={
+            {
+              lat: props.currentLoc[0],
+              lng: props.currentLoc[1]
+            }
           }
           defaultZoom={12}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
           options={{
-              maxZoom: 16,
-              zoomControl: false,
-              disableDoubleClickZoom: true,
-              styles: mapStyles
+            maxZoom: 16,
+            zoomControl: false,
+            disableDoubleClickZoom: true,
+            styles: mapStyles
           }}
       >
           {props.markers}
