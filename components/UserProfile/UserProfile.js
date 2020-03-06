@@ -222,7 +222,7 @@ function UserProfile(props) {
                                             let timestamp = Date.now();
 
                                             if (newProfile) {
-                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}?timestamp=${timestamp}`, {
+                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}&timestamp=${timestamp}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
@@ -240,7 +240,7 @@ function UserProfile(props) {
                                             data.append('file', newPic3);
 
                                             if (newPic1 || newPic2 || newPic3) {
-                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}?timestamp=${timestamp}`, {
+                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}&timestamp=${timestamp}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
