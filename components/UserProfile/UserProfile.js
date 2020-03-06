@@ -36,7 +36,7 @@ function UserProfile(props) {
             err = 'Only 1 image can be uploaded at a time\n'
         } 
 
-        let size = 2000000;
+        let size = 5000000;
         if (files[0].size > size) {
             err += files[0].type + ' is too large\n';
         }
