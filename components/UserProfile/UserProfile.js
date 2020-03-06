@@ -212,7 +212,7 @@ function UserProfile(props) {
                                 >Cancel</button>
                                 <button 
                                     className="btn-edit btn-save"
-                                    onClick={ async () => {
+                                    onClick={() => {
 
                                         // If uploading pics, make REST API request
                                         if (newProfile || newPic1 || newPic2 || newPic3) {
@@ -220,12 +220,16 @@ function UserProfile(props) {
                                             data.append('file', newProfile);
 
                                             if (newProfile) {
-                                                await fetch(process.env.API_URI + `/post-image?user=${props.userId}`, {
+                                                fetch(process.env.API_URI + `/post-image?user=${props.userId}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
                                                     },
                                                     body: data
+                                                })
+                                                .then(() => {
+                                                    setNewProfile(null);
+                                                    props.refetch();
                                                 })
                                             }
 
@@ -234,16 +238,22 @@ function UserProfile(props) {
                                             data.append('file', newPic3);
 
                                             if (newPic1 || newPic2 || newPic3) {
-                                                await fetch(process.env.API_URI + `/post-images?user=${props.userId}`, {
+                                                fetch(process.env.API_URI + `/post-images?user=${props.userId}`, {
                                                     method: 'POST',
                                                     headers: {
                                                         Authorization: 'Bearer ' + cookie.get('token')
                                                     },
                                                     body: data
                                                 })
+                                                .then(() => {
+                                                    setNewPic1(null);
+                                                    setNewPic2(null);
+                                                    setNewPic3(null);
+                                                    props.refetch();
+                                                })
                                             }
                                             
-                                            const response = await props.updateProfile({ variables: {
+                                            props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
                                                     profilePic: newProfile ? newProfile.name : null,
@@ -256,19 +266,15 @@ function UserProfile(props) {
                                                     status: status.trim()
                                                 }
                                             }})
-
-                                            if (response.errors) {
-                                                alert(response.errors[0].message)
-                                            }
-
-                                            setNewProfile(null);
-                                            setNewPic1(null);
-                                            setNewPic2(null);
-                                            setNewPic3(null);
-                                            setEditMode(false);
-                                            props.refetch()
+                                            .then( response => {
+                                                if (response.errors) {
+                                                    alert(response.errors[0].message)
+                                                }
+                                                setEditMode(false);
+                                                props.refetch();
+                                            })
                                         } else {
-                                            const response = await props.updateProfile({ variables: {
+                                            props.updateProfile({ variables: {
                                                 userId: props.userId,
                                                 userInput: {
                                                     name: name,
@@ -277,12 +283,13 @@ function UserProfile(props) {
                                                     status: status
                                                 }
                                             }})
-                                            if (response.errors) {
-                                                alert(response.errors[0].message)
-                                            }
-                                            
-                                            setEditMode(false);
-                                            props.refetch();
+                                            .then( response => {
+                                                if (response.errors) {
+                                                    alert(response.errors[0].message)
+                                                }
+                                                setEditMode(false);
+                                                props.refetch();
+                                            })
                                         }
                                     }}
                                 >Save</button>
