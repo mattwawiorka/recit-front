@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SortingFiltering from '../components/GamesFeed/SortingFiltering';
 import Layout from '../components/Layout/Layout';
 import CreateGameForm from '../components/CreateGame/CreateGameForm';
@@ -13,15 +13,17 @@ function Index(props) {
     const [createGame, setCreateGame] = useState(false);
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCurrentLoc([position.coords.latitude, position.coords.longitude]);
-        },
-        (error) => {
-            debug('Could not get user location');
-            if (error.code == error.PERMISSION_DENIED) {
-                alert("If you want Rec-board to show games in your area, allow location access");
-            }
-        });
+        setTimeout(() => {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setCurrentLoc([position.coords.latitude, position.coords.longitude]);
+            },
+            (error) => {
+                debug('Could not get user location');
+                if (error.code == error.PERMISSION_DENIED) {
+                    alert("If you want Rec-board to show games in your area, allow location access");
+                }
+            });
+        })
 
         setLoading(false);
     }, [])
