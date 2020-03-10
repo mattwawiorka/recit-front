@@ -84,7 +84,7 @@ function GameContainer(props) {
     <React.Fragment>
     {(inviteMode || cancelMode || editMode) ? <div className="overlay"></div> : null}
 
-    {editMode ? 
+    {(editMode && !isOver) ? 
     <CreateGameForm 
       id={props.gameId}
       title={data.game.title}
@@ -150,7 +150,7 @@ function GameContainer(props) {
         />
       </div>
 
-      {inviteMode ?
+      {(inviteMode && !isOver) ?
       <Invite
         gameId={props.gameId}
         conversationId={data.game.conversationId}

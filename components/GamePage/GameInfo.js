@@ -88,19 +88,15 @@ function GameInfo(props) {
 
       .heading-info {
         display: inline-block;
-        width: 85%;
-      }
-
-      .heading-info > h2 {
-        font-size: 2em;
-        word-break: break-all;
+        width: 80%;
       }
 
       .heading-image {
         display: inline-block;
         float: right;
-        width: 15%;
+        width: 20%;
         height: 100%;
+        text-align: right;
       }
       
       .sport-image {
@@ -220,6 +216,10 @@ function GameInfo(props) {
       @media only screen and (max-width: 600px) {
         i {
           display: none;
+        }
+
+        .heading-info > h2 {
+          font-size: 1.5em;
         }
       }
     `}</style>

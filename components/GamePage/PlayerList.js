@@ -147,7 +147,7 @@ function PlayerList(props) {
       else if (player && player.level == 3) {
         playersDisplay.push(
           <React.Fragment key={i}>
-            <div className="player" onClick={() => { if (!props.joined && props.invited) props.joinGame() }}>
+            <div className="player" onClick={() => { if (!props.joined && props.invited && !props.isOver) props.joinGame() }}>
               <span className="player-pic">
                 <img 
                   src={'/PROFILE-BLANK_THUMB.png'} 
@@ -166,7 +166,7 @@ function PlayerList(props) {
       else {
         playersDisplay.push(
           <React.Fragment key={i}>
-            <div className="player" onClick={() => { if (!props.joined) props.joinGame() }}>
+            <div className="player" onClick={() => { if (!props.joined && !props.isOver) props.joinGame() }}>
               <span className="player-pic">
                 <div 
                   className="player-pic-round open-spot"
